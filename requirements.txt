@@ -3,6 +3,6 @@ pyglet
 pyglet<2
 scipy
 numpy
-libigl
+# libigl
 rtree
 django

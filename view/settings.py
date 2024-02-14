@@ -45,7 +45,7 @@ DEBUG = True
 #     ALLOWED_HOSTS = []
 
 ALLOWED_HOSTS = ['view-prototype1-de482f0a101a.herokuapp.com', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ['https://view-prototype1-de482f0a101a.herokuapp.com/']
+CSRF_TRUSTED_ORIGINS = ['https://*.herokuapp.com/']
 
 # Application definition
 

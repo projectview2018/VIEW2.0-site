@@ -61,7 +61,8 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     face_idxs_by_yaw = np.zeros((yaws.size,), dtype=int)
     for idx, yaw in enumerate(yaws):
         faces = intersections[ray_angles[:, 0] == yaw]
-        face_idxs_by_yaw[idx] = int(max(faces, key=lambda f: -10000 if f == -1 else high_point[f, 1]))
+        face_idxs_by_yaw[idx] = int(
+            max(faces, key=lambda f: -10000 if f == -1 else high_point[f, 1]))
 
     # The height of the ground (the lowest point in the entire mesh)
     floor_y_val = np.min(mesh.vertices[:, 1])
@@ -72,7 +73,8 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     # Calculate the vector which points from eye position to NVP
     hypot = np.sqrt(np.sum(nvp_rays * nvp_rays, axis=0))
     nvp_rays /= hypot  # Normalize
-    nvp_rays *= -(eye_pos[1] - floor_y_val) / nvp_rays[1, :]  # scale until ground hit
+    nvp_rays *= -(eye_pos[1] - floor_y_val) / \
+        nvp_rays[1, :]  # scale until ground hit
     nvp_rays *= 100
     nvp_rays = np.floor(nvp_rays)
     if driver_side_start:

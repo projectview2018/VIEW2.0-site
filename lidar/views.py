@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 import threading
 from .forms import ScanForm
 from .perform_scan import complete_scan
+from .models import Vehicle, Scan, CompletedScan
 
 
 def index(request):
@@ -35,4 +36,9 @@ def vehicle_database_loading(request):
 
 
 def vehicle_database_table(request):
-    return render(request, 'lidar/vehicle-database-table.html', {})
+    vehicle_list = Vehicle.objects.all()
+    # scan_list = Scan.objects.all()
+    # completed_scan_list = CompletedScan.objects.all()
+
+    return render(request, 'lidar/vehicle-database-table.html',
+                  {'vehicle_list': vehicle_list})

@@ -1,9 +1,9 @@
 import trimesh
 import numpy as np
-from .models import Scan, CompletedScan
+from .models import Vehicle, Scan, CompletedScan
 
 
-def complete_scan(scan: Scan):
+def complete_scan(scan: Scan, vehicle: Vehicle):
     print('Starting scan')
     mesh = trimesh.load(scan.lidar_scan.path, force='mesh')
     eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
@@ -17,6 +17,8 @@ def complete_scan(scan: Scan):
         area=calculate_area(coordinates)
     )
     completed_scan.save()
+    vehicle.vehicle_updated = completed_scan.completed_scan_added
+    vehicle.save()
     print('Saved scan')
 
 

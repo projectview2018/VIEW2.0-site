@@ -21,7 +21,7 @@ def data_upload(request):
             scan = form.save()
             vehicle = Vehicle.objects.get(pk=scan.vehicle.id)
             thread = threading.Thread(
-                target=complete_scan, args=(scan, vehicle,))
+                target=complete_scan, args=(scan, vehicle))
             thread.start()
             return HttpResponseRedirect('/add_vehicle')
     else:
@@ -39,6 +39,8 @@ def vehicle_database_loading(request):
 
 def vehicle_database_table(request):
     vehicle_list = Vehicle.objects.all()
+    for vehicle in vehicle_list:
+        vehicle.vehicle_updated = vehicle.vehicle_updated.date()
 
     return render(request, 'lidar/vehicle-database-table.html',
                   {'vehicle_list': vehicle_list})

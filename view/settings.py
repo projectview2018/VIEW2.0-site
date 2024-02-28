@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 # import django_on_heroku
+import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,11 +25,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-kfb=+rej@*g)fb58b_&!o8vg4&!gn&6o6-(749bqdd@b+up9_0'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# # The `DYNO` env var is set on Heroku CI, but it's not a real Heroku app, so we have to
+# # also explicitly exclude CI:
+# # https://devcenter.heroku.com/articles/heroku-ci#immutable-environment-variables
+# IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
+
+# # SECURITY WARNING: don't run with debug turned on in production!
+# if not IS_HEROKU_APP:
+#     DEBUG = True
 DEBUG = True
 
-ALLOWED_HOSTS = ['view-prototype1-de482f0a101a.herokuapp.com', '127.0.0.1']
+# # On Heroku, it's safe to use a wildcard for `ALLOWED_HOSTS``, since the Heroku router performs
+# # validation of the Host header in the incoming HTTP request. On other platforms you may need
+# # to list the expected hostnames explicitly to prevent HTTP Host header attacks. See:
+# # https://docs.djangoproject.com/en/5.0/ref/settings/#std-setting-ALLOWED_HOSTS
+# if IS_HEROKU_APP:
+#     ALLOWED_HOSTS = ["*"]
+# else:
+#     ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS = ['view-prototype1-de482f0a101a.herokuapp.com', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://*.herokuapp.com/']
 
 # Application definition
 
@@ -75,10 +93,45 @@ WSGI_APPLICATION = 'view.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# if IS_HEROKU_APP:
+#     # In production on Heroku the database configuration is derived from the `DATABASE_URL`
+#     # environment variable by the dj-database-url package. `DATABASE_URL` will be set
+#     # automatically by Heroku when a database addon is attached to your Heroku app. See:
+#     # https://devcenter.heroku.com/articles/provisioning-heroku-postgres
+#     # https://github.com/jazzband/dj-database-url
+#     DATABASES = {
+#         "default": dj_database_url.config(
+#             conn_max_age=600,
+#             conn_health_checks=True,
+#             ssl_require=True,
+#         ),
+#     }
+# else:
+#     # When running locally in development or in CI, a sqlite database file will be used instead
+#     # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ddhgeoelvcb9f3',
+        'USER': 'ycrjihurofoglp',
+        'PASSWORD': 'fccfdc55b8ab6ea26a61ea821d9dacc928c99178b616dd4e552cf7f405b51587',
+        'HOST': 'ec2-44-215-1-253.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 

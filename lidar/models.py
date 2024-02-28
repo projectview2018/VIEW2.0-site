@@ -3,9 +3,14 @@ from django.core.validators import validate_comma_separated_integer_list
 
 
 class Vehicle(models.Model):
+    vehicle_added = models.DateTimeField(auto_now_add=True)
+    vehicle_updated = models.DateTimeField(auto_now_add=True)
     vehicle_make = models.CharField(max_length=50)
     vehicle_model = models.CharField(max_length=50)
     vehicle_year = models.IntegerField()
+
+    # body class - int field
+    # weight class - numbers 1-8
 
     def __str__(self) -> str:
         return f'{self.vehicle_year} {self.vehicle_make} {self.vehicle_model}'
@@ -13,6 +18,7 @@ class Vehicle(models.Model):
 
 class Scan(models.Model):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
+    scan_added = models.DateTimeField(auto_now_add=True)
     driver_side_start = models.BooleanField()
     eye_x_ft = models.IntegerField(default=0)
     eye_x_in = models.FloatField(default=0)
@@ -37,6 +43,9 @@ class Scan(models.Model):
 
 class CompletedScan(models.Model):
     raw_scan = models.ForeignKey(Scan, on_delete=models.PROTECT)
-    nvp_xs = models.CharField(validators=[validate_comma_separated_integer_list], max_length=2160)
-    nvp_ys = models.CharField(validators=[validate_comma_separated_integer_list], max_length=2160)
+    completed_scan_added = models.DateTimeField(auto_now_add=True)
+    nvp_xs = models.CharField(
+        validators=[validate_comma_separated_integer_list], max_length=2160)
+    nvp_ys = models.CharField(
+        validators=[validate_comma_separated_integer_list], max_length=2160)
     area = models.FloatField()

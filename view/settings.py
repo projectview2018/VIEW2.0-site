@@ -44,7 +44,8 @@ DEBUG = True
 # else:
 #     ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = ['view-prototype1-de482f0a101a.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['view-prototype1-de482f0a101a.herokuapp.com',
+                 '127.0.0.1', 'view2-vd8vm.ondigitalocean.app']
 CSRF_TRUSTED_ORIGINS = ['https://*.herokuapp.com/']
 
 # Application definition

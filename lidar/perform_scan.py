@@ -39,47 +39,48 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     :return: a tuple of two numpy vectors of equivalent length, giving the
         x-coordinates and y-coordinates of the NVPs, respectively
     """
-    # face by point by (x, y, z) (F x 3 x 3 matrix)
-    faces_by_points = mesh.vertices[mesh.faces, :]
-    print('Ran face by points')
-    # face by (x, y, z) (F x 3 matrix) - the highest point on each face
-    high_point = np.array([max(points, key=lambda p: p[1])
-                           for points in faces_by_points])
-    print('Found high point')
     # The directions to cast rays
-    yaws = np.deg2rad(np.arange(70, 200) + (0 if driver_side_start else 180))
+    yaws = np.deg2rad(np.arange(70, 200) +
+                      (0 if driver_side_start else 180))
     pitches = np.deg2rad(np.arange(-85, -5))
     print('Found desired pitches and yaws')
-    yawgrid, pitchgrid = np.meshgrid(yaws, pitches)
-    print('Created mesh grid')
-    ray_angles = np.stack((yawgrid.flatten(), pitchgrid.flatten())).T
-    print('Stacked ray angles')
-    # An (n x 3) matrix of unit vectors in each direction (given yaw and pitch)
-    rays = np.array([
-        np.sin(ray_angles[:, 0]) * np.cos(ray_angles[:, 1]),
-        np.sin(ray_angles[:, 1]),
-        np.cos(ray_angles[:, 0]) * np.cos(ray_angles[:, 1]),
-    ]).T
-    print('Put rays in an array')
-    # An (n x 3) matrix where each row is equal to eye_pos
-    eye_pos_repeated = np.tile(eye_pos, rays.shape[0]).reshape((-1, 3))
+
+    # An (p x 3) matrix where each row is equal to eye_pos
+    eye_pos_repeated = np.tile(eye_pos, pitches.shape[0]).reshape((-1, 3))
     print('Created eye pos matrix')
-    # Perform raycasts
-    intersections = mesh.ray.intersects_first(eye_pos_repeated, rays)
-    print('Raycasts performed')
-    # For each yaw, find the tallest face that any of the rays intersect
-    face_idxs_by_yaw = np.zeros((yaws.size,), dtype=int)
+
+    nvp_rays = np.zeros((yaws.shape[0], 3))
     for idx, yaw in enumerate(yaws):
-        faces = intersections[ray_angles[:, 0] == yaw]
-        face_idxs_by_yaw[idx] = int(
-            max(faces, key=lambda f: -10000 if f == -1 else high_point[f, 1]))
-    print('Ray intersections found')
+        # An (n x 3) matrix of unit vectors in each direction (given yaw and pitch)
+        rays = np.array([
+            np.sin(yaw) * np.cos(pitches),
+            np.sin(pitches),
+            np.cos(yaw) * np.cos(pitches),
+        ]).T
+        print('Put rays in an array')
+
+        # Perform raycasts
+        intersections = mesh.ray.intersects_first(eye_pos_repeated, rays)
+        print(f'Raycasts performed for yaw: {yaw}')
+
+        face_idx_vals = np.where(intersections >= 0)[0]
+
+        if face_idx_vals.size > 0:
+            face_idx = face_idx_vals[-1]
+            face = mesh.faces[face_idx, :]
+            face_vertices = mesh.vertices[face, :]
+            highest_vertex_idx = np.argmax(face_vertices[:, 1])
+            highest_vertex = mesh.vertices[face[highest_vertex_idx]]
+            nvp_rays[idx, :] = (highest_vertex - eye_pos)
+        else:
+            nvp_rays[idx, :] = np.nan
+
+    nvp_rays = nvp_rays[~np.isnan(nvp_rays)].reshape((-1, 3))
+
     # The height of the ground (the lowest point in the entire mesh)
     floor_y_val = np.min(mesh.vertices[:, 1])
     print('Found height of the floor')
-    # A (y x 3) matrix - the direction of the NVP in a given yaw
-    nvp_rays = (high_point[face_idxs_by_yaw, :] - eye_pos).T
-    print('Found NVP rays for given yaw')
+
     # Calculate the vector which points from eye position to NVP
     hypot = np.sqrt(np.sum(nvp_rays * nvp_rays, axis=0))
     nvp_rays /= hypot  # Normalize

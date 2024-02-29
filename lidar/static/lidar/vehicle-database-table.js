@@ -64,7 +64,7 @@ class PageSelectorView {
         }
 
         let start_page = this.model.page - 2 > 0 ? this.model.page - 2 : 1
-        let end_page = this.model.page + 2 <= this.model.num_pages ? this.model.page + 2 : this.model.num_pages
+        let end_page = start_page + 4 <= this.model.num_pages ? start_page + 4 : this.model.num_pages
 
         let first_page = document.createElement('a');
         first_page.innerText = "<< First";

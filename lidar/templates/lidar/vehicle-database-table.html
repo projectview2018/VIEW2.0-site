@@ -52,6 +52,18 @@
         justify-content: space-between;
         width: 100%;
       }
+      .pagination_elt {
+        padding: 0px 4px;
+      }
+      .clickable_page {
+        cursor: pointer;
+      }
+      .unclickable_page {
+        color: graytext;
+      }
+      .current_page {
+         background-color: #248ee0;
+      }
     </style>
     <link
       rel="stylesheet"
@@ -259,16 +271,7 @@
             </table>
             <div id="table_footer">
               <div id="entry_indicator"></div>
-              <div id="pagination">
-                <a href="#">&laquo;</a>
-                <a href="#">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">5</a>
-                <a href="#">6</a>
-                <a href="#">&raquo;</a>
-              </div>
+              <div id="pagination"></div>
             </div>
           </div>
         </div>

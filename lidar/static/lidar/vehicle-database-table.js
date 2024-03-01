@@ -3,14 +3,15 @@ const data = JSON.parse(document.getElementById('vehicle_list').textContent);
 class Model {
     constructor() {
         this.vehicle_list = data;
+        this.total_vehicle_num = this.vehicle_list.length;
         
         this.cars_per_page = 10;
+        this.num_pages = Math.ceil(this.total_vehicle_num / this.cars_per_page)
         
         this.page = null;
         this.start_vehicle_num = null;
         this.end_vehicle_num = null;
-        this.total_vehicle_num = this.vehicle_list.length;
-        this.num_pages = Math.ceil(this.total_vehicle_num / this.cars_per_page)
+
         this.current_vehicles = [];
         this.changedPageSubscribers = [];
     }
@@ -21,6 +22,11 @@ class Model {
 
     subChangedPage(f) {
         this.changedPageSubscribers.push(f);
+    }
+
+    updatePages() {
+        this.num_pages = Math.ceil(this.total_vehicle_num / this.cars_per_page);
+        this.changePage(1);
     }
 
     changePage(p) {
@@ -39,6 +45,57 @@ class Model {
     }
 }
 
+class NumRowController {
+    constructor(m) {
+        this.model = m;
+        this.numSelect = document.getElementById('num_row_select');
+        this.numSelect.addEventListener('change', () => this.handleChangedRowNum())
+        m.subChangedPage(() => this.handleChangedPage());
+    }
+
+    handleChangedRowNum() {
+        let new_num_cars = this.numSelect.value;
+        if (new_num_cars === "All") {
+            this.model.cars_per_page = this.model.total_vehicle_num;
+        } else {
+            this.model.cars_per_page = +this.numSelect.value;
+        }
+        this.model.updatePages();
+    }
+
+    handleChangedPage() {
+        if (this.model.total_vehicle_num === this.model.cars_per_page) {
+            this.numSelect.value = "All";
+        } else {
+            this.numSelect.value = this.model.cars_per_page;
+        }
+    }
+}
+
+class TableView {
+    constructor(m) {
+        this.model = m;
+        this.table = document.getElementById('vehicle_table');
+        m.subChangedPage(() => this.handleChangedPage());
+    }
+
+    handleChangedPage() {
+        while (this.table.children.length > 1) {
+            this.table.removeChild(this.table.children[1]);
+        }
+        for (let vehicle of this.model.getVehicles()) {
+            let row = document.createElement('tr');
+            this.table.appendChild(row);
+            const keys = ['vehicle_updated', 'vehicle_make', 'vehicle_model', 'vehicle_year'];
+            for (let key of keys) {
+                let col = document.createElement('td');
+                col.innerText = vehicle.fields[key];
+                row.appendChild(col);
+            }
+        }
+    }
+}
+
 class LabelView {
     constructor(m) {
         this.model = m;
@@ -51,7 +108,7 @@ class LabelView {
     }
 }
 
-class PageSelectorView {
+class PageSelectorViewController {
     constructor(m) {
         this.model = m;
         this.pageSelector = document.getElementById('pagination');
@@ -134,35 +191,12 @@ class PageSelectorView {
     }
 }
 
-class TableView {
-    constructor(m) {
-        this.model = m;
-        this.table = document.getElementById('vehicle_table');
-        m.subChangedPage(() => this.handleChangedPage());
-    }
-
-    handleChangedPage() {
-        while (this.table.children.length > 1) {
-            this.table.removeChild(this.table.children[1]);
-        }
-        for (let vehicle of this.model.getVehicles()) {
-            let row = document.createElement('tr');
-            this.table.appendChild(row);
-            const keys = ['vehicle_updated', 'vehicle_make', 'vehicle_model', 'vehicle_year'];
-            for (let key of keys) {
-                let col = document.createElement('td');
-                col.innerText = vehicle.fields[key];
-                row.appendChild(col);
-            }
-        }
-    }
-}
-
 function init() {
     const model = new Model();
     const tableV = new TableView(model);
+    const numRowC = new NumRowController(model);
     const labelV = new LabelView(model);
-    const pageSelectorV = new PageSelectorView(model);
+    const pageSelectorV = new PageSelectorViewController(model);
     model.changePage(1);
 }
 

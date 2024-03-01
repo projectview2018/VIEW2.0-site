@@ -52,6 +52,11 @@
         justify-content: space-between;
         width: 100%;
       }
+      #table_header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
       .pagination_elt {
         padding: 0px 4px;
       }
@@ -258,6 +263,27 @@
             </span>
           </div>
           <div id="table_wrapper">
+            <div id="table_header">
+              <div>
+                <input type="text" id="search_model" name="search_model" placeholder="Search for Vehicle Model">
+              </div>
+              <div>
+                <label for="num_row_select">Entries Shown:</label>
+                <select name="num_row_select" id="num_row_select">
+                  <option value="5">5 Vehicles per Page</option>
+                  <option value="10">10 Vehicles per Page</option>
+                  <option value="15">15 Vehicles per Page</option>
+                  <option value="All">See All Vehicles</option>
+                </select>
+                <label for="sort_selct">Sort By:</label>
+                <select name="sort_select" id="sort_select">
+                  <option value="5">Last Updated (ascending)</option>
+                  <option value="10">Make</option>
+                  <option value="15">Model</option>
+                  <option value="All">Year (ascending)</option>
+                </select>
+              </div>
+            </div>
             <table id="vehicle_table">
               <tr id="header_row">
                 <th>Last Updated</th>

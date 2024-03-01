@@ -9,5 +9,5 @@ class StaticStorage(S3Boto3Storage):
 
 class MediaStorage(S3Boto3Storage):
     location = 'media/lidar/lidar_scans'
-    default_acl = 'None'
+    default_acl = None
     file_overwrite = False

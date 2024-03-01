@@ -179,13 +179,13 @@ STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
 
 AWS_STATIC_LOCATION = 'static/lidar'
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)
-STATIC_ROOT = os.path.join(BASE_DIR, 'lidar/static/')
+STATIC_ROOT = 'lidar/static/'
 
 
 MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
 AWS_MEDIA_LOCATION = 'media/lidar/lidar_scans'
 PUBLIC_MEDIA_LOCATION = 'media/public'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'lidar/media/')
+MEDIA_ROOT = 'lidar/media/'
 MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)
 
 # OLD Procfile CONTENT

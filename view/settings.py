@@ -176,15 +176,16 @@ AWS_S3_OBJECT_PARAMETERS = {
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
 
-AWS_STATIC_LOCATION = 'static'
+AWS_STATIC_LOCATION = 'static/lidar'
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)
 STATIC_ROOT = os.path.join(BASE_DIR, 'lidar/static/')
 
 
-# Uploaded files settings
-MEDIA_ROOT = os.path.join(BASE_DIR, 'lidar/media/')
-
-DEFAULT_FILE_STORAGE = 'view.storage_backends.MediaStorage'
+MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
 AWS_MEDIA_LOCATION = 'media/lidar/lidar_scans'
-PUBLIC_MEDIA_LOCATION = 'media'
+PUBLIC_MEDIA_LOCATION = 'media/public'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'lidar/media/')
 MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)
+
+# OLD Procfile CONTENT
+# web: python3 manage.py runserver 0.0.0.0:"$PORT"

@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-kfb=+rej@*g)fb58b_&!o8vg4&!gn&6o6-(749bqdd@b+up9_0
 # # SECURITY WARNING: don't run with debug turned on in production!
 # if not IS_HEROKU_APP:
 #     DEBUG = True
-DEBUG = False
+DEBUG = True
 
 # # On Heroku, it's safe to use a wildcard for `ALLOWED_HOSTS``, since the Heroku router performs
 # # validation of the Host header in the incoming HTTP request. On other platforms you may need
@@ -154,14 +154,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'lidar/static/')
 
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
-AWS_DEFAULT_REGION = os.environ.get("AWS_DEFAULT_REGION")
-AWS_DEFAULT_ACL = os.environ.get("AWS_DEFAULT_ACL")
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION')
+AWS_DEFAULT_ACL = os.environ.get('AWS_DEFAULT_ACL')
 # Make sure nyc3 is correct
 # AWS_S3_ENDPOINT_URL = 'https://nyc3.digitaloceanspaces.com'
-AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL")
+AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL')
 
 
 AWS_S3_OBJECT_PARAMETERS = {
@@ -172,17 +172,18 @@ AWS_S3_OBJECT_PARAMETERS = {
 #     os.path.join(BASE_DIR, 'lidar/static'),
 # ]
 
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
 
 AWS_STATIC_LOCATION = 'static'
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)
-STATIC_ROOT = 'lidar/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'lidar/static/')
 
 
-# # Uploaded files settings
-# MEDIA_ROOT = Path(__file__).parent.parent / 'media'
+# Uploaded files settings
+MEDIA_ROOT = os.path.join(BASE_DIR, 'lidar/media/')
 
-# MEDIA_FILE_STORAGE = 'django_project.storage_backends.MediaStorage'
-# AWS_MEDIA_LOCATION = 'media'
-# PUBLIC_MEDIA_LOCATION = 'media'
-# MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)
+DEFAULT_FILE_STORAGE = 'view.storage_backends.MediaStorage'
+AWS_MEDIA_LOCATION = 'media/lidar/lidar_scans'
+PUBLIC_MEDIA_LOCATION = 'media'
+MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)

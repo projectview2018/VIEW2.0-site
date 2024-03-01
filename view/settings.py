@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-kfb=+rej@*g)fb58b_&!o8vg4&!gn&6o6-(749bqdd@b+up9_0'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # # The `DYNO` env var is set on Heroku CI, but it's not a real Heroku app, so we have to
 # # also explicitly exclude CI:

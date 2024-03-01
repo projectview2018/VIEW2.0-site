@@ -171,12 +171,12 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400'
 }
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'lidar/static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'lidar/static'),
+# ]
 
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
+STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
 
 AWS_STATIC_LOCATION = 'static/lidar'
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)

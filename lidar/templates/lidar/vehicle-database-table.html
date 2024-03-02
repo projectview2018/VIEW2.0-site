@@ -30,6 +30,19 @@
         width: 85%;
         margin: 64px;
       }
+      #table_header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+      #search_bar {
+        box-shadow: 0px 1px 4px black;
+      }
+      #clear_search_bar {
+        cursor: pointer;
+        background-color: gray;
+        border-radius: 4px;
+      }
       #vehicle_table {
         border-collapse: separate;
         border-spacing: 0px 10px;
@@ -48,11 +61,6 @@
         background-color: #dce5ec; 
       }
       #table_footer {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-      }
-      #table_header {
         display: flex;
         justify-content: space-between;
         width: 100%;
@@ -265,7 +273,8 @@
           <div id="table_wrapper">
             <div id="table_header">
               <div>
-                <input type="text" id="search_model" name="search_model" placeholder="Search for Vehicle Model">
+                <input type="text" id="search_bar" name="search_bar" placeholder="Search for Model">
+                <button id="clear_search_bar" type="button">Clear</button>
               </div>
               <div>
                 <label for="num_row_select">Entries Shown:</label>

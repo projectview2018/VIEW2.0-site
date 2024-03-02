@@ -14,6 +14,7 @@ function compareByField(field) {
 
 class Model {
     constructor() {
+        this.table_fields = ['vehicle_updated', 'vehicle_make', 'vehicle_model', 'vehicle_year'];
         this.vehicle_lists = [
             data, 
             [...data].sort(compareByField('vehicle_updated')),
@@ -21,62 +22,96 @@ class Model {
             [...data].sort(compareByField('vehicle_model')),
             [...data].sort(compareByField('vehicle_year')),
         ];
-        this.total_vehicle_num = this.vehicle_lists[0].length;
+        this.current_list = this.vehicle_lists[0];
+
+        // search controller
+        this.seach_value = "";
 
         // row controller
         this.cars_per_page = 10;
-        this.num_pages = Math.ceil(this.total_vehicle_num / this.cars_per_page)
+        this.num_pages = Math.ceil(this.current_list.length / this.cars_per_page)
         
+        // sort controller
+        this.vehicle_lists_index = 0;
+        this.reverse = false;
+
         // page controller
         this.page = null;
         this.start_vehicle_num = null;
         this.end_vehicle_num = null;
 
-        // sort controller
-        this.vehicle_lists_index = 0;
-        this.reverse = false;
-
-        this.current_vehicles = [];
+        this.shown_vehicles = [];
         this.changedPageSubscribers = [];
     }
 
-    getVehicles() {
-        return this.current_vehicles;
+    getShownVehicles() {
+        return this.shown_vehicles;
     }
 
     subChangedPage(f) {
         this.changedPageSubscribers.push(f);
     }
 
-    updatePageLength() {
-        this.num_pages = Math.ceil(this.total_vehicle_num / this.cars_per_page);
+    updateNumPages() {
+        this.num_pages = Math.ceil(this.current_list.length / this.cars_per_page);
         this.changePage(1);
+    }
+
+    updateCurrentList() {
+        let list = [];
+        for (let vehicle of this.vehicle_lists[this.vehicle_lists_index]) {
+            if (vehicle.fields['vehicle_model'].toLowerCase().includes(this.seach_value.toLowerCase())) {
+                list.push(vehicle);
+            }
+        }
+        this.current_list = list;
+        this.updateNumPages()
     }
 
     changePage(p) {
         this.page = p;
 
-        this.current_vehicles = []
-        let vehicle_list = this.vehicle_lists[this.vehicle_lists_index];
+        this.shown_vehicles = []
 
         let start_index = this.cars_per_page * (p - 1);
-        let end_index = this.total_vehicle_num >= this.cars_per_page * p ? this.cars_per_page * p : this.total_vehicle_num;
+        let end_index = this.current_list.length >= this.cars_per_page * p ? this.cars_per_page * p : this.current_list.length;
 
         if (!this.reverse) {
             for (let i = start_index; i < end_index; i++) {
-                this.current_vehicles.push(vehicle_list[i]);
+                this.shown_vehicles.push(this.current_list[i]);
             }
         } else {
-            for (let i = this.total_vehicle_num - end_index; i < this.total_vehicle_num - start_index; i++) {
-                this.current_vehicles.push(vehicle_list[i]);
+            for (let i = this.current_list.length - end_index; i < this.current_list.length - start_index; i++) {
+                this.shown_vehicles.push(this.current_list[i]);
             }
-            this.current_vehicles.reverse();
+            this.shown_vehicles.reverse();
         }        
 
         this.start_vehicle_num = start_index + 1;
         this.end_vehicle_num = end_index;
 
         this.changedPageSubscribers.forEach((f) => f(p))
+    }
+}
+
+class SearchController {
+    constructor(m) {
+        this.model = m;
+        this.searchBar = document.getElementById('search_bar');
+        this.clearButton = document.getElementById('clear_search_bar');
+        this.searchBar.addEventListener('input', (e) => this.handleSearchInput(e));
+        this.clearButton.addEventListener('click', () => this.handleClearSearch());
+    }
+
+    handleSearchInput(e) {
+        this.model.seach_value = e.target.value;
+        this.model.updateCurrentList();
+    }
+
+    handleClearSearch() {
+        this.searchBar.value = "";
+        this.model.seach_value = "";
+        this.model.updateCurrentList();
     }
 }
 
@@ -91,15 +126,15 @@ class NumRowController {
     handleChangedRowNum() {
         let new_num_cars = this.numSelect.value;
         if (new_num_cars === "All") {
-            this.model.cars_per_page = this.model.total_vehicle_num;
+            this.model.cars_per_page = this.model.current_list.length;
         } else {
             this.model.cars_per_page = +this.numSelect.value;
         }
-        this.model.updatePageLength();
+        this.model.updateNumPages();
     }
 
     handleChangedPage() {
-        if (this.model.total_vehicle_num === this.model.cars_per_page) {
+        if (this.model.current_list.length === this.model.cars_per_page) {
             this.numSelect.value = "All";
         } else {
             this.numSelect.value = this.model.cars_per_page;
@@ -122,7 +157,7 @@ class SortController {
         } else {
             this.model.reverse = false;
         }
-        this.model.changePage(1);
+        this.model.updateCurrentList();
     }
 
     handleChangedPage() {
@@ -141,11 +176,10 @@ class TableView {
         while (this.table.children.length > 1) {
             this.table.removeChild(this.table.children[1]);
         }
-        for (let vehicle of this.model.getVehicles()) {
+        for (let vehicle of this.model.getShownVehicles()) {
             let row = document.createElement('tr');
             this.table.appendChild(row);
-            const keys = ['vehicle_updated', 'vehicle_make', 'vehicle_model', 'vehicle_year'];
-            for (let key of keys) {
+            for (let key of this.model.table_fields) {
                 let col = document.createElement('td');
                 col.innerText = vehicle.fields[key];
                 row.appendChild(col);
@@ -162,7 +196,7 @@ class LabelView {
     }
 
     handleChangedPage() {
-        this.label.innerText = `Showing ${this.model.start_vehicle_num}-${this.model.end_vehicle_num} of ${this.model.total_vehicle_num} entries`;
+        this.label.innerText = `Showing ${this.model.start_vehicle_num}-${this.model.end_vehicle_num} of ${this.model.current_list.length} entries`;
     }
 }
 
@@ -251,11 +285,12 @@ class PageSelectorViewController {
 
 function init() {
     const model = new Model();
-    const tableV = new TableView(model);
+    const searchC = new SearchController(model);
     const numRowC = new NumRowController(model);
     const sortC = new SortController(model);
+    const tableV = new TableView(model);
     const labelV = new LabelView(model);
-    const pageSelectorV = new PageSelectorViewController(model);
+    const pageSelectorVC = new PageSelectorViewController(model);
     model.changePage(1);
 }
 

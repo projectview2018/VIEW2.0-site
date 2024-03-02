@@ -1,16 +1,40 @@
 const data = JSON.parse(document.getElementById('vehicle_list').textContent);
 
+function compareByField(field) {
+    return function(a, b) {
+        if (a.fields[field] < b.fields[field]) {
+            return -1;
+        }
+        if (a.fields[field] > b.fields[field]) {
+            return 1;
+        }
+        return 0;
+    }
+}
+
 class Model {
     constructor() {
-        this.vehicle_list = data;
-        this.total_vehicle_num = this.vehicle_list.length;
-        
+        this.vehicle_lists = [
+            data, 
+            [...data].sort(compareByField('vehicle_updated')),
+            [...data].sort(compareByField('vehicle_make')),
+            [...data].sort(compareByField('vehicle_model')),
+            [...data].sort(compareByField('vehicle_year')),
+        ];
+        this.total_vehicle_num = this.vehicle_lists[0].length;
+
+        // row controller
         this.cars_per_page = 10;
         this.num_pages = Math.ceil(this.total_vehicle_num / this.cars_per_page)
         
+        // page controller
         this.page = null;
         this.start_vehicle_num = null;
         this.end_vehicle_num = null;
+
+        // sort controller
+        this.vehicle_lists_index = 0;
+        this.reverse = false;
 
         this.current_vehicles = [];
         this.changedPageSubscribers = [];
@@ -24,7 +48,7 @@ class Model {
         this.changedPageSubscribers.push(f);
     }
 
-    updatePages() {
+    updatePageLength() {
         this.num_pages = Math.ceil(this.total_vehicle_num / this.cars_per_page);
         this.changePage(1);
     }
@@ -33,11 +57,22 @@ class Model {
         this.page = p;
 
         this.current_vehicles = []
+        let vehicle_list = this.vehicle_lists[this.vehicle_lists_index];
+
         let start_index = this.cars_per_page * (p - 1);
-        let end_index = this.vehicle_list.length >= this.cars_per_page * p ? this.cars_per_page * p : this.vehicle_list.length;
-        for (let i = start_index; i < end_index; i++) {
-            this.current_vehicles.push(this.vehicle_list[i]);
-        }
+        let end_index = this.total_vehicle_num >= this.cars_per_page * p ? this.cars_per_page * p : this.total_vehicle_num;
+
+        if (!this.reverse) {
+            for (let i = start_index; i < end_index; i++) {
+                this.current_vehicles.push(vehicle_list[i]);
+            }
+        } else {
+            for (let i = this.total_vehicle_num - end_index; i < this.total_vehicle_num - start_index; i++) {
+                this.current_vehicles.push(vehicle_list[i]);
+            }
+            this.current_vehicles.reverse();
+        }        
+
         this.start_vehicle_num = start_index + 1;
         this.end_vehicle_num = end_index;
 
@@ -60,7 +95,7 @@ class NumRowController {
         } else {
             this.model.cars_per_page = +this.numSelect.value;
         }
-        this.model.updatePages();
+        this.model.updatePageLength();
     }
 
     handleChangedPage() {
@@ -69,6 +104,29 @@ class NumRowController {
         } else {
             this.numSelect.value = this.model.cars_per_page;
         }
+    }
+}
+
+class SortController {
+    constructor(m) {
+        this.model = m;
+        this.sortSelect = document.getElementById('sort_select');
+        this.sortSelect.addEventListener('change', () => this.handleChangedSort());
+        m.subChangedPage(() => this.handleChangedPage())
+    }
+
+    handleChangedSort() {
+        this.model.vehicle_lists_index = Math.ceil(this.sortSelect.value / 2);
+        if (this.sortSelect.value % 2 === 0 && this.sortSelect.value != 0) {
+            this.model.reverse = true;
+        } else {
+            this.model.reverse = false;
+        }
+        this.model.changePage(1);
+    }
+
+    handleChangedPage() {
+        this.sortSelect.value = this.model.vehicle_lists_index === 0 ? this.model.vehicle_lists_index : 2 * this.model.vehicle_lists_index - !this.model.reverse;
     }
 }
 
@@ -195,6 +253,7 @@ function init() {
     const model = new Model();
     const tableV = new TableView(model);
     const numRowC = new NumRowController(model);
+    const sortC = new SortController(model);
     const labelV = new LabelView(model);
     const pageSelectorV = new PageSelectorViewController(model);
     model.changePage(1);

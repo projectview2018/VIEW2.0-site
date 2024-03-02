@@ -12,6 +12,25 @@ function compareByField(field) {
     }
 }
 
+function isSubsequence(a, b) {
+    // convert to lowercase
+    a = a.toLowerCase();
+    b = b.toLowerCase();
+
+    // remove non-alphanumeric characters
+    a = a.replace(/[^a-zA-Z0-9]/g, '');
+    b = b.replace(/[^a-zA-Z0-9]/g, '');
+
+    // check if a is a substring of b (non necessarily consecutive)
+    for (let letter of a) {
+        if (!b.includes(letter)) {
+            return false
+        }
+        b = b.slice(b.indexOf(letter) + 1)
+    }
+    return true
+}
+
 class Model {
     constructor() {
         this.table_fields = ['vehicle_updated', 'vehicle_make', 'vehicle_model', 'vehicle_year'];
@@ -60,7 +79,7 @@ class Model {
     updateCurrentList() {
         let list = [];
         for (let vehicle of this.vehicle_lists[this.vehicle_lists_index]) {
-            if (vehicle.fields['vehicle_model'].toLowerCase().includes(this.seach_value.toLowerCase())) {
+            if (isSubsequence(this.seach_value, vehicle.fields['vehicle_model'])) {
                 list.push(vehicle);
             }
         }

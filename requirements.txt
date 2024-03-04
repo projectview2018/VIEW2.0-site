@@ -7,10 +7,10 @@ numpy
 rtree
 django
 psycopg2
-boto3==1.21.0
-django-storages==1.12.3
-python-dotenv
 boto3
+django-storages
+python-dotenv
+
 
 # django>=5.0,<5.1
 # gunicorn>=21.2,<22.0

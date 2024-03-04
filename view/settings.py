@@ -158,8 +158,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 print(f"Bucket type is {type(os.environ.get('AWS_STORAGE_BUCKET_NAME'))}")
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# AWS_
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-# AWS_REGION_NAME= os.environ.get('AWS_REGION_NAME')
+AWS_REGION_NAME = os.environ.get('AWS_REGION_NAME')
 AWS_DEFAULT_ACL = os.environ.get('AWS_DEFAULT_ACL')
 # Make sure nyc3 is correct
 # AWS_S3_ENDPOINT_URL = 'https://nyc3.digitaloceanspaces.com'

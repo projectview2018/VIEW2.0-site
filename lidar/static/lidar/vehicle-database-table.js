@@ -45,6 +45,7 @@ class Model {
         this.current_list = this.vehicle_lists[0];
 
         // search controller
+        this.search_field_index = 0;
         this.seach_value = "";
 
         // row controller
@@ -79,8 +80,9 @@ class Model {
 
     updateCurrentList() {
         let list = [];
+        let search_field = this.table_fields[this.search_field_index];
         for (let vehicle of this.vehicle_lists[this.vehicle_lists_index]) {
-            if (isSubsequence(this.seach_value, vehicle.fields['vehicle_model'])) {
+            if (isSubsequence(this.seach_value, vehicle.fields[search_field].toString())) {
                 list.push(vehicle);
             }
         }
@@ -117,10 +119,19 @@ class Model {
 class SearchController {
     constructor(m) {
         this.model = m;
+        this.seachColSelector = document.getElementById('search_col_select');
         this.searchBar = document.getElementById('search_bar');
         this.clearButton = document.getElementById('clear_search_bar');
+        this.seachColSelector.addEventListener('change', () => this.handleSeachFieldChange());
         this.searchBar.addEventListener('input', (e) => this.handleSearchInput(e));
         this.clearButton.addEventListener('click', () => this.handleClearSearch());
+    }
+
+    handleSeachFieldChange() {
+        this.model.search_field_index = +this.seachColSelector.value;
+        if (this.model.seach_value !== '') {
+            this.model.updateCurrentList();
+        }
     }
 
     handleSearchInput(e) {

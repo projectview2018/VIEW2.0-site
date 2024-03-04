@@ -129,6 +129,7 @@ class SearchController {
 
     handleSeachFieldChange() {
         this.model.search_field_index = +this.seachColSelector.value;
+        this.searchBar.placeholder = `Search for ${this.seachColSelector.options[this.model.search_field_index].text}`;
         if (this.model.seach_value !== '') {
             this.model.updateCurrentList();
         }

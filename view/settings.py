@@ -102,10 +102,10 @@ WSGI_APPLICATION = 'view.wsgi.application'
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lidar',
-        'USER': 'view2user',
-        'PASSWORD': 'scopesantosvolpe2023',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'defaultdb',
+        'USER': 'doadmin',
+        'PASSWORD': os.environ.get('PASSWORD'),
         'HOST': 'db-postgresql-nyc3-27521-do-user-15891455-0.c.db.ondigitalocean.com',
         'PORT': '25060',
     }

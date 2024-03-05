@@ -18,7 +18,7 @@ def add_vehicle(request):
 
 def data_upload(request):
     if request.method == 'POST':
-        form = ScanForm(request.POST, request.FILES)
+        form = ScanForm(request.POST, lidar_scan=request.FILES)
         if form.is_valid():
             scan = form.save()
             vehicle = Vehicle.objects.get(pk=scan.vehicle.id)

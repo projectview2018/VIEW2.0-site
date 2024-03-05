@@ -181,16 +181,15 @@ AWS_S3_OBJECT_PARAMETERS = {
 #     os.path.join(BASE_DIR, 'lidar/static'),
 # ]
 
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
-
-AWS_STATIC_LOCATION = 'static/lidar'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
+AWS_STATIC_LOCATION = 'static'
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)
 STATIC_ROOT = 'lidar/static/'
 
 
 MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
-AWS_MEDIA_LOCATION = 'media/lidar/lidar_scans'
+AWS_MEDIA_LOCATION = 'media'
 PUBLIC_MEDIA_LOCATION = 'media/public'
 MEDIA_ROOT = 'lidar/media/'
 MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)

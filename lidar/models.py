@@ -26,7 +26,7 @@ class Scan(models.Model):
     eye_y_in = models.FloatField(default=0)
     eye_z_ft = models.IntegerField(default=0)
     eye_z_in = models.FloatField(default=0)
-    lidar_scan = models.FileField(upload_to='lidar/lidar_scans/')
+    lidar_scan = models.FileField(upload_to='')
 
     @property
     def eye_x_m(self) -> float:

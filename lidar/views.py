@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 import threading
 from .forms import ScanForm
 from .perform_scan import complete_scan
-from .models import Vehicle
+from .models import Vehicle, Scan, CompletedScan
 from django.core import serializers
 import json
 
@@ -23,7 +23,7 @@ def data_upload(request):
             scan = form.save()
             vehicle = Vehicle.objects.get(pk=scan.vehicle.id)
             thread = threading.Thread(
-                target=complete_scan, args=(scan, vehicle))
+                target=complete_scan, args=(scan, vehicle,))
             thread.start()
             return HttpResponseRedirect('/add_vehicle')
     else:

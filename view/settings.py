@@ -167,7 +167,7 @@ AWS_S3_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 AWS_STORAGE_BUCKET_NAME = 'vehicle-scans'
 AWS_DEFAULT_ACL = 'public-read'
-AWS_REGION_NAME = 'us-east-2'
+AWS_S3_REGION_NAME = 'us-east-2'
 AWS_S3_ENDPOINT_URL = 'https://vehicle-scans.nyc3.digitaloceanspaces.com'
 
 

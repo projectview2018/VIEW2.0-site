@@ -26,21 +26,56 @@
         background-color: var(--dl-color-gray-white);
 
       }
-      .vehicle_table {
-        border-collapse: separate;
-        border-spacing: 0px 10px;
+      #table_wrapper {
+        width: 85%;
         margin: 64px;
       }
-      .vehicle_table td,
-      .vehicle_table th {
-        padding: 10px 20px;
+      #table_header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
       }
-      .vehicle_table tr {
+      #search_bar {
+        box-shadow: 0px 1px 4px black;
+      }
+      #clear_search_bar {
+        cursor: pointer;
+        background-color: gray;
+        border-radius: 4px;
+      }
+      #vehicle_table {
+        border-collapse: separate;
+        border-spacing: 0px 10px;
+        width: 100%;
+      }
+      #vehicle_table td,
+      #vehicle_table th {
+        padding: 10px 20px;
+        text-align: left;
+      }
+      #vehicle_table tr {
         /* border-radius: 4px; */
         box-shadow: 0px 1px 4px black;
       }
-      .header_row {
+      #header_row {
         background-color: #dce5ec; 
+      }
+      #table_footer {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+      .pagination_elt {
+        padding: 0px 4px;
+      }
+      .clickable_page {
+        cursor: pointer;
+      }
+      .unclickable_page {
+        color: graytext;
+      }
+      .current_page {
+         background-color: #248ee0;
       }
     </style>
     <link
@@ -105,6 +140,9 @@
       }
       /*** End data upload styling ***/
     </style>
+    {% load static %}
+    {{ vehicle_list|json_script:"vehicle_list" }}
+    <script src="{% static 'lidar/vehicle-database-table.js' %}" defer></script>
   </head>
   <body>
     {% load static %}
@@ -232,32 +270,58 @@
               </span>
             </span>
           </div>
-
-          <table class="vehicle_table">
-            <tr class="header_row">
-              <th>Last Updated</th>
-              <th>Make</th>
-              <th>Model</th>
-              <th>Year</th>
-              <th>Body Class</th>
-              <th>Weight Class</th>
-              <th>ID</th>
-            </tr>
-            {% for vehicle in vehicle_list %}
-              <tr>
-                <td>{{ vehicle.vehicle_updated }}</td>
-                <td>{{ vehicle.vehicle_make }}</td>
-                <td>{{ vehicle.vehicle_model }}</td>
-                <td>{{ vehicle.vehicle_year }}</td>
-                <td>TODO - Body Class</td>
-                <td>TODO - Weight Class</td>
-                <td>
-                  <a href="">View</a>
-                </td>
+          <div id="table_wrapper">
+            <div id="table_header">
+              <div>
+                <select name="search_col_select" id="search_col_select">
+                  <option value="0">Last Updated</option>
+                  <option value="1">Make</option>
+                  <option value="2">Model</option>
+                  <option value="3">Year</option>
+                </select>
+                <input type="text" id="search_bar" name="search_bar" placeholder="Search for Last Updated">
+                <button id="clear_search_bar" type="button">Clear</button>
+              </div>
+              <div>
+                <label for="num_row_select">Entries Shown:</label>
+                <select name="num_row_select" id="num_row_select">
+                  <option value="5">5 Vehicles per Page</option>
+                  <option value="10">10 Vehicles per Page</option>
+                  <option value="15">15 Vehicles per Page</option>
+                  <option value="All">See All Vehicles</option>
+                </select>
+                <label for="sort_selct">Sort By:</label>
+                <select name="sort_select" id="sort_select">
+                  <option value="0">Default</option>
+                  <option value="1">Last Updated (Old-New)</option>
+                  <option value="2">Last Updated (New-Old)</option>
+                  <option value="3">Make (Alphabetical)</option>
+                  <option value="4">Make (Reverse Alphabetical)</option>
+                  <option value="5">Model (Alphabetical)</option>
+                  <option value="6">Model (Reverse Alphabetical)</option>
+                  <option value="7">Year (Old-New)</option>
+                  <option value="8">Year (New-Old)</option>
+                  <!-- <option value="9">Body Class (TODO)</option>
+                  <option value="10">Weight Class (TODO)</option> -->
+                </select>
+              </div>
+            </div>
+            <table id="vehicle_table">
+              <tr id="header_row">
+                <th>Last Updated</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Body Class</th>
+                <th>Weight Class</th>
+                <th>ID</th>
               </tr>
-            {% endfor %}
-          </table>
-
+            </table>
+            <div id="table_footer">
+              <div id="entry_indicator"></div>
+              <div id="pagination"></div>
+            </div>
+          </div>
         </div>
         <footer class="footer-footer">
           <span class="footer-text">

@@ -15,6 +15,8 @@ def index(request):
 def add_vehicle(request):
     return render(request, 'lidar/add-vehicle.html', {})
 
+# handle data upload old
+
 
 def data_upload(request):
     if request.method == 'POST':
@@ -35,6 +37,10 @@ def faq(request):
     return render(request, 'lidar/faq.html', {})
 
 
+def instructions(request):
+    return render(request, 'lidar/instructions.html', {})
+
+
 def vehicle_database_loading(request):
     return render(request, 'lidar/vehicle-database-loading.html', {})
 
@@ -48,3 +54,11 @@ def vehicle_database_table(request):
 
     return render(request, 'lidar/vehicle-database-table.html',
                   {'vehicle_list': vehicle_list})
+
+
+def visualization(request):
+    return render(request, 'lidar/visualization.html', {})
+
+
+def windshield_removal(request):
+    return render(request, 'lidar/windshield-removal.html', {})

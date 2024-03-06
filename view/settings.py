@@ -181,20 +181,31 @@ AWS_S3_OBJECT_PARAMETERS = {
 #     os.path.join(BASE_DIR, 'lidar/static'),
 # ]
 
+# STORAGES = {
+#     "default": {
+#         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+#         "OPTIONS": {},
+#     },
+#     "staticfiles": {
+#         "BACKEND": "view.storage_backends.StaticStorage",
+#         "OPTIONS": {},
+#     },
+# }
+
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
 AWS_STATIC_LOCATION = 'static'
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)
-# STATIC_ROOT = 'lidar/static/'
+STATIC_ROOT = 'lidar/static/'
 
-
-# MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
-AWS_MEDIA_LOCATION = 'media/lidar/lidar_scans'
+MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
+AWS_MEDIA_LOCATION = 'media'
 PUBLIC_MEDIA_LOCATION = 'media/public'
 MEDIA_ROOT = 'lidar/media/'
 MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)
 
-DEFAULT_FILE_STORAGE = 'view.storage_backends.MediaStorage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 # OLD Procfile CONTENT
 # web: python3 manage.py runserver 0.0.0.0:"$PORT"

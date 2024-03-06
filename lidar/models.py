@@ -26,7 +26,7 @@ class Scan(models.Model):
     eye_y_in = models.FloatField(default=0)
     eye_z_ft = models.IntegerField(default=0)
     eye_z_in = models.FloatField(default=0)
-    lidar_scan = models.FileField()
+    lidar_scan = models.FileField(upload_to='lidar/lidar_scans/')
 
     @property
     def eye_x_m(self) -> float:
@@ -49,4 +49,3 @@ class CompletedScan(models.Model):
     nvp_ys = models.CharField(
         validators=[validate_comma_separated_integer_list], max_length=2160)
     area = models.FloatField()
-    scan_file = models.FileField()

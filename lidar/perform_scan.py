@@ -5,7 +5,8 @@ from .models import Vehicle, Scan, CompletedScan
 
 def complete_scan(scan: Scan, vehicle: Vehicle):
     print('Starting scan')
-    # print(scan.lidar_scan.path)
+    # print(f'scan_path: {scan.lidar_scan.name}')
+    # mesh = trimesh.load(f'media/{scan.lidar_scan.name}', force='mesh')
     mesh = trimesh.load(scan.lidar_scan.path, force='mesh')
     print('Loading scan')
     eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
@@ -18,7 +19,6 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         nvp_xs=nvp_xs,
         nvp_ys=nvp_ys,
         area=calculate_area(coordinates),
-        scan_file=scan.lidar_scan
     )
     print('Created new CompletedScan model')
     completed_scan.save()

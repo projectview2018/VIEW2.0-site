@@ -340,6 +340,9 @@
 }
 
 
+.bulletedList {
+  list-style: square;
+}
 .NavText {
   font-size: 1.25rem;
   font-family: "Roboto";

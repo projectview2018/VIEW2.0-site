@@ -287,6 +287,9 @@
 
 
 
+.header-v2-root-class-name9 {
+  align-self: center;
+}
 @media(max-width: 1200px) {
   .header-v2-links {
     margin-left: var(--dl-space-space-twounits);
@@ -632,18 +635,28 @@
   position: relative;
   flex-wrap: wrap;
   align-items: flex-start;
+  justify-content: space-between;
 }
 .windshield-removal-navlink {
   display: absolute;
   align-self: center;
   text-decoration: none;
 }
+.windshield-removal-container7 {
+  flex: 1;
+  width: auto;
+  height: var(--dl-size-size-xsmall);
+  max-width: 480px;
+  min-width: 160px;
+  align-self: center;
+  margin-left: var(--dl-space-space-threeunits);
+  margin-right: var(--dl-space-space-threeunits);
+  border-radius: var(--dl-radius-radius-radius4);
+}
+.windshield-removal-container8 {
+  display: contents;
+}
 .windshield-removal-submit-entry {
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  margin: auto;
-  position: absolute;
   align-self: center;
   transition: 0.3s;
 }
@@ -656,11 +669,17 @@
 }
 @media(max-width: 1200px) {
   .windshield-removal-container2 {
-    width: 100vw;
+    width: 100%;
   }
 }
 @media(max-width: 991px) {
   .windshield-removal-container4 {
     width: 100%;
+  }
+}
+@media(max-width: 767px) {
+  .windshield-removal-container7 {
+    margin-left: var(--dl-space-space-twounits);
+    margin-right: var(--dl-space-space-twounits);
   }
 }

@@ -287,6 +287,9 @@
 
 
 
+.header-v2-root-class-name9 {
+  align-self: center;
+}
 @media(max-width: 1200px) {
   .header-v2-links {
     margin-left: var(--dl-space-space-twounits);

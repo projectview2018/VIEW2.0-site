@@ -2,10 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 import threading
 from .forms import ScanForm
-from .perform_scan import complete_scan
+from .perform_scan import complete_scan, access_object
 from .models import Vehicle, Scan, CompletedScan
 from django.core import serializers
 import json
+import os
 
 
 def index(request):
@@ -20,8 +21,9 @@ def data_upload(request):
     if request.method == 'POST':
         form = ScanForm(request.POST, request.FILES)
         if form.is_valid():
+            # scan = form.save(commit=False)
+            print("Saving original scan to S3 storage")
             scan = form.save()
-            # scan.save()
             vehicle = Vehicle.objects.get(pk=scan.vehicle.id)
             thread = threading.Thread(
                 target=complete_scan, args=(scan, vehicle))

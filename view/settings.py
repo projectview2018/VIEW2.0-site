@@ -36,7 +36,7 @@ SECRET_KEY = 'django-insecure-kfb=+rej@*g)fb58b_&!o8vg4&!gn&6o6-(749bqdd@b+up9_0
 # # SECURITY WARNING: don't run with debug turned on in production!
 # if not IS_HEROKU_APP:
 #     DEBUG = True
-DEBUG = False
+DEBUG = True
 
 # # On Heroku, it's safe to use a wildcard for `ALLOWED_HOSTS``, since the Heroku router performs
 # # validation of the Host header in the incoming HTTP request. On other platforms you may need
@@ -177,32 +177,32 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400'
 }
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'lidar/static'),
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'lidar/static'),
+]
 
-# STORAGES = {
-#     "default": {
-#         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-#         "OPTIONS": {},
-#     },
-#     "staticfiles": {
-#         "BACKEND": "view.storage_backends.StaticStorage",
-#         "OPTIONS": {},
-#     },
-# }
+STORAGES = {
+    "default": {
+        "BACKEND": "view.storage_backends.MediaStorage",
+        "OPTIONS": {},
+    },
+    "staticfiles": {
+        "BACKEND": "view.storage_backends.StaticStorage",
+        "OPTIONS": {},
+    },
+}
 
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
+# STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
 AWS_STATIC_LOCATION = 'static'
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)
-STATIC_ROOT = 'lidar/static/'
+# STATIC_ROOT = 'static/'
 
-MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
-AWS_MEDIA_LOCATION = 'media'
+# MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
+AWS_MEDIA_LOCATION = 'media/lidar/lidar_scans'
 PUBLIC_MEDIA_LOCATION = 'media/public'
-MEDIA_ROOT = 'lidar/media/'
 MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)
+# MEDIA_ROOT = 'lidar/media/'
 
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 

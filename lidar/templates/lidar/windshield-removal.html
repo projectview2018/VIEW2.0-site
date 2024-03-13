@@ -287,7 +287,7 @@
       /* style top level of disclosure boxes when open and not active */
       .disclosure__trigger[aria-expanded="true"]:not(:hover, :focus){
         background:var(--dl-color-default-accentbluedark);
-        /*evelation3*/
+        /*elevation3*/
         box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12) ;
       }
 
@@ -348,6 +348,8 @@
         border-radius: var(--dl-radius-radius-radius4);
         color: #fff;
         background: var(--dl-color-primaryblue-primaryblue);
+        /*elevation3*/
+        box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12) ;
       }
 
       /* add arrow to popup content on visualization page */
@@ -532,6 +534,28 @@
                   >
                     Back
                   </a>
+                  <div class="windshield-removal-container7 elevation01">
+                    <div class="windshield-removal-container8">
+                      <div class="row" id="progressbar">
+                        <div class="column" id="prog"></div>
+                      </div>
+
+                      <style>
+                        #progressbar { /*style entire bar*/
+                          height: 100%; /*set size of progress bar inside embed size*/
+                          border-radius: var(--dl-radius-radius-radius4);
+                          background: var(--dl-color-default-accentbluedark);
+                          overflow: hidden; /*hide overflow of column corners instead of adding radius*/
+                        }
+
+                        #progressbar #prog { /*style the 'completed' column*/
+                          width: 100%;
+                          height: 100%;
+                          background: var(--dl-color-secondaryblue-secondaryblue);
+                        }
+                      </style>
+                    </div>
+                  </div>
                   <button
                     name="submit data"
                     type="submit"

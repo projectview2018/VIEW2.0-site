@@ -50,7 +50,7 @@ class Model {
         this.seach_value = "";
 
         // row controller
-        this.cars_per_page = 10;
+        this.cars_per_page = 25;
         this.num_pages = Math.ceil(this.current_list.length / this.cars_per_page)
         
         // sort controller

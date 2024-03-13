@@ -1,5 +1,8 @@
 const data = JSON.parse(document.getElementById('vehicle_list').textContent);
-const visual_url = document.getElementById('visual_url');
+const table_base_uri = document.getElementById('visual_url').baseURI;
+const table_page_extension = '/vehicle_database_table/';
+const visual_page_extension = '/visualization/';
+const visual_url = table_base_uri.slice(0, table_base_uri.indexOf(table_page_extension)) + visual_page_extension;
 
 function compareByField(field) {
     return function(a, b) {
@@ -333,7 +336,6 @@ class PageSelectorViewController {
 }
 
 function init() {
-    console.log(visual_url);
     const model = new Model();
     const searchC = new SearchController(model);
     const numRowC = new NumRowController(model);

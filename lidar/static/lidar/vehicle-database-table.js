@@ -1,4 +1,5 @@
 const data = JSON.parse(document.getElementById('vehicle_list').textContent);
+const visual_url = document.getElementById('visual_url');
 
 function compareByField(field) {
     return function(a, b) {
@@ -211,11 +212,27 @@ class TableView {
         for (let vehicle of this.model.getShownVehicles()) {
             let row = document.createElement('tr');
             this.table.appendChild(row);
-            for (let key of this.model.table_fields) {
+            for (let index in this.model.table_fields) {
                 let col = document.createElement('td');
-                col.innerText = vehicle.fields[key];
+                col.innerText = vehicle.fields[this.model.table_fields[index]];
+                if (+index === 0) {
+                    col.classList.add('left_cell');
+                }
                 row.appendChild(col);
             }
+            //TEMPORARY WAY TO FILLPLACEHOLDERS FOR EMPTY COLUMNS - COME BACK AND REMOVE
+            for (let i = 0; i < 2; i++) {
+                let col = document.createElement('td');
+                col.innerText = "";
+                row.appendChild(col);
+            }
+            let id = document.createElement('td');
+            let link = document.createElement('a');
+            row.appendChild(id);
+            id.appendChild(link);
+            id.classList.add('right_cell');
+            link.href = visual_url;
+            link.innerText = 'View';
         }
     }
 }
@@ -316,6 +333,7 @@ class PageSelectorViewController {
 }
 
 function init() {
+    console.log(visual_url);
     const model = new Model();
     const searchC = new SearchController(model);
     const numRowC = new NumRowController(model);

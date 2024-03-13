@@ -8,9 +8,10 @@ class Vehicle(models.Model):
     vehicle_make = models.CharField(max_length=50)
     vehicle_model = models.CharField(max_length=50)
     vehicle_year = models.IntegerField()
-
-    # body class - int field
-    # weight class - numbers 1-8
+    # body class - int field 1-13
+    vehicle_body_class = models.IntegerField()
+    # weight class - int field 1-8
+    vehicle_weight_class = models.IntegerField()
 
     def __str__(self) -> str:
         return f'{self.vehicle_year} {self.vehicle_make} {self.vehicle_model}'

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 import threading
-from .forms import ScanForm
+from .forms import ScanForm, VehicleForm
 from .perform_scan import complete_scan
 from .models import Vehicle
 from django.core import serializers
@@ -20,17 +20,19 @@ def add_vehicle(request):
 
 def data_upload(request):
     if request.method == 'POST':
-        form = ScanForm(request.POST, request.FILES)
-        if form.is_valid():
-            scan = form.save()
+        vehicle_form = VehicleForm(request.POST, request.FILES)
+        scan_form = ScanForm(request.POST, request.FILES)
+        if scan_form.is_valid():
+            scan = scan_form.save()
             vehicle = Vehicle.objects.get(pk=scan.vehicle.id)
             thread = threading.Thread(
                 target=complete_scan, args=(scan, vehicle))
             thread.start()
             return HttpResponseRedirect('/add_vehicle')
     else:
-        form = ScanForm()
-    return render(request, 'lidar/data-upload.html', {'form': form})
+        vehicle_form = VehicleForm()
+        scan_form = ScanForm()
+    return render(request, 'lidar/data-upload.html', {'scan_form': scan_form, 'vehicle_form': vehicle_form})
 
 
 def faq(request):

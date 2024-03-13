@@ -30,6 +30,7 @@ def access_object():
 
 
 def complete_scan(scan: Scan, vehicle: Vehicle):
+    print(f'scan_path: {scan.lidar_scan.name}')
     # create s3 client to  access digital ocean space bucket
     s3_client = boto3.client('s3', region_name='nyc3', endpoint_url=os.environ.get('AWS_S3_ENDPOINT_URL'), aws_access_key_id=os.environ.get(
         'AWS_S3_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'))
@@ -39,7 +40,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         Bucket='vehicle-scans', Key=f'media/lidar/lidar_scans/{scan.lidar_scan.name}')
 
     print('Starting scan')
-    print(f'scan_path: {scan.lidar_scan.name}')
+
     mesh = trimesh.load(response['Body'], file_type='glb', force='mesh')
     print('Loading scan')
     eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])

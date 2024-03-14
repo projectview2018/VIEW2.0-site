@@ -5,7 +5,7 @@ const visual_page_extension = "/visualization/";
 const visual_url =
   table_base_uri.slice(0, table_base_uri.indexOf(table_page_extension)) +
   visual_page_extension;
-const body_classe_list = [
+const body_class_list = [
   "N/A",
   "Passenger Cars",
   "Four Tire, Single Unit",
@@ -20,6 +20,24 @@ const body_classe_list = [
   "Six Axle, Multi-Trailer",
   "Seven or More Axle, Multi-Trailer",
 ];
+const body_class_dict = {};
+body_class_list.forEach((item, index) => {
+  body_class_dict[index + 1] = item;
+});
+const weight_class_list = [
+  "Class 1",
+  "Class 2",
+  "Class 3",
+  "Class 4",
+  "Class 5",
+  "Class 6",
+  "Class 7",
+  "Class 8",
+];
+const weight_class_dict = {};
+weight_class_list.forEach((item, index) => {
+  weight_class_dict[index + 1] = item;
+});
 
 function compareByField(field) {
   return function (a, b) {
@@ -60,6 +78,8 @@ class Model {
       "vehicle_make",
       "vehicle_model",
       "vehicle_year",
+      "vehicle_body_class",
+      "vehicle_weight_class",
     ];
     this.vehicle_lists = [
       data,
@@ -255,16 +275,18 @@ class TableView {
       this.table.appendChild(row);
       for (let index in this.model.table_fields) {
         let col = document.createElement("td");
-        col.innerText = vehicle.fields[this.model.table_fields[index]];
+        if (this.model.table_fields[index] === "vehicle_body_class") {
+          col.innerText =
+            body_class_dict[vehicle.fields[this.model.table_fields[index]]];
+        } else if (this.model.table_fields[index] === "vehicle_weight_class") {
+          col.innerText =
+            weight_class_dict[vehicle.fields[this.model.table_fields[index]]];
+        } else {
+          col.innerText = vehicle.fields[this.model.table_fields[index]];
+        }
         if (+index === 0) {
           col.classList.add("left_cell");
         }
-        row.appendChild(col);
-      }
-      //TEMPORARY WAY TO FILLPLACEHOLDERS FOR EMPTY COLUMNS - COME BACK AND REMOVE
-      for (let i = 0; i < 2; i++) {
-        let col = document.createElement("td");
-        col.innerText = "";
         row.appendChild(col);
       }
       let id = document.createElement("td");

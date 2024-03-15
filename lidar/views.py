@@ -63,7 +63,7 @@ def vehicle_database_table(request):
                   {'vehicle_list': vehicle_list})
 
 
-def visualization(request, vehicle_id):
+def visualization(request, vehicle_id=None):
     return render(request, 'lidar/visualization.html', {})
 
 

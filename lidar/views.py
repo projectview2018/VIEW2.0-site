@@ -81,11 +81,6 @@ def vehicle_database_loading(request):
 
 
 def vehicle_database_table(request):
-    # if request.method == 'POST':
-    #     visual_form = VisualForm(request.POST, request.FILES)
-    #     if visual_form.is_valid():
-    #         return HttpResponseRedirect('/visualization', vehicle_id)
-    # else:
     vehicle_list = Vehicle.objects.all()
     for vehicle in vehicle_list:
         vehicle.vehicle_updated = vehicle.vehicle_updated.date()
@@ -96,8 +91,12 @@ def vehicle_database_table(request):
                   {'vehicle_list': vehicle_list})
 
 
-def visualization(request, vehicle_id=None):
-    return render(request, 'lidar/visualization.html', {})
+def visualization(request, vehicle_id):
+    vehicle = Vehicle.objects.get(pk=vehicle_id)
+    make = vehicle.vehicle_make
+    model = vehicle.vehicle_model
+    year = vehicle.vehicle_year
+    return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
 
 
 def windshield_removal(request):

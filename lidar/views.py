@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 import threading
-from .forms import ScanForm
+from .forms import ScanForm, VehicleForm
 from .perform_scan import complete_scan, access_object
 from .models import Vehicle, Scan, CompletedScan
 from django.core import serializers

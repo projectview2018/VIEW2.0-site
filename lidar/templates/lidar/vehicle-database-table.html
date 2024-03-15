@@ -424,8 +424,10 @@
     </style>
     {% load static %}
     {{ vehicle_list|json_script:"vehicle_list" }}
-    {{ "{% url 'lidar:visualization' %}"|json_script:"visual_url" }}
-    <script src="{% static 'lidar/vehicle-database-table.js' %}" defer></script>
+    <script src="{% static 'lidar/vehicle-database-table.js' %}"
+            defer
+            data-visual-url = "{% url 'lidar:visualization' 1 %}"
+            data-current-url = "{% url 'lidar:vehicle_database_table' %}"></script>
   </head>
   <body>
     {% load static %}

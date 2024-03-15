@@ -1,13 +1,47 @@
 import trimesh
 import numpy as np
 from .models import Vehicle, Scan, CompletedScan
+import boto3
+import os
+
+
+def access_object():
+    # Create an S3 client
+    s3_client = boto3.client('s3', aws_access_key_id=os.environ.get(
+        'AWS_S3_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'))
+
+    # Read an object from the bucket
+    response = s3_client.get_object(
+        Bucket='vehicle-scans', Key='media/lidar/lidar_scans/Attenuator2.glb')
+
+    # Read the object’s content as text
+    object_content = response['Body']
+
+    # Process or use the content as needed
+    return object_content
 
 
 def complete_scan(scan: Scan, vehicle: Vehicle):
+    print(f'scan_path: {scan.lidar_scan.name}')
+    # create s3 client to  access digital ocean space bucket
+    s3_client = boto3.client('s3', region_name='nyc3', endpoint_url=os.environ.get('AWS_S3_ENDPOINT_URL'), aws_access_key_id=os.environ.get(
+        'AWS_S3_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'))
+
+    # Get recently uploaded scan from the bucket
+    response = s3_client.get_object(
+        Bucket='vehicle-scans', Key=f'media/lidar/lidar_scans/{scan.lidar_scan.name}')
+
     print('Starting scan')
-    mesh = trimesh.load(scan.lidar_scan.path, force='mesh')
+
+    mesh = trimesh.load(response['Body'], file_type='glb', force='mesh')
     print('Loading scan')
-    eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
+    # assuming mid track and mid-height for future calculations
+    driver_height = 1.2
+    eye_x_m = scan.D_m
+    eye_y_m = scan.A_m - ((scan.B_m - scan.A_m) / 2)
+    eye_z_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
+    eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
+    # eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
     nvp_xs, nvp_ys = find_nvps(mesh, eye_pos, scan.driver_side_start)
     print('Found NVPs')
     coordinates = np.stack([nvp_xs, nvp_ys]).T
@@ -16,11 +50,13 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         raw_scan=scan,
         nvp_xs=nvp_xs,
         nvp_ys=nvp_ys,
-        area=calculate_area(coordinates)
+        area=calculate_area(coordinates),
     )
+    # print('Saving original scan')
+    # scan.save()
     print('Created new CompletedScan model')
     completed_scan.save()
-    print('Saved scan')
+    print('Saved completed scan to database')
     vehicle.vehicle_updated = completed_scan.completed_scan_added
     print('Updated vehicle\'s time stamp')
     vehicle.save()

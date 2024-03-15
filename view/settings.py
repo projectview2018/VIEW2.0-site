@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 # import django_on_heroku
 import os
+from pathlib import Path
+from boto3 import *
+from dotenv import load_dotenv  # for python-dotenv method
+load_dotenv()  # for python-dotenv method
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,6 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = os.environ.get('SECRET_KEY')
 SECRET_KEY = 'django-insecure-kfb=+rej@*g)fb58b_&!o8vg4&!gn&6o6-(749bqdd@b+up9_0'
 
 # # The `DYNO` env var is set on Heroku CI, but it's not a real Heroku app, so we have to
@@ -43,8 +49,9 @@ DEBUG = True
 # else:
 #     ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = ['view-prototype1-de482f0a101a.herokuapp.com', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ['https://*.herokuapp.com/']
+ALLOWED_HOSTS = ['127.0.0.1', 'view2-vd8vm.ondigitalocean.app',
+                 'localhost', '127.0.0.1', '0.0.0.0']
+CSRF_TRUSTED_ORIGINS = ['https://view2-vd8vm.ondigitalocean.app']
 
 # Application definition
 
@@ -56,6 +63,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lidar.apps.LidarConfig',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -92,45 +100,16 @@ WSGI_APPLICATION = 'view.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# if IS_HEROKU_APP:
-#     # In production on Heroku the database configuration is derived from the `DATABASE_URL`
-#     # environment variable by the dj-database-url package. `DATABASE_URL` will be set
-#     # automatically by Heroku when a database addon is attached to your Heroku app. See:
-#     # https://devcenter.heroku.com/articles/provisioning-heroku-postgres
-#     # https://github.com/jazzband/dj-database-url
-#     DATABASES = {
-#         "default": dj_database_url.config(
-#             conn_max_age=600,
-#             conn_health_checks=True,
-#             ssl_require=True,
-#         ),
-#     }
-# else:
-#     # When running locally in development or in CI, a sqlite database file will be used instead
-#     # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": BASE_DIR / "db.sqlite3",
-#         }
-#     }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ddhgeoelvcb9f3',
-        'USER': 'ycrjihurofoglp',
-        'PASSWORD': 'fccfdc55b8ab6ea26a61ea821d9dacc928c99178b616dd4e552cf7f405b51587',
-        'HOST': 'ec2-44-215-1-253.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'NAME': 'defaultdb',
+        'USER': 'doadmin',
+        'PASSWORD': os.environ.get('PASSWORD'),
+        'HOST': 'db-postgresql-nyc3-27521-do-user-15891455-0.c.db.ondigitalocean.com',
+        'PORT': '25060',
     }
 }
 
@@ -169,15 +148,66 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = 'static'
+# STATIC_URL = 'static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Uploaded files settings
-MEDIA_ROOT = Path(__file__).parent.parent / 'media'
 
-# django_on_heroku.settings(locals())
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'lidar/static/')
+
+# print(f"Bucket type is {type(os.environ.get('AWS_STORAGE_BUCKET_NAME'))}")
+AWS_S3_ACCESS_KEY_ID = os.environ.get('AWS_S3_ACCESS_KEY_ID')
+AWS_S3_SECRET_ACCESS_KEY = os.environ.get('AWS_S3_SECRET_ACCESS_KEY')
+
+# AWS_STORAGE_BUCKET_NAME = 'vehicle-scans'
+# AWS_S3_REGION_NAME = os.environ.get('AWS_REGION_NAME')
+# AWS_DEFAULT_ACL = os.environ.get('AWS_DEFAULT_ACL')
+# AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL')
+
+AWS_STORAGE_BUCKET_NAME = 'vehicle-scans'
+AWS_DEFAULT_ACL = None
+AWS_S3_REGION_NAME = 'us-east-2'
+AWS_S3_ENDPOINT_URL = 'https://vehicle-scans.nyc3.digitaloceanspaces.com'
+
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400'
+}
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'lidar/static'),
+]
+
+STORAGES = {
+    "default": {
+        "BACKEND": "view.storage_backends.MediaStorage",
+        "OPTIONS": {},
+    },
+    "staticfiles": {
+        "BACKEND": "view.storage_backends.StaticStorage",
+        "OPTIONS": {},
+    },
+}
+
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
+AWS_STATIC_LOCATION = 'static'
+STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)
+# STATIC_ROOT = 'static/'
+
+# MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
+AWS_MEDIA_LOCATION = 'media/lidar/lidar_scans'
+PUBLIC_MEDIA_LOCATION = 'media/public'
+MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)
+# MEDIA_ROOT = 'lidar/media/lidar/lidar_scans/'
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+# OLD Procfile CONTENT
+# web: python3 manage.py runserver 0.0.0.0:"$PORT"

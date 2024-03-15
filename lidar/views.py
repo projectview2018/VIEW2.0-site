@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 import threading
-from .forms import ScanForm, VehicleForm
-from .perform_scan import complete_scan
-from .models import Vehicle
+from .forms import ScanForm
+from .perform_scan import complete_scan, access_object
+from .models import Vehicle, Scan, CompletedScan
 from django.core import serializers
 import json
+import os
 
 
 def index(request):

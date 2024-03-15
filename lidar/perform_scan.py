@@ -43,7 +43,13 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
 
     mesh = trimesh.load(response['Body'], file_type='glb', force='mesh')
     print('Loading scan')
-    eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
+    # assuming mid track and mid-height for future calculations
+    driver_height = 1.2
+    eye_x_m = scan.D_m
+    eye_y_m = scan.A_m - ((scan.B_m - scan.A_m) / 2)
+    eye_z_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
+    eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
+    # eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
     nvp_xs, nvp_ys = find_nvps(mesh, eye_pos, scan.driver_side_start)
     print('Found NVPs')
     coordinates = np.stack([nvp_xs, nvp_ys]).T

@@ -4,6 +4,7 @@
   display: flex;
   position: relative;
   align-items: flex-start;
+  border-radius: var(--dl-radius-radius-radius4);
   flex-direction: column;
   justify-content: center;
 }

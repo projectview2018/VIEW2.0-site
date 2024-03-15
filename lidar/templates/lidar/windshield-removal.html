@@ -372,6 +372,9 @@
         margin-bottom: 0;
       }
     </style>
+    {% load static %}
+    {{ scan_path|json_script:"scan_path" }}
+    <script type="module" crossorigin src="{% static 'lidar/windshield-removal.js' %}" defer></script>
   </head>
   <body>
     {% load static %}
@@ -509,22 +512,8 @@
                     the windshield from your vehicle scan.&nbsp;&nbsp;
                   </span>
                   <div class="windshield-removal-container4 elevation01">
-                    <div class="windshield-removal-container5">
-                      <div>
-                        <span id="viewer-placeholder">
-                          Placeholder for eraser tool
-                        </span>
-                      </div>
-
-                      <style>
-                        #viewer-placeholder{
-                            font-family: Roboto;
-                            font-weight: 600;
-                            font-size: 2rem;
-                            color: #999999;
-                        }
-                      </style>
-                    </div>
+                      <div id="erase_mode" style="display: none;">Erase Mode On</div>
+                      <div id="canvas_viewer"></div>
                   </div>
                 </div>
                 <div class="windshield-removal-container6">

@@ -28,7 +28,7 @@ def data_upload(request):
             thread = threading.Thread(
                 target=complete_scan, args=(scan, vehicle))
             thread.start()
-            return HttpResponseRedirect('/add_vehicle')
+            return HttpResponseRedirect('/visualization', {"scan_path": scan.lidar_scan})
     else:
         vehicle_form = VehicleForm()
         scan_form = ScanForm()

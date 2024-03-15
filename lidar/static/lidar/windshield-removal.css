@@ -614,15 +614,11 @@
 .windshield-removal-container4 {
   width: 800px;
   height: 500px;
-  padding: var(--dl-space-space-twounits);
   align-self: center;
   margin-top: var(--dl-space-space-unit);
-  padding-top: var(--dl-space-space-fourunits);
-  padding-left: var(--dl-space-space-fourunits);
   border-radius: var(--dl-radius-radius-radius4);
-  padding-right: var(--dl-space-space-fourunits);
-  padding-bottom: var(--dl-space-space-fourunits);
   background-color: #d9d9d9;
+  overflow: hidden;
 }
 .windshield-removal-container5 {
   display: contents;

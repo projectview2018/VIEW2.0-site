@@ -7,11 +7,8 @@ import os
 
 def access_object():
     # Create an S3 client
-    # s3_client = boto3.client('s3', aws_access_key_id=os.environ.get(
-    #     'AWS_S3_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'))
-    # s3_client = boto3.client('s3', region_name='nyc3',
-    #                          endpoint_url='https://vehicle-scans.nyc3.digitaloceanspaces.com', aws_access_key_id='DO00J9E8NFVHDW4ZJCVD',
-    #                          aws_secret_access_key='W1YEZd7ouXQjuNgzsLPd5l7rgHauZEGBmdCuYidJ0tg')
+    s3_client = boto3.client('s3', aws_access_key_id=os.environ.get(
+        'AWS_S3_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'))
 
     # Read an object from the bucket
     response = s3_client.get_object(
@@ -20,12 +17,7 @@ def access_object():
     # Read the object’s content as text
     object_content = response['Body']
 
-    # with open(f'media/lidar/lidar_scans/{image.jpg', 'wb') as file:
-
-    # file.write(content)
-
     # Process or use the content as needed
-    # print(f'object content: {object_content}')
     return object_content
 
 
@@ -43,7 +35,13 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
 
     mesh = trimesh.load(response['Body'], file_type='glb', force='mesh')
     print('Loading scan')
-    eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
+    # assuming mid track and mid-height for future calculations
+    driver_height = 1.2
+    eye_x_m = scan.D_m
+    eye_y_m = scan.A_m - ((scan.B_m - scan.A_m) / 2)
+    eye_z_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
+    eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
+    # eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
     nvp_xs, nvp_ys = find_nvps(mesh, eye_pos, scan.driver_side_start)
     print('Found NVPs')
     coordinates = np.stack([nvp_xs, nvp_ys]).T

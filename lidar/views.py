@@ -102,4 +102,6 @@ def visualization(request, vehicle_id=None):
 
 
 def windshield_removal(request):
+    if request.method == 'POST':
+        return render(request, 'lidar/add-vehicle.html', {})
     return render(request, 'lidar/windshield-removal.html', {})

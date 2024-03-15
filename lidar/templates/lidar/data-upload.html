@@ -494,7 +494,8 @@
           </section>
           <div class="data-upload-container2">
             <h1 class="data-upload-text HeadingH1">Add a Vehicle</h1>
-            <form name="Vehicle Entry Form" class="data-upload-form">
+            <form action="{% url 'lidar:data_upload' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
               <div class="data-upload-container3">
                 <div class="data-upload-vehicle-information">
                   <h3 class="data-upload-text01 HeadingH3">
@@ -502,79 +503,25 @@
                   </h3>
                   <div class="data-upload-vehicle-body-class">
                     <span class="data-upload-text02 Body">Body Class:</span>
-                    <select
-                      name="Scan start side selector"
-                      size="-4"
-                      required="true"
-                      class="data-upload-select elevation01"
-                    >
-                      <option value="N/A">N/A</option>
-                      <option value="Passenger Vehicle">Passenger</option>
-                      <option value="Class 2 Vehicle">Class 2</option>
-                      <option value="Class 3 Vehicle">Class 3</option>
-                      <option value="Class 4 Vehicle">Class 4</option>
-                      <option value="Class 5 Vehicle">Class 5</option>
-                      <option value="Option 2">Option 2</option>
-                      <option value="Option 3">Option 3</option>
-                      <option value="Class 3 Vehicle">Class 6</option>
-                      <option value="Class 7 Vehicle">Class 7</option>
-                      <option value="Class 8 Vehicle">Class 8</option>
-                    </select>
+                    {{ vehicle_form.vehicle_body_class }}
                   </div>
                   <div class="data-upload-vehicle-weight-class">
                     <span class="data-upload-text03 Body">
                       Weight Class (if passenger vehicle, choose Class 1):
                     </span>
-                    <select
-                      name="Scan start side selector"
-                      size="-4"
-                      required="true"
-                      class="data-upload-select1 elevation01"
-                    >
-                      <option value="Class 1 Vehicle">Class 1</option>
-                      <option value="Class 2 Vehicle">Class 2</option>
-                      <option value="Class 3 Vehicle">Class 3</option>
-                      <option value="Class 4 Vehicle">Class 4</option>
-                      <option value="Class 5 Vehicle">Class 5</option>
-                      <option value="Class 3 Vehicle">Class 6</option>
-                      <option value="Class 7 Vehicle">Class 7</option>
-                      <option value="Class 8 Vehicle">Class 8</option>
-                    </select>
+                    {{ vehicle_form.vehicle_weight_class }}
                   </div>
                   <div class="data-upload-vehicle-make">
                     <span class="data-upload-text04 Body">Make (brand):</span>
-                    <input
-                      type="text"
-                      min="0"
-                      name="eye height (ft) input"
-                      step="1"
-                      required="true"
-                      placeholder="Toyota"
-                      class="data-upload-textinput Body input elevation01"
-                    />
+                    {{ vehicle_form.vehicle_make }}
                   </div>
                   <div class="data-upload-vehicle-model">
                     <span class="data-upload-text05 Body">Model:</span>
-                    <input
-                      type="text"
-                      name="eye height (ft) input"
-                      required="true"
-                      placeholder="Corolla"
-                      class="data-upload-textinput01 Body input elevation01"
-                    />
+                    {{ vehicle_form.vehicle_model }}
                   </div>
                   <div class="data-upload-vehicle-year">
                     <span class="data-upload-text06 Body">Year:</span>
-                    <input
-                      type="number"
-                      max="2099"
-                      min="1900"
-                      name="Vehicle Year (model year)"
-                      step="1"
-                      required="true"
-                      placeholder="2015"
-                      class="data-upload-textinput02 Body input elevation01"
-                    />
+                    {{ vehicle_form.vehicle_year }}
                   </div>
                 </div>
                 <div class="data-upload-vehicle-measurements">
@@ -586,15 +533,7 @@
                       On which side of the vehicle did you start your LiDAR
                       scan?
                     </span>
-                    <select
-                      name="Scan start side selector"
-                      size="-4"
-                      required="true"
-                      class="data-upload-select2 elevation01"
-                    >
-                      <option value="driver's side">driver's side</option>
-                      <option value="passenger's side">passenger's side</option>
-                    </select>
+                    {{ scan_form.driver_side_start }}
                   </div>
                   <div
                     class="data-upload-front-of-vehicle-to-front-of-seat-at-forward-position-measurement"
@@ -606,23 +545,9 @@
                         driver's seat at forward-most position):
                       </span>
                     </span>
-                    <input
-                      type="number"
-                      min="0"
-                      name="front-to-front (ft) input"
-                      step="1"
-                      required="true"
-                      placeholder="000"
-                      class="data-upload-textinput03 Body input elevation01"
-                    />
+                    {{ scan_form.A_ft }}
                     <span class="data-upload-text12 Body">ft</span>
-                    <input
-                      type="number"
-                      name="front-to-front (in) input"
-                      required="true"
-                      placeholder="00.00"
-                      class="data-upload-textinput04 Body input elevation01"
-                    />
+                    {{ scan_form.A_in }}
                     <span class="data-upload-text13 Body">in</span>
                   </div>
                   <div
@@ -635,22 +560,9 @@
                         driver's seat at backward-most position):
                       </span>
                     </span>
-                    <input
-                      type="number"
-                      name="front-to-back (ft) input"
-                      step="1"
-                      required="true"
-                      placeholder="000"
-                      class="data-upload-textinput05 Body input elevation01"
-                    />
+                    {{ scan_form.B_ft }}
                     <span class="data-upload-text17 Body">ft</span>
-                    <input
-                      type="number"
-                      name="front-to-back (in) input"
-                      required="true"
-                      placeholder="00.00"
-                      class="data-upload-textinput06 Body input elevation01"
-                    />
+                    {{ scan_form.B_in }}
                     <span class="data-upload-text18 Body">in</span>
                   </div>
                   <div class="data-upload-seat-depth-meansurement">
@@ -661,22 +573,9 @@
                         furthest point back where you can sit):
                       </span>
                     </span>
-                    <input
-                      type="number"
-                      name="seat depth (ft) input"
-                      step="1"
-                      required="true"
-                      placeholder="000"
-                      class="data-upload-textinput07 Body input elevation01"
-                    />
+                    {{ scan_form.C_ft }}
                     <span class="data-upload-text22 Body">ft</span>
-                    <input
-                      type="number"
-                      name="seat depth (in) input"
-                      required="true"
-                      placeholder="00.00"
-                      class="data-upload-textinput08 Body input elevation01"
-                    />
+                    {{ scan_form.C_in }}
                     <span class="data-upload-text23 Body">in</span>
                   </div>
                   <div
@@ -689,22 +588,9 @@
                         to outermost point of vehicle on driver's side):
                       </span>
                     </span>
-                    <input
-                      type="number"
-                      name="seat center distance (ft) input"
-                      step="1"
-                      required="true"
-                      placeholder="000"
-                      class="data-upload-textinput09 Body input elevation01"
-                    />
+                    {{ scan_form.D_ft }}
                     <span class="data-upload-text27 Body">ft</span>
-                    <input
-                      type="number"
-                      name="seat center distance (in) input"
-                      required="true"
-                      placeholder="00.00"
-                      class="data-upload-textinput10 Body input elevation01"
-                    />
+                    {{ scan_form.D_in }}
                     <span class="data-upload-text28 Body">in</span>
                   </div>
                   <div class="data-upload-upper-seat-height-measurement">
@@ -715,22 +601,9 @@
                         uppermost position to the ground):
                       </span>
                     </span>
-                    <input
-                      type="number"
-                      name="seat high (ft) input"
-                      step="1"
-                      required="true"
-                      placeholder="000"
-                      class="data-upload-textinput11 Body input elevation01"
-                    />
+                    {{ scan_form.E_ft }}
                     <span class="data-upload-text32 Body">ft</span>
-                    <input
-                      type="number"
-                      name="seat high (in) input"
-                      required="true"
-                      placeholder="00.00"
-                      class="data-upload-textinput12 Body input elevation01"
-                    />
+                    {{ scan_form.E_in }}
                     <span class="data-upload-text33 Body">in</span>
                   </div>
                   <div class="data-upload-lower-seat-height-measurement">
@@ -741,22 +614,9 @@
                         lowest position to the ground):
                       </span>
                     </span>
-                    <input
-                      type="number"
-                      name="seat low (ft) input"
-                      step="1"
-                      required="true"
-                      placeholder="000"
-                      class="data-upload-textinput13 Body input elevation01"
-                    />
+                    {{ scan_form.F_ft }}
                     <span class="data-upload-text37 Body">ft</span>
-                    <input
-                      type="number"
-                      name="seat low (in) input"
-                      required="true"
-                      placeholder="00.00"
-                      class="data-upload-textinput14 Body input elevation01"
-                    />
+                    {{ scan_form.F_in }}
                     <span class="data-upload-text38 Body">in</span>
                   </div>
                 </div>
@@ -772,15 +632,7 @@
                   </span>
                   <div class="data-upload-li-dar-scan-upload">
                     <div class="data-upload-container4">
-                      <input
-                        type="file"
-                        id="lidar-file-selector"
-                        name="LiDAR Scan File Selector"
-                        accept=".glb"
-                        required="true"
-                        placeholder="placeholder"
-                        class="data-upload-textinput15 Body input elevation01"
-                      />
+                      {{ scan_form.lidar_scan }}
                     </div>
                   </div>
                 </div>
@@ -813,16 +665,16 @@
                       </style>
                     </div>
                   </div>
-                  <a
-                    href="{% url 'lidar:windshield_removal' %}"
-                    name="submit data"
-                    class="data-upload-submit-entry containedbutton-2-6-12-secondaryblue button"
+                  <button
+                  name="submit data"
+                  type="submit"
+                  class="data-upload-submit-entry containedbutton-2-6-12-secondaryblue button"
                   >
                     <span class="data-upload-text41 ButtonText">
                       <span>Upload Data</span>
                       <br />
                     </span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </form>

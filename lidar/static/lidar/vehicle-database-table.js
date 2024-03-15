@@ -71,6 +71,13 @@ function isSubsequence(a, b) {
   return true;
 }
 
+function createVisualizationLink() {
+  let link = document.createElement("a");
+  link.href = visual_url;
+  link.innerText = "View";
+  return link;
+}
+
 class Model {
   constructor() {
     this.table_fields = [
@@ -290,12 +297,10 @@ class TableView {
         row.appendChild(col);
       }
       let id = document.createElement("td");
-      let link = document.createElement("a");
+      id.classList.add("right_cell");
+      let link = createVisualizationLink();
       row.appendChild(id);
       id.appendChild(link);
-      id.classList.add("right_cell");
-      link.href = visual_url;
-      link.innerText = "View";
     }
   }
 }

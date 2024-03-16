@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 import threading
 from .forms import ScanForm, VehicleForm
-from .perform_scan import complete_scan, access_object
+from .perform_scan import complete_scan
+from .s3_utils import create_s3_client, get_object
 from .models import Vehicle, Scan, CompletedScan
 from django.core import serializers
 import json
@@ -58,10 +59,7 @@ def data_upload(request):
                     f"previous vehicle, {vehicle.vehicle_make} {vehicle.vehicle_model} {vehicle.vehicle_year}, updated")
             scan.save()
             print("scan form saved")
-            thread = threading.Thread(
-                target=complete_scan, args=(scan, vehicle))
-            thread.start()
-            return HttpResponseRedirect('/windshield_removal')
+            return HttpResponseRedirect(f'/windshield_removal')
     else:
         vehicle_form = VehicleForm()
         scan_form = ScanForm()
@@ -99,5 +97,12 @@ def visualization(request, vehicle_id):
     return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
 
 
-def windshield_removal(request):
-    return render(request, 'lidar/windshield-removal.html', {})
+def windshield_removal(request, scan_id):
+    scan_file = Scan.objects.get(pk=scan_id).lidar_scan
+    print(f'Got scan_file: {scan_file}, {type(scan_file)}')
+    scan_path = scan_file.name
+    print(f'{scan_path = }')
+    obj = get_object(scan_path)
+    print(obj)
+    return render(request, 'lidar/windshield-removal.html',
+                  {'scan_id': scan_id, 'scan_path': scan_path})

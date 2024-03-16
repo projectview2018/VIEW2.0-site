@@ -27017,6 +27017,7 @@ let Tn,
   Or = !1;
 const zs = document.getElementById("erase_mode");
 const scan_path = document.getElementById("scan_path");
+const scan_id = document.getElementById("scan_id");
 M_.load(
   scan_path,
   function (r) {

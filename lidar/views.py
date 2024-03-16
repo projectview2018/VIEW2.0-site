@@ -59,7 +59,7 @@ def data_upload(request):
                     f"previous vehicle, {vehicle.vehicle_make} {vehicle.vehicle_model} {vehicle.vehicle_year}, updated")
             scan.save()
             print("scan form saved")
-            return HttpResponseRedirect(f'/windshield_removal')
+            return HttpResponseRedirect(f'/windshield_removal/{scan.id}')
     else:
         vehicle_form = VehicleForm()
         scan_form = ScanForm()

@@ -40,7 +40,7 @@ class Scan(models.Model):
     F_ft = models.IntegerField(default=0)
     F_in = models.FloatField(default=0)
     windshield_removed = models.BooleanField(default=False)
-    lidar_scan = models.FileField(upload_to='lidar_scans/')
+    lidar_scan = models.FileField()
 
     # @property
     # def eye_x_m(self) -> float:

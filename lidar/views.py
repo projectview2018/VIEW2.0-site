@@ -60,6 +60,8 @@ def data_upload(request):
             scan.save()
             print("scan form saved")
             return HttpResponseRedirect(f'/windshield_removal/{scan.id}')
+            # return render(request, 'lidar/windshield-removal.html', {'scan_id': scan.id})
+
     else:
         vehicle_form = VehicleForm()
         scan_form = ScanForm()
@@ -98,11 +100,14 @@ def visualization(request, vehicle_id):
 
 
 def windshield_removal(request, scan_id):
-    scan_file = Scan.objects.get(pk=scan_id).lidar_scan
-    print(f'Got scan_file: {scan_file}, {type(scan_file)}')
-    scan_path = scan_file.name
-    print(f'{scan_path = }')
-    obj = get_object(scan_path)
-    print(obj)
-    return render(request, 'lidar/windshield-removal.html',
-                  {'scan_id': scan_id, 'scan_path': scan_path})
+    if request.method == 'POST':
+        return HttpResponseRedirect('/add_vehicle')
+    else:
+        scan_file = Scan.objects.get(pk=scan_id).lidar_scan
+        print(f'Got scan_file: {scan_file}, {type(scan_file)}')
+        scan_path = scan_file.name
+        print(f'{scan_path = }')
+        obj = get_object(scan_path)
+        print(obj)
+        return render(request, 'lidar/windshield-removal.html',
+                      {'scan_id': scan_id, 'scan_path': scan_path})

@@ -504,7 +504,9 @@
           </section>
           <div class="windshield-removal-container2">
             <h1 class="windshield-removal-text HeadingH1">Add a Vehicle</h1>
-            <form name="Vehicle Entry Form" class="windshield-removal-form">
+            <!-- <form name="Vehicle Entry Form" class="windshield-removal-form"> -->
+            <form action="{% url 'lidar:windshield_removal' scan_id %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
               <div class="windshield-removal-container3">
                 <div class="windshield-removal-eraser">
                   <h3 class="windshield-removal-text1">Erase Windshield</h3>

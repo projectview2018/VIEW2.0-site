@@ -15,7 +15,7 @@ def get_object(filepath: str):
     print(os.environ.get('AWS_S3_ACCESS_KEY_ID'))
     try:
         response = client.get_object(
-            Bucket=bucket, Key=f'media/lidar/lidar_scans/2011HondaOdysseyScan1.glb')
+            Bucket=bucket, Key=f'media/lidar/lidar_scans/{filepath}')
     except Exception as e:
         print(e)
         raise e

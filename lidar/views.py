@@ -4,7 +4,7 @@ from django.utils import timezone
 import threading
 from .forms import ScanForm, VehicleForm
 from .perform_scan import complete_scan
-from .s3_utils import create_s3_client, get_object
+from .s3_utils import create_s3_client, get_object, generate_presigned_url
 from .models import Vehicle, Scan, CompletedScan
 from django.core import serializers
 import json
@@ -109,5 +109,7 @@ def windshield_removal(request, scan_id):
         print(f'{scan_path = }')
         obj = get_object(scan_path)
         print(obj)
+        url = generate_presigned_url(scan_path)
+        print(f'{url = }')
         return render(request, 'lidar/windshield-removal.html',
-                      {'scan_id': scan_id, 'scan_path': scan_path})
+                      {'scan_id': scan_id, 'scan_path': scan_path, 'scan_url': url})

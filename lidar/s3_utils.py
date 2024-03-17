@@ -7,6 +7,18 @@ def create_s3_client():
         'AWS_S3_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'))
 
 
+def generate_presigned_url(filepath):
+    """
+    Generate a presigned Amazon S3 URL that can be used to perform an action.
+    """
+    client = create_s3_client()
+    bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    method = 'get_object'
+
+    return client.generate_presigned_url(
+        ClientMethod=method, Params={'Bucket': bucket, 'Key': f'media/lidar/lidar_scans/{filepath}'}, ExpiresIn=3600)
+
+
 def get_object(filepath: str):
     client = create_s3_client()
     print('Got client')

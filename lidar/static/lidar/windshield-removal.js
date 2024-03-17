@@ -27016,7 +27016,7 @@ let Tn,
   xa = !1,
   Or = !1;
 const zs = document.getElementById("erase_mode");
-const scan_url = document.getElementById("scan_url");
+const scan_url = JSON.parse(document.getElementById("scan_url").textContent);
 console.log(scan_url);
 M_.load(
   scan_url,

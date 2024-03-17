@@ -27016,10 +27016,10 @@ let Tn,
   xa = !1,
   Or = !1;
 const zs = document.getElementById("erase_mode");
-const scan_path = document.getElementById("scan_path");
-const scan_id = document.getElementById("scan_id");
+const scan_url = document.getElementById("scan_url");
+console.log(scan_url);
 M_.load(
-  scan_path,
+  scan_url,
   function (r) {
     (Tn = r.scene.children[0]), Qi.add(Tn);
   },

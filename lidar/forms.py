@@ -209,3 +209,15 @@ class ScanForm(forms.ModelForm):
         }
         fields = ['driver_side_start', 'A_ft', 'A_in', 'B_ft', 'B_in', 'C_ft', 'C_in', 'D_ft', 'D_in',
                   'E_ft', 'E_in', 'F_ft', 'F_in', 'lidar_scan']
+
+
+class CleanedScanForm(forms.Form):
+    cleaned_scan_obj = forms.FileField(
+        widget=forms.FileInput(
+            attrs={
+                'type': 'hidden',
+                'id': 'cleaned_scan_obj',
+                'name': 'Cleaned Scan Object'
+            }
+        )
+    )

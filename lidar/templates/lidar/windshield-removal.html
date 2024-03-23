@@ -373,7 +373,8 @@
       }
     </style>
     {% load static %}
-    {{ scan_url|json_script:"scan_url" }}
+    {{ get_url|json_script:"get_url" }}
+    {{ put_url|json_script:"put_url" }}
     <script type="module" crossorigin src="{% static 'lidar/windshield-removal.js' %}" defer></script>
   </head>
   <body>
@@ -518,9 +519,6 @@
                       <div id="canvas_viewer"></div>
                   </div>
                 </div>
-                <div>
-                  {{ cleaned_scan_form.cleaned_scan_obj }}
-                </div>
                 <div class="windshield-removal-container6">
                   <a
                     href="{% url 'lidar:data_upload' %}"
@@ -553,6 +551,7 @@
                   <button
                     name="submit data"
                     type="submit"
+                    id="submit_button"
                     class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button"
                   >
                     <span class="windshield-removal-text3 ButtonText">

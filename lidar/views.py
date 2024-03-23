@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 import threading
-from .forms import ScanForm, VehicleForm, CleanedScanForm
+from .forms import ScanForm, VehicleForm
 from .perform_scan import complete_scan
-from .s3_utils import create_s3_client, get_object, generate_presigned_url
+from .s3_utils import get_object, generate_presigned_url_get, generate_presigned_url_put
 from .models import Vehicle, Scan, CompletedScan
 from django.core import serializers
 import json
@@ -101,21 +101,17 @@ def visualization(request, vehicle_id):
 
 def windshield_removal(request, scan_id):
     if request.method == 'POST':
-        cleaned_scan_form = CleanedScanForm(request.POST, request.FILES)
-        print('Got cleaned scan form')
-        if cleaned_scan_form.is_valid():
-            cleaned_scan = cleaned_scan_form.save(commit=False)
-            print(f"Cleaned scan object: {cleaned_scan.cleaned_scan_obj}")
         return HttpResponseRedirect('/add_vehicle')
     else:
-        cleaned_scan_form = CleanedScanForm()
         scan_file = Scan.objects.get(pk=scan_id).lidar_scan
         print(f'Got scan_file: {scan_file}, {type(scan_file)}')
         scan_path = scan_file.name
         print(f'{scan_path = }')
         obj = get_object(scan_path)
         print(obj)
-        url = generate_presigned_url(scan_path)
-        print(f'{url = }')
+        get_url = generate_presigned_url_get(scan_path)
+        put_url = generate_presigned_url_put(scan_path)
+        print(f'{get_url = }')
+        print(f'{put_url = }')
         return render(request, 'lidar/windshield-removal.html',
-                      {'scan_id': scan_id, 'scan_path': scan_path, 'scan_url': url, 'cleaned_scan_form': cleaned_scan_form})
+                      {'scan_id': scan_id, 'scan_path': scan_path, 'get_url': get_url, 'put_url': put_url})

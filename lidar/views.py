@@ -100,18 +100,15 @@ def visualization(request, vehicle_id):
 
 
 def windshield_removal(request, scan_id):
-    if request.method == 'POST':
-        return HttpResponseRedirect('/add_vehicle')
-    else:
-        scan_file = Scan.objects.get(pk=scan_id).lidar_scan
-        print(f'Got scan_file: {scan_file}, {type(scan_file)}')
-        scan_path = scan_file.name
-        print(f'{scan_path = }')
-        obj = get_object(scan_path)
-        print(obj)
-        get_url = generate_presigned_url_get(scan_path)
-        put_url = generate_presigned_url_put(scan_path)
-        print(f'{get_url = }')
-        print(f'{put_url = }')
-        return render(request, 'lidar/windshield-removal.html',
-                      {'scan_id': scan_id, 'scan_path': scan_path, 'get_url': get_url, 'put_url': put_url})
+    scan_file = Scan.objects.get(pk=scan_id).lidar_scan
+    print(f'Got scan_file: {scan_file}, {type(scan_file)}')
+    scan_path = scan_file.name
+    print(f'{scan_path = }')
+    obj = get_object(scan_path)
+    print(obj)
+    get_url = generate_presigned_url_get(scan_path)
+    put_url = generate_presigned_url_put(scan_path)
+    print(f'{get_url = }')
+    print(f'{put_url = }')
+    return render(request, 'lidar/windshield-removal.html',
+                  {'scan_id': scan_id, 'scan_path': scan_path, 'get_url': get_url, 'put_url': put_url})

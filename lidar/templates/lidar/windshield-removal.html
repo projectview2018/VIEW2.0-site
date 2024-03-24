@@ -375,6 +375,10 @@
     {% load static %}
     {{ get_url|json_script:"get_url" }}
     {{ put_url|json_script:"put_url" }}
+    {% url 'lidar:windshield_removal' 1 as windshield_removal_ext %}
+    {{ windshield_removal_ext|json_script:"windshield_removal_ext" }}
+    {% url 'lidar:add_vehicle' as add_vehicle_ext %}
+    {{ add_vehicle_ext| json_script:"add_vehicle_ext" }}
     <script type="module" crossorigin src="{% static 'lidar/windshield-removal.js' %}" defer></script>
   </head>
   <body>
@@ -505,63 +509,58 @@
           <div class="windshield-removal-container2">
             <h1 class="windshield-removal-text HeadingH1">Add a Vehicle</h1>
             <!-- <form name="Vehicle Entry Form" class="windshield-removal-form"> -->
-            <form action="{% url 'lidar:windshield_removal' scan_id %}" method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              <div class="windshield-removal-container3">
-                <div class="windshield-removal-eraser">
-                  <h3 class="windshield-removal-text1">Erase Windshield</h3>
-                  <span class="windshield-removal-text2 Body">
-                    In the 3D file viewer below, use the eraser tool to remove
-                    the windshield from your vehicle scan.&nbsp;&nbsp;
-                  </span>
-                  <div class="windshield-removal-container4 elevation01">
-                      <div id="erase_mode" style="display: none;">Erase Mode On</div>
-                      <div id="canvas_viewer"></div>
-                  </div>
-                </div>
-                <div class="windshield-removal-container6">
-                  <a
-                    href="{% url 'lidar:data_upload' %}"
-                    class="windshield-removal-navlink outlinedbutton button"
-                  >
-                    Back
-                  </a>
-                  <div class="windshield-removal-container7 elevation01">
-                    <div class="windshield-removal-container8">
-                      <div class="row" id="progressbar">
-                        <div class="column" id="prog"></div>
-                      </div>
-
-                      <style>
-                        #progressbar { /*style entire bar*/
-                          height: 100%; /*set size of progress bar inside embed size*/
-                          border-radius: var(--dl-radius-radius-radius4);
-                          background: var(--dl-color-default-accentbluedark);
-                          overflow: hidden; /*hide overflow of column corners instead of adding radius*/
-                        }
-
-                        #progressbar #prog { /*style the 'completed' column*/
-                          width: 100%;
-                          height: 100%;
-                          background: var(--dl-color-secondaryblue-secondaryblue);
-                        }
-                      </style>
-                    </div>
-                  </div>
-                  <button
-                    name="submit data"
-                    type="submit"
-                    id="submit_button"
-                    class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button"
-                  >
-                    <span class="windshield-removal-text3 ButtonText">
-                      <span>Submit Entry</span>
-                      <br />
-                    </span>
-                  </button>
+            <div class="windshield-removal-container3">
+              <div class="windshield-removal-eraser">
+                <h3 class="windshield-removal-text1">Erase Windshield</h3>
+                <span class="windshield-removal-text2 Body">
+                  In the 3D file viewer below, use the eraser tool to remove
+                  the windshield from your vehicle scan.&nbsp;&nbsp;
+                </span>
+                <div class="windshield-removal-container4 elevation01">
+                    <div id="erase_mode" style="display: none;">Erase Mode On</div>
+                    <div id="canvas_viewer"></div>
                 </div>
               </div>
-            </form>
+              <div class="windshield-removal-container6">
+                <a
+                  href="{% url 'lidar:data_upload' %}"
+                  class="windshield-removal-navlink outlinedbutton button"
+                >
+                  Back
+                </a>
+                <div class="windshield-removal-container7 elevation01">
+                  <div class="windshield-removal-container8">
+                    <div class="row" id="progressbar">
+                      <div class="column" id="prog"></div>
+                    </div>
+
+                    <style>
+                      #progressbar { /*style entire bar*/
+                        height: 100%; /*set size of progress bar inside embed size*/
+                        border-radius: var(--dl-radius-radius-radius4);
+                        background: var(--dl-color-default-accentbluedark);
+                        overflow: hidden; /*hide overflow of column corners instead of adding radius*/
+                      }
+
+                      #progressbar #prog { /*style the 'completed' column*/
+                        width: 100%;
+                        height: 100%;
+                        background: var(--dl-color-secondaryblue-secondaryblue);
+                      }
+                    </style>
+                  </div>
+                </div>
+                <button
+                  id="submit_button"
+                  class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button"
+                >
+                  <span class="windshield-removal-text3 ButtonText">
+                    <span>Submit Entry</span>
+                    <br />
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <footer class="footer-footer elevation02 footer-root-class-name8">

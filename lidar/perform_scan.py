@@ -5,22 +5,6 @@ import boto3
 import os
 
 
-def access_object():
-    # Create an S3 client
-    s3_client = boto3.client('s3', aws_access_key_id=os.environ.get(
-        'AWS_S3_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'))
-
-    # Read an object from the bucket
-    response = s3_client.get_object(
-        Bucket='vehicle-scans', Key='media/lidar/lidar_scans/Attenuator2.glb')
-
-    # Read the object’s content as text
-    object_content = response['Body']
-
-    # Process or use the content as needed
-    return object_content
-
-
 def complete_scan(scan: Scan, vehicle: Vehicle):
     print(f'scan_path: {scan.lidar_scan.name}')
     # create s3 client to  access digital ocean space bucket

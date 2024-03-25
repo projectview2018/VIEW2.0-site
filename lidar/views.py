@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 import threading
 from .forms import ScanForm, VehicleForm
-from .perform_scan import complete_scan, access_object
+from .perform_scan import complete_scan
 from .models import Vehicle, Scan, CompletedScan
 from django.core import serializers
 import json
@@ -101,4 +101,6 @@ def visualization(request, vehicle_id):
 
 
 def windshield_removal(request):
+    if request.method == 'POST':
+        return render(request, 'lidar/add-vehicle.html', {})
     return render(request, 'lidar/windshield-removal.html', {})

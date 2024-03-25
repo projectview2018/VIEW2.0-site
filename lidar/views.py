@@ -98,7 +98,6 @@ def visualization(request, vehicle_id):
     year = vehicle.vehicle_year
     return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
 
-
 def windshield_removal(request, scan_id):
     scan_file = Scan.objects.get(pk=scan_id).lidar_scan
     print(f'Got scan_file: {scan_file}, {type(scan_file)}')

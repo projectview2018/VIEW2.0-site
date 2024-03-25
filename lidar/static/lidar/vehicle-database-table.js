@@ -1,10 +1,16 @@
-const data = JSON.parse(document.getElementById("vehicle_list").textContent);
-const table_base_uri = document.getElementById("visual_url").baseURI;
-const table_page_extension = "/vehicle_database_table/";
-const visual_page_extension = "/visualization/";
-const visual_url =
+const vehicle_list_raw = document.getElementById("vehicle_list");
+const data = JSON.parse(vehicle_list_raw.textContent);
+
+const table_base_uri = vehicle_list_raw.baseURI;
+const visual_page_extension = document.currentScript.dataset.visualUrl.slice(
+  0,
+  -2
+);
+const table_page_extension = document.currentScript.dataset.currentUrl;
+const vis_page_url =
   table_base_uri.slice(0, table_base_uri.indexOf(table_page_extension)) +
   visual_page_extension;
+
 const body_class_list = [
   "N/A",
   "Passenger Cars",
@@ -71,9 +77,9 @@ function isSubsequence(a, b) {
   return true;
 }
 
-function createVisualizationLink() {
+function createVisualizationLink(vehicle_id) {
   let link = document.createElement("a");
-  link.href = visual_url;
+  link.href = vis_page_url + "/" + vehicle_id;
   link.innerText = "View";
   return link;
 }
@@ -298,7 +304,7 @@ class TableView {
       }
       let id = document.createElement("td");
       id.classList.add("right_cell");
-      let link = createVisualizationLink();
+      let link = createVisualizationLink(vehicle.pk);
       row.appendChild(id);
       id.appendChild(link);
     }

@@ -16,6 +16,6 @@ urlpatterns = [
          name='vehicle_database_table'),
     path('visualization/<int:vehicle_id>',
          views.visualization, name='visualization'),
-    path('windshield_removal/', views.windshield_removal,
+    path('windshield_removal/<int:scan_id>', views.windshield_removal,
          name='windshield_removal'),
 ]

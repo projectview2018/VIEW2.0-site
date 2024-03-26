@@ -6,6 +6,8 @@ from .s3_utils import create_s3_client
 
 def complete_scan(scan: Scan, vehicle: Vehicle):
     print(f'scan_path: {scan.lidar_scan.name}')
+    scan.scan_status = "calculating"
+    scan.save()
     # create s3 client to  access digital ocean space bucket
     s3_client = create_s3_client()
 
@@ -14,7 +16,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         Bucket='vehicle-scans', Key=f'media/lidar/lidar_scans/{scan.lidar_scan.name}')
 
     print('Starting scan')
-
+    # print(f"scan before changing to binary: {response['Body'].read()}")
     mesh = trimesh.load(response['Body'], file_type='glb', force='mesh')
     print('Loading scan')
     # assuming mid track and mid-height for future calculations
@@ -43,6 +45,8 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     print('Updated vehicle\'s time stamp')
     vehicle.save()
     print('Vehicle\'s time stamp saved')
+    scan.scan_status = "processed"
+    scan.save()
 
 
 def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,

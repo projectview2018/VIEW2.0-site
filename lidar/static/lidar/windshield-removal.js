@@ -41775,12 +41775,21 @@ class Model {
     this.windshieldRemovalExt = JSON.parse(
       document.getElementById("windshield_removal_ext").innerText
     ).slice(0, -2);
+    this.scan_id = SON.parse(
+      document.getElementById("windshield_removal_ext").innerText
+    ).slice(-2);
     this.addVehicleExt = JSON.parse(
       document.getElementById("add_vehicle_ext").innerText
     );
+    this.visualizationExt = JSON.parse(
+      document.getElementById("visualization_ext").innerText
+    ).slice(0, -2);
+    // this.submitUrl =
+    //   this.baseURI.slice(0, this.baseURI.indexOf(this.windshieldRemovalExt)) +
+    //   this.addVehicleExt;
     this.submitUrl =
       this.baseURI.slice(0, this.baseURI.indexOf(this.windshieldRemovalExt)) +
-      this.addVehicleExt;
+      this.visualizationExt + this.scan_id;
     this.erasemodeSubscribers = [];
     this.animate();
   }

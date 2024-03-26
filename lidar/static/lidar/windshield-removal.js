@@ -41772,24 +41772,24 @@ class Model {
     this.mouseDown = false;
     this.eraseMode = false;
     this.baseURI = document.getElementById("put_url").baseURI;
+    this.windshield_removal_index = JSON.parse(
+      document.getElementById("windshield_removal_ext").innerText
+    ).indexOf("/", 1)
     this.windshieldRemovalExt = JSON.parse(
       document.getElementById("windshield_removal_ext").innerText
-    ).slice(0, -2);
-    this.scan_id = SON.parse(
-      document.getElementById("windshield_removal_ext").innerText
-    ).slice(-2);
-    this.addVehicleExt = JSON.parse(
-      document.getElementById("add_vehicle_ext").innerText
-    );
+    ).slice(0, this.windshield_removal_index);
+    // this.addVehicleExt = JSON.parse(
+    //   document.getElementById("add_vehicle_ext").innerText
+    // );
     this.visualizationExt = JSON.parse(
       document.getElementById("visualization_ext").innerText
-    ).slice(0, -2);
+    );
     // this.submitUrl =
     //   this.baseURI.slice(0, this.baseURI.indexOf(this.windshieldRemovalExt)) +
     //   this.addVehicleExt;
     this.submitUrl =
       this.baseURI.slice(0, this.baseURI.indexOf(this.windshieldRemovalExt)) +
-      this.visualizationExt + this.scan_id;
+      this.visualizationExt;
     this.erasemodeSubscribers = [];
     this.animate();
   }
@@ -41847,6 +41847,7 @@ class Model {
           path: this.path,
           method: "PUT",
           headers: {
+            "Content-Type": 'application/octet-stream',
             "Content-Length": new Blob([data]).size,
           },
         },
@@ -41936,8 +41937,10 @@ class filesaveController {
     this.model.exporter.parse(
       this.model.meshObj,
       async (result) => {
-        const data = JSON.stringify(result);
-        await this.model.saveFile(data);
+        // const data = JSON.stringify(result);
+        const data = new Blob([JSON.stringify(result)], { type: 'application/octet-stream' })
+        const string = await data.text();
+        console.log(string);
         const link = document.createElement("a");
         link.href = this.model.submitUrl;
         link.click();

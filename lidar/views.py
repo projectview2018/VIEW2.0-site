@@ -116,18 +116,14 @@ def visualization(request, vehicle_id):
         thread.start()
         return render(request, 'lidar/404.html', {})
     elif scan.scan_status == "calculating":
-        # THIS THREAD IS STRICTLY FOR TESTING SHOULD BE DELETED AFTER ELSE THERE WILL BE NEW THREADS STARTED ON EVERY REFRESH
-
-        thread = threading.Thread(
-            target=complete_scan, args=(scan, vehicle))
-        thread.start()
         print("Tried to load Visualization page. Scan is still being processed.")
         return render(request, 'lidar/404.html', {})
     elif scan.scan_status == "processed":  # scan should be processed and status updated as such
         num_completed_scans = CompletedScan.objects.filter(
             raw_scan=scan).count()
         if num_completed_scans > 0:
-            completed_scan = CompletedScan.objects.latest(raw_scan=scan)
+            completed_scans = CompletedScan.objects.filter(raw_scan=scan)
+            completed_scan = completed_scans.latest("completed_scan_added")
             print("Loading Visualization page. Scan is processed.")
             return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
         else:
@@ -142,7 +138,7 @@ def windshield_removal(request, scan_id):
     if scan.scan_status == "uploaded":
         scan.scan_status = "modifying"
         scan.save()
-    elif scan.scan_status == ("modified" or "calculating" or "processed"):
+    elif (scan.scan_status == "modified" or "calculating" or "processed"):
         # if clean scan already submitted, do not allow user to go back to page
         print(
             "Scan already modified and cleaned, cannot go back to windshield_removal page.")

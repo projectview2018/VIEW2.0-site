@@ -135,10 +135,12 @@ def visualization(request, vehicle_id):
 def windshield_removal(request, scan_id):
     scan = Scan.objects.get(pk=scan_id)
     scan_file = scan.lidar_scan
+    print(f"scan_status upon windshield: {scan.scan_status}")
+    post_windshield_strings = {"modified", "calculating", "processed"}
     if scan.scan_status == "uploaded":
         scan.scan_status = "modifying"
         scan.save()
-    elif (scan.scan_status == "modified" or "calculating" or "processed"):
+    elif (scan.scan_status in post_windshield_strings):
         # if clean scan already submitted, do not allow user to go back to page
         print(
             "Scan already modified and cleaned, cannot go back to windshield_removal page.")

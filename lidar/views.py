@@ -91,23 +91,69 @@ def vehicle_database_table(request):
                   {'vehicle_list': vehicle_list})
 
 
+# def visualization(request, vehicle_id):
+#     vehicle = Vehicle.objects.get(pk=vehicle_id)
+#     make = vehicle.vehicle_make
+#     model = vehicle.vehicle_model
+#     year = vehicle.vehicle_year
+#     return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
+
 def visualization(request, vehicle_id):
-    vehicle = Vehicle.objects.get(pk=vehicle_id)
+    scan = Scan.objects.get(pk=vehicle_id)
+    vehicle = scan.vehicle
     make = vehicle.vehicle_make
     model = vehicle.vehicle_model
     year = vehicle.vehicle_year
-    return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
+    print(f"Scan status on load: {scan.scan_status}")
+    if scan.scan_status == "modifying":
+        scan.scan_status = "modified"
+        scan.save()
+
+    if scan.scan_status == "modified":
+        print("Tried to load Visualization page. Scan about to be processed.")
+        thread = threading.Thread(
+            target=complete_scan, args=(scan, vehicle))
+        thread.start()
+        return render(request, 'lidar/404.html', {})
+    elif scan.scan_status == "calculating":
+        print("Tried to load Visualization page. Scan is still being processed.")
+        return render(request, 'lidar/404.html', {})
+    elif scan.scan_status == "processed":  # scan should be processed and status updated as such
+        num_completed_scans = CompletedScan.objects.filter(
+            raw_scan=scan).count()
+        if num_completed_scans > 0:
+            completed_scans = CompletedScan.objects.filter(raw_scan=scan)
+            completed_scan = completed_scans.latest("completed_scan_added")
+            print("Loading Visualization page. Scan is processed.")
+            return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
+        else:
+            print(
+                "Tried to load Visualization page. Scan should be processed, some error occurred.")
+            return render(request, 'lidar/404.html', {})
+
 
 def windshield_removal(request, scan_id):
-    scan_file = Scan.objects.get(pk=scan_id).lidar_scan
-    print(f'Got scan_file: {scan_file}, {type(scan_file)}')
+    scan = Scan.objects.get(pk=scan_id)
+    scan_file = scan.lidar_scan
+    print(f"scan_status upon windshield: {scan.scan_status}")
+    post_windshield_strings = {"modified", "calculating", "processed"}
+    if scan.scan_status == "uploaded":
+        scan.scan_status = "modifying"
+        scan.save()
+    elif (scan.scan_status in post_windshield_strings):
+        # if clean scan already submitted, do not allow user to go back to page
+        print(
+            "Scan already modified and cleaned, cannot go back to windshield_removal page.")
+        return render(request, 'lidar/404.html', {})
+
+    # print(f'Got scan_file: {scan_file}, {type(scan_file)}')
     scan_path = scan_file.name
     print(f'{scan_path = }')
     obj = get_object(scan_path)
-    print(obj)
+    # print(obj)
     get_url = generate_presigned_url_get(scan_path)
     put_url = generate_presigned_url_put(scan_path)
-    print(f'{get_url = }')
-    print(f'{put_url = }')
+    # print(f'{get_url = }')
+    # print(f'{put_url = }')
     return render(request, 'lidar/windshield-removal.html',
                   {'scan_id': scan_id, 'scan_path': scan_path, 'get_url': get_url, 'put_url': put_url})

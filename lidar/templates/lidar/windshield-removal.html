@@ -375,10 +375,12 @@
     {% load static %}
     {{ get_url|json_script:"get_url" }}
     {{ put_url|json_script:"put_url" }}
-    {% url 'lidar:windshield_removal' 1 as windshield_removal_ext %}
+    {% url 'lidar:windshield_removal' scan_id as windshield_removal_ext %}
     {{ windshield_removal_ext|json_script:"windshield_removal_ext" }}
     {% url 'lidar:add_vehicle' as add_vehicle_ext %}
     {{ add_vehicle_ext| json_script:"add_vehicle_ext" }}
+    {% url 'lidar:visualization' scan_id as visualization_ext %}
+    {{ visualization_ext|json_script:"visualization_ext" }}
     <script type="module" crossorigin src="{% static 'lidar/windshield-removal.js' %}" defer></script>
   </head>
   <body>
@@ -576,7 +578,7 @@
               States Government assumes no liability for the contents or use
               thereof. The United States Government does not endorse products,
               manufacturers, or state or local policies or laws unless
-              specifically indicated. Trade or manufacturers’ names may appear
+              specifically indicated. Trade or manufacturers' names may appear
               herein solely because they are considered essential to the
               objective of this document. Site contents represent the best
               technical judgement of U.S. DOT Volpe Center staff based on their

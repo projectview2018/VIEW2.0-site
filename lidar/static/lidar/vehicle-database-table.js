@@ -1,5 +1,24 @@
+const completed_scan_list_raw = document.getElementById("completed_scan_list");
+const completed_scan_data = JSON.parse(completed_scan_list_raw.textContent);
+console.log(completed_scan_data);
+
 const vehicle_list_raw = document.getElementById("vehicle_list");
 const data = JSON.parse(vehicle_list_raw.textContent);
+console.log(data);
+
+let vehicle_to_scan_dict = [];
+for (let car of data) {
+  vehicle_to_scan_dict[car["pk"]] = [];
+}
+console.log(vehicle_to_scan_dict);
+for (let scan of completed_scan_data) {
+  vehicle_to_scan_dict[scan["vehicle"]].push({
+    fields: {
+      raw_scan: scan["fields"]["raw_scan"],
+      date_added: scan["fields"]["completed_scan_added"].slice(0, 10),
+    },
+  });
+}
 
 const table_base_uri = vehicle_list_raw.baseURI;
 const visual_page_extension = document.currentScript.dataset.visualUrl.slice(
@@ -77,11 +96,33 @@ function isSubsequence(a, b) {
   return true;
 }
 
-function createVisualizationLink(vehicle_id) {
-  let link = document.createElement("a");
-  link.href = vis_page_url + "/" + vehicle_id;
-  link.innerText = "View";
-  return link;
+function createDropdown(vehicle_id) {
+  let select_items = vehicle_to_scan_dict[vehicle_id];
+  let wrapper = document.createElement("div");
+  if (select_items.length === 0) {
+    wrapper.innerText = "No Associated Scans";
+    return wrapper;
+  }
+
+  select_items = select_items.sort(compareByField("date_added")).toReversed();
+
+  let dropdown = document.createElement("select");
+  for (ind in select_items) {
+    let choice = document.createElement("option");
+    choice.value = select_items[ind]["fields"]["raw_scan"];
+    choice.innerText = `${select_items[ind]["fields"]["date_added"]}`;
+    dropdown.appendChild(choice);
+  }
+
+  let submit_button = document.createElement("button");
+  submit_button.innerText = "View";
+  submit_button.classList.add("view_button");
+
+  new ViewButtonController(dropdown, submit_button);
+
+  wrapper.appendChild(dropdown);
+  wrapper.appendChild(submit_button);
+  return wrapper;
 }
 
 class Model {
@@ -304,10 +345,31 @@ class TableView {
       }
       let id = document.createElement("td");
       id.classList.add("right_cell");
-      let link = createVisualizationLink(vehicle.pk);
+      let dropdown = createDropdown(vehicle.pk);
       row.appendChild(id);
-      id.appendChild(link);
+      id.appendChild(dropdown);
     }
+  }
+}
+
+class ViewButtonController {
+  constructor(d, b) {
+    this.dropdown = d;
+    this.button = b;
+    this.scan_num = this.dropdown.value;
+
+    this.dropdown.addEventListener("change", () => this.handleChangedView());
+    this.button.addEventListener("click", () => this.handleViewButtonClick());
+  }
+
+  handleChangedView() {
+    this.scan_num = this.dropdown.value;
+  }
+
+  handleViewButtonClick() {
+    let link = document.createElement("a");
+    link.href = vis_page_url + "/" + this.scan_num;
+    link.click();
   }
 }
 

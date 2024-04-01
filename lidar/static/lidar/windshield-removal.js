@@ -41847,7 +41847,7 @@ class Model {
           path: this.path,
           method: "PUT",
           headers: {
-            "Content-Type": 'application/octet-stream',
+            // "Content-Type": 'application/octet-stream',
             "Content-Length": new Blob([data]).size,
           },
         },
@@ -41937,10 +41937,11 @@ class filesaveController {
     this.model.exporter.parse(
       this.model.meshObj,
       async (result) => {
-        // const data = JSON.stringify(result);
-        const data = new Blob([JSON.stringify(result)], { type: 'application/octet-stream' })
-        const string = await data.text();
-        console.log(string);
+        const data = JSON.stringify(result);
+        await this.model.saveFile(data);
+        // const data = new Blob([JSON.stringify(result)], { type: 'application/octet-stream' })
+        // const string = await data.text();
+        // console.log(string);
         const link = document.createElement("a");
         link.href = this.model.submitUrl;
         link.click();

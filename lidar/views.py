@@ -122,6 +122,7 @@ def visualization(request, vehicle_id):
         num_completed_scans = CompletedScan.objects.filter(
             raw_scan=scan).count()
         if num_completed_scans > 0:
+
             completed_scans = CompletedScan.objects.filter(raw_scan=scan)
             completed_scan = completed_scans.latest("completed_scan_added")
             print("Loading Visualization page. Scan is processed.")

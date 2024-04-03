@@ -41980,7 +41980,6 @@ class filesaveController {
       async (result) => {
         const data = JSON.stringify(result);
         await this.model.saveFile(data);
-
         const link = document.createElement("a");
         link.href = this.model.submitUrl;
         link.click();

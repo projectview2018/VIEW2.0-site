@@ -84,11 +84,17 @@ def vehicle_database_table(request):
     vehicle_list = Vehicle.objects.all()
     for vehicle in vehicle_list:
         vehicle.vehicle_updated = vehicle.vehicle_updated.date()
+    completed_scan_list = CompletedScan.objects.all()
 
     vehicle_list = json.loads(serializers.serialize("json", vehicle_list))
+    completed_scan_list = json.loads(
+        serializers.serialize("json", completed_scan_list))
+    for completed_scan in completed_scan_list:
+        completed_scan["vehicle"] = json.loads(serializers.serialize(
+            "json", [Scan.objects.get(pk=completed_scan["fields"]["raw_scan"])]))[0]["fields"]["vehicle"]
 
     return render(request, 'lidar/vehicle-database-table.html',
-                  {'vehicle_list': vehicle_list})
+                  {'vehicle_list': vehicle_list, 'completed_scan_list': completed_scan_list})
 
 
 # def visualization(request, vehicle_id):
@@ -122,10 +128,11 @@ def visualization(request, vehicle_id):
         num_completed_scans = CompletedScan.objects.filter(
             raw_scan=scan).count()
         if num_completed_scans > 0:
+
             completed_scans = CompletedScan.objects.filter(raw_scan=scan)
             completed_scan = completed_scans.latest("completed_scan_added")
             print("Loading Visualization page. Scan is processed.")
-            return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
+            return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year, 'date': completed_scan.completed_scan_added})
         else:
             print(
                 "Tried to load Visualization page. Scan should be processed, some error occurred.")

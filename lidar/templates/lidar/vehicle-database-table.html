@@ -404,6 +404,11 @@
       #header_row {
         background-color: #dce5ec; 
       }
+      .view_button {
+        cursor: pointer;
+        background-color: gray;
+        border-radius: 4px;
+      }
       #table_footer {
         display: flex;
         justify-content: space-between;
@@ -424,6 +429,7 @@
     </style>
     {% load static %}
     {{ vehicle_list|json_script:"vehicle_list" }}
+    {{ completed_scan_list|json_script:"completed_scan_list" }}
     <script src="{% static 'lidar/vehicle-database-table.js' %}"
             defer
             data-visual-url = "{% url 'lidar:visualization' 1 %}"

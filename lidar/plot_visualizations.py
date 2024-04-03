@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+import math as mth
+from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
 
 
 def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_full, vru_selected):
@@ -32,9 +34,18 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
                          39, 26, 49], [47, 16, 58], [49, 16, 60]])
     # store 'person height' of selected VRU in [ft]
     vru_height = vru_sizes[vru_selected-1, 2]/12
+    # store 'width' of selected VRU in [ft]
+    vru_width = vru_sizes[vru_selected-1, 1]/12
 
     max_distance = 7*15  # maximum distance plotted (multiple of 7)
 
+    # background colors (make sure to have the same number of colors as plot divisions)
+    greenBG = ['#143A1D', '#1A5A2D', '#1F723A',
+               '#429344', '#7CBC55', '#A6C991', '#CAE4BB']
+
+    ''' -------------------------
+  Begin initial data processing
+  --------------------------'''
     # convert from [cm] to [ft]
     nvp_x_cartesian_ft = nvp_x_cartesian*0.032808399
     nvp_y_cartesian_ft = nvp_y_cartesian*0.032808399
@@ -52,10 +63,9 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     idx = np.argsort(theta)  # find indices that would sort the array
     r_sorted = np.array(r)[idx]
     theta_sorted = np.array(theta)[idx]
-
-    # background colors (make sure to have the same number of colors as plot divisions)
-    greenBG = ['#143A1D', '#1A5A2D', '#1F723A',
-               '#429344', '#7CBC55', '#A6C991', '#CAE4BB']
+    ''' -----------------------
+  End initial data processing
+  ------------------------'''
 
     # set figure size (check as regular script since notebooks don't work the same way)
     px = 1/plt.rcParams['figure.dpi']  # pixel in inches
@@ -74,8 +84,6 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # 65% opacity (a6) 404040bf is darker
     ax.fill(theta_sorted, r_sorted, '#5c5c5ca6', label='Blind Zone')
 
-    ''' spacer
-            '''
     ''' ----------------------------------------------------------------
   Begin calculate minimum distance from hood to VRU in front of driver
   -----------------------------------------------------------------'''
@@ -88,16 +96,18 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     hood_theta = np.pi/2  # 90 deg in rad
 
     # find nvp in front of driver (with tolerance)
-    front_range_indices = np.where(np.logical_and(theta_sorted >= 1.55334, theta_sorted <= 1.58825))[
-        0]  # b/w 89 and 90deg (taking ind0 since returns array inside variable)
+    # b/w 89 and 90deg (taking ind0 since returns array inside variable)
+    front_range_indices = np.where(np.logical_and(
+        theta_sorted >= hood_theta-mth.radians(1), theta_sorted <= hood_theta+mth.radians(1)))[0]
     # find index of minimum of selected entries
     front_r_min_index = front_range_indices[np.argmin(
         r_sorted[front_range_indices])]
     front_r_min = r_sorted[front_r_min_index]
     front_theta_min = theta_sorted[front_r_min_index]
 
-    # generate r values and heights b/w eye and closest NVP in increments of 1 unit [ft]
-    r_fit_nvp = np.arange(front_r_min)
+    # generate r values and heights b/w eye and closest NVP in increments of 1 VRU width
+    # includes final r value to over- rather than under-estimate
+    r_fit_nvp = np.arange(0, front_r_min+vru_width, vru_width)
     # generate height height values for each r value
     height_fit_nvp = np.linspace(eye_height, 0, len(r_fit_nvp))
 
@@ -109,11 +119,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # find r values with height lower than vru height
     # store inds of all heights lower than vru height
     vru_fit_ind = np.where(height_hood_nvp < vru_height)[0]
-    # store value of first r that meets the conditions above
+    # store value of first r that meets the conditions above (absolute distance)
     r_vru_fit = r_hood_nvp[vru_fit_ind[0]]
 
-    # minimum distance from hood to first visible VRU in front of driver
-    front_vru_dist = r_vru_fit  # [ft]
+    # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
+    front_vru_dist = r_vru_fit-hood_r  # [ft]
 
     # plot closest forward-visible VRU
     '''(theta might be slightly off but hopefully covered by dot size,
@@ -151,9 +161,9 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ax.spines['polar'].set_visible(False)
 
     # plot car image
-    image_file = "/static/images/Vehicle-Overhead-09.png"
+    image_file = "Vehicle-Overhead-09.png"
     img = Image.open(image_file)
-    from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
+
     # change image zoom based on vehicle size
     imagebox = OffsetImage(img, zoom=0.03)
     ab = AnnotationBbox(imagebox, (0, 0), frameon=False)
@@ -169,8 +179,15 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # legend in bottom left corner of FIGURE, not PLOT
     fig.legend(loc='lower left', fancybox=False)
 
+    imgdata = StringIO()
     # save file as SVG
-    plt.savefig('/content/viz_overhead.svg', transparent=False, dpi='figure',
+    plt.savefig('viz_overhead.svg', transparent=False, dpi='figure',
                 pad_inches=0, facecolor='#fff', edgecolor='#5c5c5c')
+
+    fig.savefig(imgdata, format='svg')
+    imgdata.seek(0)
+
+    data = imgdata.getvalue()
+    return data
 
     return (fig)

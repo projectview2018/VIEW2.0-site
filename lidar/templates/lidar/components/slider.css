@@ -1,0 +1,40 @@
+.slider-container {
+  display: flex;
+  position: relative;
+}
+.slider-slider {
+  width: 500px;
+  height: 300px;
+  display: inline-block;
+}
+.slider-slider-slide {
+  display: flex;
+  background-size: cover;
+  background-image: url("public/external/Placeholder photos/djp%202904-400h.png");
+}
+.slider-slider-slide1 {
+  display: flex;
+  background-size: cover;
+  background-image: url("public/external/Placeholder photos/v1-06-400h.png");
+}
+.slider-slider-slide2 {
+  display: flex;
+  background-size: cover;
+  background-image: url("public/external/Placeholder photos/djp%202883-400h.png");
+}
+.slider-slider-pagination {
+  display: none;
+}
+.slider-slider-button-prev {
+  display: none;
+}
+.slider-slider-button-next {
+  display: none;
+}
+@media(max-width: 767px) {
+  .slider-slider {
+    width: 100%;
+    height: 350px;
+    align-self: flex-start;
+  }
+}

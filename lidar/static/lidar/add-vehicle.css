@@ -275,7 +275,7 @@
   flex-direction: row;
   justify-content: space-between;
 }
-.header-v2-add-vehicle1 {
+.header-v2-add-vehicle {
   text-decoration: none;
 }
 
@@ -290,6 +290,10 @@
 .header-v2-root-class-name9 {
   align-self: center;
 }
+.header-v2-root-class-name10 {
+  align-self: center;
+}
+
 @media(max-width: 1200px) {
   .header-v2-links {
     margin-left: var(--dl-space-space-twounits);
@@ -400,6 +404,63 @@
   }
 }
 
+.add-a-vehicle-masthead-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: var(--dl-color-default-accentbluedark);
+}
+.add-a-vehicle-masthead-container1 {
+  flex: 0 0 auto;
+  width: 1200px;
+  height: auto;
+  display: flex;
+  align-self: center;
+  align-items: flex-start;
+  padding-top: var(--dl-space-space-unit);
+  padding-left: var(--dl-space-space-threeunits);
+  padding-right: var(--dl-space-space-threeunits);
+  flex-direction: column;
+  padding-bottom: var(--dl-space-space-unit);
+}
+.add-a-vehicle-masthead-heading {
+  color: var(--dl-color-text-darktext);
+}
+.add-a-vehicle-masthead-text {
+  width: auto;
+  height: auto;
+  max-width: var(--dl-size-size-maxwidth);
+  min-width: auto;
+  margin-top: var(--dl-space-space-unit);
+  max-height: auto;
+  min-height: auto;
+}
+.add-a-vehicle-masthead-text1 {
+  width: auto;
+  height: auto;
+  max-width: var(--dl-size-size-maxwidth);
+  min-width: auto;
+  margin-top: var(--dl-space-space-unit);
+  max-height: auto;
+  min-height: auto;
+}
+
+@media(max-width: 1200px) {
+  .add-a-vehicle-masthead-container1 {
+    width: 100%;
+  }
+  .add-a-vehicle-masthead-text {
+    width: 100%;
+  }
+  .add-a-vehicle-masthead-text1 {
+    width: 100%;
+  }
+}
+
 .footer-footer {
   flex: 0 0 auto;
   width: 100%;
@@ -489,6 +550,16 @@
   bottom: 0vh;
   position: static;
 }
+.footer-root-class-name11 {
+  width: 100%;
+}
+.footer-root-class-name12 {
+  top: bottom;
+  left: 0px;
+  bottom: 0vh;
+  height: auto;
+  position: static;
+}
 
 .add-vehicle-container {
   width: 100%;
@@ -497,21 +568,23 @@
   min-height: 100vh;
   align-items: center;
   flex-direction: column;
-  background-color: #f9f9f9;
 }
 .add-vehicle-content {
   flex: 0 0 auto;
+  width: 100%;
+  height: auto;
   display: flex;
   margin-top: 80px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  background-color: var(--dl-color-secondaryblue-secondaryblue);
 }
-.add-vehicle-container1 {
+.add-vehicle-container01 {
   flex: 0 0 auto;
   width: 1200px;
   height: auto;
-  display: flex;
+  display: none;
   position: relative;
   align-items: center;
   padding-top: var(--dl-space-space-twounits);
@@ -520,18 +593,6 @@
   flex-direction: column;
   padding-bottom: var(--dl-space-space-twounits);
   justify-content: center;
-}
-.add-vehicle-container2 {
-  top: 0px;
-  left: left;
-  width: 100vw;
-  height: 350px;
-  margin: auto;
-  display: flex;
-  position: absolute;
-  align-items: flex-start;
-  flex-direction: column;
-  background-color: var(--dl-color-secondaryblue-secondaryblue);
 }
 .add-vehicle-heading {
   color: var(--dl-color-text-whitetext);
@@ -544,186 +605,152 @@
   z-index: 1;
   font-size: 1.25rem;
   text-align: left;
-  font-family: Roboto;
+  font-family: "Roboto";
   font-weight: 500;
   padding-top: 1rem;
 }
-.add-vehicle-features {
+.add-vehicle-container02 {
+  flex: 0 0 auto;
   width: 100%;
   display: flex;
-  padding: var(--dl-space-space-unit);
-  position: relative;
-  max-width: var(--dl-size-size-maxwidth);
-  margin-top: var(--dl-space-space-oneandhalfunits);
-  align-items: center;
-  margin-bottom: var(--dl-space-space-unit);
+  align-items: flex-start;
   flex-direction: column;
+  background-color: #f9f9f9;
 }
-.add-vehicle-container3 {
-  width: 100%;
+.add-vehicle-container03 {
+  flex: 0 0 auto;
+  width: 1200px;
   display: flex;
+  align-self: center;
   align-items: center;
-  flex-direction: row;
+  padding-left: var(--dl-space-space-threeunits);
+  padding-right: var(--dl-space-space-threeunits);
+  flex-direction: column;
   justify-content: center;
 }
-.add-vehicle-feature-card {
-  width: var(--dl-size-size-xxlarge);
+.add-vehicle-container04 {
+  width: 100%;
   height: auto;
   display: flex;
-  padding: var(--dl-space-space-unit);
-  max-width: auto;
-  margin-top: var(--dl-space-space-unit);
-  transition: 0.3s;
+  overflow: hidden;
+  align-self: center;
+  box-shadow: 2px 2px 10px 0px #d4d4d4;
+  margin-top: var(--dl-space-space-twounits);
   align-items: flex-start;
-  margin-left: var(--dl-space-space-unit);
-  margin-right: var(--dl-space-space-twounits);
   border-radius: var(--dl-radius-radius-radius4);
-  margin-bottom: var(--dl-space-space-unit);
+  margin-bottom: 0px;
   flex-direction: column;
-  justify-content: flex-start;
-  background-color: var(--dl-color-default-accentblue);
+  background-color: #f8f8f8;
 }
-
-.add-vehicle-container4 {
+.add-vehicle-container05 {
   flex: 0 0 auto;
-  width: auto;
-  height: Small;
+  width: 100%;
+  display: flex;
+  align-self: flex-start;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: #ffffff;
+}
+.add-vehicle-container06 {
+  flex: 0 0 auto;
+  width: 40%;
+  height: 242px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  background-size: cover;
+  background-image: linear-gradient(270deg, rgb(255, 255, 255) 1.00%,rgba(240, 203, 53, 0) 77.00%),67276184-d108-4942-b40e-c87a87437627;
+  background-repeat: repeat,no-repeat;
+  background-position: top left,center;
+}
+.add-vehicle-container07 {
+  flex: 0 0 auto;
+  width: 50%;
   display: flex;
   align-self: center;
   align-items: flex-start;
-  justify-content: flex-start;
-}
-.add-vehicle-icon {
-  fill: var(--dl-color-primaryblue-primarybluedark);
-  width: 150px;
-  height: 150px;
-  align-self: center;
+  padding-top: var(--dl-space-space-unit);
+  margin-right: 0px;
+  padding-left: var(--dl-space-space-twounits);
+  padding-right: var(--dl-space-space-twounits);
+  flex-direction: column;
+  padding-bottom: var(--dl-space-space-unit);
 }
 .add-vehicle-text05 {
   color: var(--dl-color-primaryblue-primaryblue);
-  align-self: center;
-  margin-top: var(--dl-space-space-unit);
-  text-align: center;
-  margin-left: var(--dl-space-space-halfunit);
-  margin-right: var(--dl-space-space-halfunit);
-  margin-bottom: var(--dl-space-space-unit);
+  padding-bottom: var(--dl-space-space-halfunit);
+  text-transform: none;
+  text-decoration: none;
 }
 .add-vehicle-text06 {
-  margin: var(--dl-space-space-unit);
-  align-self: center;
-  text-align: center;
+  padding-bottom: var(--dl-space-space-unit);
 }
-.add-vehicle-vector1 {
-  width: 12px;
-  height: 40px;
-}
-.add-vehicle-feature-card1 {
-  width: var(--dl-size-size-xxlarge);
-  height: 100%;
-  display: flex;
-  padding: var(--dl-space-space-unit);
-  max-width: auto;
-  margin-top: var(--dl-space-space-unit);
+.add-vehicle-add-vehicle {
   transition: 0.3s;
-  align-items: flex-start;
-  margin-left: var(--dl-space-space-twounits);
-  margin-right: var(--dl-space-space-twounits);
-  border-radius: var(--dl-radius-radius-radius4);
-  margin-bottom: var(--dl-space-space-unit);
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: var(--dl-color-default-accentblue);
+  text-decoration: none;
 }
 
-.add-vehicle-container5 {
+
+
+
+.add-vehicle-container08 {
+  width: 100%;
+  height: auto;
+  display: flex;
+  overflow: hidden;
+  align-self: center;
+  box-shadow: 2px 2px 10px 0px #d4d4d4;
+  margin-top: var(--dl-space-space-twounits);
+  align-items: flex-start;
+  border-radius: var(--dl-radius-radius-radius4);
+  margin-bottom: var(--dl-space-space-twounits);
+  flex-direction: column;
+  background-color: #f8f8f8;
+}
+.add-vehicle-container09 {
   flex: 0 0 auto;
-  width: auto;
-  height: Small;
+  width: 100%;
+  display: flex;
+  align-self: flex-start;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: #ffffff;
+}
+.add-vehicle-container10 {
+  flex: 0 0 auto;
+  width: 40%;
+  height: 242px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  background-size: cover;
+  background-image: linear-gradient(270deg, rgb(255, 255, 255) 1.00%,rgba(240, 203, 53, 0) 77.00%),url("public/external/Placeholder photos/data%20upload%20mockup-reduced-1500w.png");
+  background-repeat: repeat,no-repeat;
+  background-position: top left,bottom left;
+}
+.add-vehicle-container11 {
+  flex: 0 0 auto;
+  width: 50%;
   display: flex;
   align-self: center;
   align-items: flex-start;
-  justify-content: flex-start;
-}
-.add-vehicle-icon2 {
-  fill: var(--dl-color-primaryblue-primarybluedark);
-  width: 150px;
-  height: 150px;
-  align-self: center;
-}
-.add-vehicle-text07 {
-  color: var(--dl-color-primaryblue-primaryblue);
-  align-self: center;
-  margin-top: var(--dl-space-space-unit);
-  text-align: center;
-  margin-left: var(--dl-space-space-unit);
-  margin-right: var(--dl-space-space-unit);
-  margin-bottom: var(--dl-space-space-unit);
+  padding-top: var(--dl-space-space-unit);
+  margin-right: 0px;
+  padding-left: var(--dl-space-space-twounits);
+  padding-right: var(--dl-space-space-twounits);
+  flex-direction: column;
+  padding-bottom: var(--dl-space-space-unit);
 }
 .add-vehicle-text08 {
-  align-self: center;
-  margin-top: var(--dl-space-space-unit);
-  text-align: center;
-  margin-left: var(--dl-space-space-unit);
-  margin-right: var(--dl-space-space-unit);
-  margin-bottom: var(--dl-space-space-unit);
-}
-.add-vehicle-vector11 {
-  width: 12px;
-  height: 40px;
-}
-.add-vehicle-feature-card2 {
-  width: var(--dl-size-size-xxlarge);
-  height: 100%;
-  display: flex;
-  padding: var(--dl-space-space-unit);
-  max-width: auto;
-  margin-top: var(--dl-space-space-unit);
-  transition: 0.3s;
-  align-items: flex-start;
-  margin-left: var(--dl-space-space-twounits);
-  margin-right: var(--dl-space-space-unit);
-  border-radius: var(--dl-radius-radius-radius4);
-  margin-bottom: var(--dl-space-space-unit);
-  flex-direction: column;
-  padding-bottom: 16px;
-  justify-content: flex-start;
-  background-color: var(--dl-color-default-accentblue);
-}
-
-.add-vehicle-container6 {
-  flex: 0 0 auto;
-  width: auto;
-  height: Small;
-  display: flex;
-  align-self: center;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-.add-vehicle-icon4 {
-  fill: var(--dl-color-primaryblue-primarybluedark);
-  width: 150px;
-  height: 150px;
-  align-self: center;
-}
-.add-vehicle-text11 {
   color: var(--dl-color-primaryblue-primaryblue);
-  align-self: center;
-  margin-top: var(--dl-space-space-unit);
-  text-align: center;
-  margin-left: var(--dl-space-space-unit);
-  margin-right: var(--dl-space-space-unit);
-  margin-bottom: var(--dl-space-space-unit);
+  padding-bottom: var(--dl-space-space-halfunit);
+  text-transform: none;
+  text-decoration: none;
 }
-.add-vehicle-text14 {
-  margin: var(--dl-space-space-unit);
-  align-self: center;
-  text-align: center;
+.add-vehicle-text09 {
+  padding-bottom: var(--dl-space-space-unit);
 }
-.add-vehicle-container7 {
-  display: flex;
-  position: relative;
-}
-.add-vehicle-button {
+.add-vehicle-add-vehicle {
   transition: 0.3s;
   text-decoration: none;
 }
@@ -732,21 +759,62 @@
 
 
 @media(max-width: 1200px) {
-  .add-vehicle-container1 {
+  .add-vehicle-container01 {
     width: 100vw;
+  }
+  .add-vehicle-container03 {
+    width: 100%;
+  }
+}
+@media(max-width: 991px) {
+  .add-vehicle-container07 {
+    width: 60%;
+  }
+  .add-vehicle-container11 {
+    width: 60%;
   }
 }
 @media(max-width: 767px) {
-  .add-vehicle-features {
-    padding-left: var(--dl-space-space-twounits);
-    padding-right: var(--dl-space-space-twounits);
+  .add-vehicle-container05 {
+    flex-direction: column;
+  }
+  .add-vehicle-container06 {
+    width: 100%;
+  }
+  .add-vehicle-container07 {
+    width: 100%;
+    padding-bottom: var(--dl-space-space-twounits);
+  }
+  .add-vehicle-add-vehicle {
+    align-self: center;
+  }
+  .add-vehicle-container09 {
+    flex-direction: column;
+  }
+  .add-vehicle-container10 {
+    width: 100%;
+  }
+  .add-vehicle-container11 {
+    width: 100%;
+    padding-bottom: var(--dl-space-space-twounits);
+  }
+  .add-vehicle-add-vehicle {
+    align-self: center;
   }
 }
 @media(max-width: 479px) {
-  .add-vehicle-features {
-    padding-top: var(--dl-space-space-twounits);
-    padding-left: var(--dl-space-space-unit);
-    padding-right: var(--dl-space-space-unit);
-    padding-bottom: var(--dl-space-space-twounits);
+  .add-vehicle-container04 {
+    width: 100%;
+    align-self: center;
+    margin-left: var(--dl-space-space-twounits);
+    margin-right: var(--dl-space-space-twounits);
+    flex-direction: column;
+  }
+  .add-vehicle-container08 {
+    width: 100%;
+    align-self: center;
+    margin-left: var(--dl-space-space-twounits);
+    margin-right: var(--dl-space-space-twounits);
+    flex-direction: column;
   }
 }

@@ -221,6 +221,6 @@ class VisualizationForm(forms.Form):
         ('6', 'Adult (49 inches)'),
     ]
     vru_selected = forms.ChoiceField(
-        label="vru_form",
+        # label="vru_form",
         widget=forms.RadioSelect(attrs={"type": "radio", "name": "radio"}),
         choices=VRUS,)

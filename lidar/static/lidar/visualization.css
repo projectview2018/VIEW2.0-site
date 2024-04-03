@@ -470,6 +470,7 @@
 /*match hover/active color of icon and text (editing text)*/
 .visualization-masthead-button:hover .visualization-masthead-text, .visualization-masthead-button:focus .visualization-masthead-text {
   color: var(--dl-color-primaryblue-primarybluedark);
+  text-decoration: underline;
 }
 
 .visualization-masthead-heading {

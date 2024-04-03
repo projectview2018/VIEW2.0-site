@@ -293,6 +293,7 @@
 .header-v2-root-class-name10 {
   align-self: center;
 }
+
 @media(max-width: 1200px) {
   .header-v2-links {
     margin-left: var(--dl-space-space-twounits);
@@ -403,6 +404,93 @@
   }
 }
 
+.instructions-masthead-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: var(--dl-color-default-accentbluedark);
+}
+.instructions-masthead-container1 {
+  flex: 0 0 auto;
+  width: 1200px;
+  height: auto;
+  display: flex;
+  align-self: center;
+  align-items: flex-start;
+  padding-top: var(--dl-space-space-unit);
+  padding-left: var(--dl-space-space-threeunits);
+  padding-right: var(--dl-space-space-threeunits);
+  flex-direction: column;
+  padding-bottom: var(--dl-space-space-unit);
+}
+.instructions-masthead-container2 {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+}
+.instructions-masthead-navlink {
+  display: flex;
+  transition: 0.3s;
+  font-family: "Roboto";
+  flex-direction: row;
+  text-decoration: none;
+}
+
+.instructions-masthead-navlink:hover {
+  color: var(--dl-color-primaryblue-primarybluedark);
+}
+
+.instructions-masthead-icon {
+  fill: var(--dl-color-primaryblue-primaryblue);
+  width: auto;
+  height: 1.5rem;
+  align-self: center;
+}
+.instructions-masthead-vector1 {
+  width: auto;
+  height: 1.5rem;
+  rotate: 0.5turn;
+  display: none;
+  align-self: center;
+}
+.instructions-masthead-text {
+  color: var(--dl-color-primaryblue-primaryblue);
+  font-size: 1.5rem;
+  align-self: flex-start;
+  font-style: normal;
+  font-family: "Roboto";
+  font-weight: 500;
+  margin-left: -4px;
+}
+
+/*match hover/active color of icon and text (editing icon)*/
+.instructions-masthead-navlink:hover .instructions-masthead-icon, .instructions-masthead-navlink:focus .instructions-masthead-icon {
+  fill: var(--dl-color-primaryblue-primarybluedark);
+}
+
+/*match hover/active color of icon and text (editing text)*/
+.instructions-masthead-navlink:hover .instructions-masthead-text, .instructions-masthead-navlink:focus .instructions-masthead-text {
+  color: var(--dl-color-primaryblue-primarybluedark);
+  text-decoration: underline;
+}
+
+.instructions-masthead-heading {
+  color: var(--dl-color-text-darktext);
+  margin-top: var(--dl-space-space-unit);
+}
+
+@media(max-width: 1200px) {
+  .instructions-masthead-container1 {
+    width: 100%;
+  }
+}
+
 .upload-process-masthead-container {
   width: 100%;
   height: auto;
@@ -445,7 +533,9 @@
 
 
 
-
+.upload-process-masthead-root-class-name3 {
+  display: none;
+}
 @media(max-width: 1200px) {
   .upload-process-masthead-container1 {
     width: 100%;
@@ -547,6 +637,13 @@
 .footer-root-class-name11 {
   width: 100%;
 }
+.footer-root-class-name12 {
+  top: bottom;
+  left: 0px;
+  bottom: 0vh;
+  height: auto;
+  position: static;
+}
 
 .instructions-container {
   width: 100%;
@@ -564,6 +661,7 @@
   margin-top: 80px;
   align-items: flex-start;
   flex-direction: column;
+  background-color: #f9f9f9;
 }
 .instructions-container02 {
   flex: 0 0 auto;
@@ -584,6 +682,10 @@
   align-self: flex-start;
   margin-top: 0px;
   margin-left: 0px;
+}
+.instructions-link {
+  margin-top: var(--dl-space-space-twounits);
+  text-decoration: none;
 }
 .instructions-container03 {
   flex: 0 0 auto;
@@ -621,7 +723,7 @@
   font-style: normal;
   font-family: "Roboto";
 }
-.instructions-link {
+.instructions-link1 {
   text-decoration: underline;
 }
 .instructions-li02 {
@@ -733,7 +835,7 @@
   font-style: italic;
   font-weight: 400;
 }
-.instructions-link1 {
+.instructions-link2 {
   font-size: 0.8rem;
   font-style: italic;
   font-weight: 400;
@@ -754,7 +856,7 @@
   font-style: italic;
   font-weight: 400;
 }
-.instructions-link2 {
+.instructions-link3 {
   font-size: 0.8rem;
   font-style: italic;
   font-weight: 400;
@@ -1053,7 +1155,7 @@
 .instructions-li24 {
   margin-bottom: var(--dl-space-space-halfunit);
 }
-.instructions-link3 {
+.instructions-link4 {
   text-decoration: underline;
 }
 .instructions-li25 {
@@ -1140,7 +1242,7 @@
   flex: 0 0 auto;
   width: 100%;
   height: auto;
-  display: flex;
+  display: none;
   position: relative;
   flex-wrap: wrap;
   align-items: flex-start;

@@ -21,12 +21,15 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     print('Loading scan')
     # assuming mid track and mid-height for future calculations
     driver_height = 1.2
+    # eye pos in front-left frame, using scan-frame axes
     eye_x_m = scan.D_m
-    eye_y_m = scan.A_m - ((scan.B_m - scan.A_m) / 2)
-    eye_z_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
+    eye_y_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
+    eye_z_m = scan.A_m + ((scan.B_m - scan.A_m) / 2) + scan.C_m
     eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
     # eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
-    nvp_xs, nvp_ys = find_nvps(mesh, eye_pos, scan.driver_side_start)
+    scan_eye_pos = get_eye_in_mesh_frame(
+        mesh, eye_pos, scan.driver_side_start)
+    nvp_xs, nvp_ys = find_nvps(mesh, scan_eye_pos, scan.driver_side_start)
     print('Found NVPs')
     coordinates = np.stack([nvp_xs, nvp_ys]).T
     coordinates = np.concatenate([np.zeros((1, 2)), coordinates])
@@ -129,15 +132,30 @@ def calculate_area(coordinates):
     return area
 
 
-# def correct_mesh_frame(mesh):
-#     x_coordinates = mesh.vertices[:, 0]
-#     y_coordinates = mesh.vertices[:, 1]
-#     z_coordinates = mesh.vertices[:, 2]
+def get_eye_in_mesh_frame(mesh, eye_pos, driver_start):
+    ground_y = np.min(mesh.vertices[:, 1])
+    ground_range = 0.5  # m off the ground within which to remove points from mesh
+    filt_ground = mesh.vertices[:, 1] > (ground_y + ground_range)
 
-#     ground_z = np.min(z_coordinates)
-#     ground_range = 0.5  # m off the ground within which to remove points from mesh
-#     filt_ground = z_coordinates > (ground_z + ground_range)
+    final_vertices = mesh.vertices[filt_ground]
+    # get front of car vertex
+    front_car_z_value = abs(
+        final_vertices[np.argmin(final_vertices[:, 2])][2])
+    if (driver_start):
+        left_mirror_idx = np.argmin(final_vertices[:, 0])
+        # right_mirror_idx = np.argmax(final_vertices[:, 0])
 
-#     final_vertices = mesh.vertices[filt_ground]
+        left_mirror_vertex = final_vertices[left_mirror_idx]
+        # right_mirror_vertex = final_vertices[right_mirror_idx]
 
-#     left_mirror
+        # only get points that are behind the side mirrors
+        filt_mirrors = final_vertices[:, 2] > (left_mirror_vertex[2] + 0.25)
+
+        final_vertices = final_vertices[filt_mirrors]
+        left_car_x_value = abs(
+            final_vertices[np.argmin(final_vertices[:, 0])][0])
+
+        new_eye_pos = [eye_pos[0] - left_car_x_value,
+                       eye_pos[1], eye_pos[2] - front_car_z_value]
+
+    return new_eye_pos

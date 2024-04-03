@@ -124,6 +124,9 @@ def visualization(request, scan_id):
         return render(request, 'lidar/404.html', {})
     elif scan.scan_status == "calculating":
         print("Tried to load Visualization page. Scan is still being processed.")
+        thread = threading.Thread(
+            target=complete_scan, args=(scan, vehicle))
+        thread.start()
         return render(request, 'lidar/404.html', {})
     elif scan.scan_status == "processed":  # scan should be processed and status updated as such
         num_completed_scans = CompletedScan.objects.filter(

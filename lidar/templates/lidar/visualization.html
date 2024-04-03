@@ -482,30 +482,32 @@
           >
             <div class="visualization-masthead-container1">
               <div class="visualization-masthead-container2">
-                <button
-                  name="vehicle database"
-                  type="button"
-                  aria-label="back to vehicle database"
-                  class="visualization-masthead-button button"
-                >
-                  <svg
-                    alt="back arrow"
-                    viewBox="0 0 1024 1024"
-                    class="visualization-masthead-icon"
+                <a href="{% url 'lidar:vehicle_database_table' %}">
+                  <button
+                    name="vehicle database"
+                    type="button"
+                    aria-label="back to vehicle database"
+                    class="visualization-masthead-button button"
                   >
-                    <path
-                      d="M498 166l-346 346 346 346-76 76-422-422 422-422z"
-                    ></path>
-                  </svg>
-                  <img
-                    alt="Vector11314"
-                    src="{% static 'lidar/images/vector11314-wnpn.svg' %}"
-                    class="visualization-masthead-vector1"
-                  />
-                  <span class="visualization-masthead-text">
-                    <span>Vehicle Database</span>
-                  </span>
-                </button>
+                    <svg
+                      alt="back arrow"
+                      viewBox="0 0 1024 1024"
+                      class="visualization-masthead-icon"
+                    >
+                      <path
+                        d="M498 166l-346 346 346 346-76 76-422-422 422-422z"
+                      ></path>
+                    </svg>
+                    <img
+                      alt="Vector11314"
+                      src="{% static 'lidar/images/vector11314-wnpn.svg' %}"
+                      class="visualization-masthead-vector1"
+                    />
+                    <span class="visualization-masthead-text">
+                      <span>Vehicle Database</span>
+                    </span>
+                  </button>
+                </a>
               </div>
               <h1 class="visualization-masthead-heading HeadingH1">
                 <span>{{ year }} {{ make }} {{ model }} ({{ date }} UTC)</span>

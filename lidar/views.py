@@ -1,14 +1,15 @@
+import os
+import json
+from django.core import serializers
+from .models import Vehicle, Scan, CompletedScan
+from .s3_utils import get_object, generate_presigned_url_get, generate_presigned_url_put
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 import threading
-from .forms import ScanForm, VehicleForm
+from .forms import ScanForm, VehicleForm, VisualizationForm
 from .perform_scan import complete_scan
-from .s3_utils import get_object, generate_presigned_url_get, generate_presigned_url_put
-from .models import Vehicle, Scan, CompletedScan
-from django.core import serializers
-import json
-import os
+from .plot_visualizations import viz_overhead
 
 
 def index(request):
@@ -84,30 +85,91 @@ def vehicle_database_table(request):
     vehicle_list = Vehicle.objects.all()
     for vehicle in vehicle_list:
         vehicle.vehicle_updated = vehicle.vehicle_updated.date()
+    completed_scan_list = CompletedScan.objects.all()
 
     vehicle_list = json.loads(serializers.serialize("json", vehicle_list))
+    completed_scan_list = json.loads(
+        serializers.serialize("json", completed_scan_list))
+    for completed_scan in completed_scan_list:
+        completed_scan["vehicle"] = json.loads(serializers.serialize(
+            "json", [Scan.objects.get(pk=completed_scan["fields"]["raw_scan"])]))[0]["fields"]["vehicle"]
 
     return render(request, 'lidar/vehicle-database-table.html',
-                  {'vehicle_list': vehicle_list})
+                  {'vehicle_list': vehicle_list, 'completed_scan_list': completed_scan_list})
 
 
-def visualization(request, vehicle_id):
-    vehicle = Vehicle.objects.get(pk=vehicle_id)
+# def visualization(request, vehicle_id):
+#     vehicle = Vehicle.objects.get(pk=vehicle_id)
+#     make = vehicle.vehicle_make
+#     model = vehicle.vehicle_model
+#     year = vehicle.vehicle_year
+#     return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
+
+def visualization(request, scan_id):
+    scan = Scan.objects.get(pk=scan_id)
+    vehicle = scan.vehicle
     make = vehicle.vehicle_make
     model = vehicle.vehicle_model
     year = vehicle.vehicle_year
-    return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
+    print(f"Scan status on load: {scan.scan_status}")
+    if scan.scan_status == "modifying":
+        scan.scan_status = "modified"
+        scan.save()
+
+    if scan.scan_status == "modified":
+        print("Tried to load Visualization page. Scan about to be processed.")
+        thread = threading.Thread(
+            target=complete_scan, args=(scan, vehicle))
+        thread.start()
+        return render(request, 'lidar/404.html', {})
+    elif scan.scan_status == "calculating":
+        print("Tried to load Visualization page. Scan is still being processed.")
+        return render(request, 'lidar/404.html', {})
+    elif scan.scan_status == "processed":  # scan should be processed and status updated as such
+        num_completed_scans = CompletedScan.objects.filter(
+            raw_scan=scan).count()
+        if num_completed_scans > 0:
+            if request.method == 'POST':
+                print("visualization form submitted, request was POST")
+                viz_form = VisualizationForm(request.POST)
+                if viz_form.is_valid():
+                    print("viz_from was valid")
+                    completed_scan = CompletedScan.objects.get(raw_scan=scan)
+
+                    print("Loading Visualization page. Scan is processed.")
+                    [graph, graph_str] = viz_overhead(
+                        json.loads(completed_scan.nvp_xs), json.loads(completed_scan.nvp_ys), (scan.F_m + ((scan.E_m - scan.F_m) / 2) + 1.2), ((scan.B_m - scan.A_m) / 2), int(viz_form.cleaned_data['vru_selected']))
+                    return render(request, 'lidar/visualization-graph.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'graph': graph, 'graph_str': graph_str})
+            else:
+                viz_form = VisualizationForm()
+        else:
+            print(
+                "Tried to load Visualization page. Scan should be processed, some error occurred.")
+        return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year})
+
 
 def windshield_removal(request, scan_id):
-    scan_file = Scan.objects.get(pk=scan_id).lidar_scan
-    print(f'Got scan_file: {scan_file}, {type(scan_file)}')
+    scan = Scan.objects.get(pk=scan_id)
+    scan_file = scan.lidar_scan
+    print(f"scan_status upon windshield: {scan.scan_status}")
+    post_windshield_strings = {"modified", "calculating", "processed"}
+    if scan.scan_status == "uploaded":
+        scan.scan_status = "modifying"
+        scan.save()
+    elif (scan.scan_status in post_windshield_strings):
+        # if clean scan already submitted, do not allow user to go back to page
+        print(
+            "Scan already modified and cleaned, cannot go back to windshield_removal page.")
+        return render(request, 'lidar/404.html', {})
+
+    # print(f'Got scan_file: {scan_file}, {type(scan_file)}')
     scan_path = scan_file.name
     print(f'{scan_path = }')
     obj = get_object(scan_path)
-    print(obj)
+    # print(obj)
     get_url = generate_presigned_url_get(scan_path)
     put_url = generate_presigned_url_put(scan_path)
-    print(f'{get_url = }')
-    print(f'{put_url = }')
+    # print(f'{get_url = }')
+    # print(f'{put_url = }')
     return render(request, 'lidar/windshield-removal.html',
                   {'scan_id': scan_id, 'scan_path': scan_path, 'get_url': get_url, 'put_url': put_url})

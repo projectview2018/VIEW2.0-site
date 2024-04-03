@@ -508,7 +508,7 @@
                 </button>
               </div>
               <h1 class="visualization-masthead-heading HeadingH1">
-                <span>{{ make }} {{ model }} {{ year }}</span>
+                <span>{{ year }} {{ make }} {{ model }} ({{ date }} UTC)</span>
               </h1>
             </div>
           </section>
@@ -544,7 +544,8 @@
               <h2 class="visualization-text HeadingH2">
                 Blind-Zone Visualizations
               </h2>
-              <form class="visualization-vru-selection-form">
+              <form action="{% url 'lidar:visualization' scan_id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="visualization-container08">
                   <div>
                     <div class="visualization-container10">
@@ -563,44 +564,14 @@
                       </disclosure-inline>
                     </div>
                   </div>
-                  <ul class="visualization-ul list">
-                    <li class="visualization-li list-item">
-                      <input type="radio" name="radio" />
-                      <label class="visualization-text01 Body">
-                        Preschool child (28 inches)
-                      </label>
-                    </li>
-                    <li class="visualization-li1 list-item">
-                      <input type="radio" name="radio" />
-                      <label class="visualization-text02 Body">
-                        Elementary school child on bicycle (35 inches)
-                      </label>
-                    </li>
-                    <li class="visualization-li2 list-item">
-                      <input type="radio" name="radio" />
-                      <label class="visualization-text03 Body">
-                        Elementary school child (37 inches)
-                      </label>
-                    </li>
-                    <li class="visualization-li3 list-item">
-                      <input type="radio" name="radio" />
-                      <label class="visualization-text04 Body">
-                        Wheelchair user (39 inches)
-                      </label>
-                    </li>
-                    <li class="visualization-li4 list-item">
-                      <input type="radio" name="radio" />
-                      <label class="visualization-text05 Body">
-                        Adult on bicycle (47 inches)
-                      </label>
-                    </li>
-                    <li class="visualization-li5 list-item">
-                      <input type="radio" name="radio" checked="true" />
-                      <label class="visualization-text06 Body">
-                        Adult (49 inches)
-                      </label>
-                    </li>
-                  </ul>
+                  <fieldset>
+                    <legend>{{ VisualizationForm.vru_selected.label }}</legend>
+                    {% for radio in VisualizationForm.vru_selected %}
+                    <div class="visualization-li list-item">
+                        {{ radio }}
+                    </div>
+                    {% endfor %}
+                  </fieldset>
                   <span class="visualization-text07 Body">
                     *Vulnerable Road Users&nbsp;include pedestrians, cyclists,
                     and people who use wheelchairs. A vulnerable road user is
@@ -676,8 +647,8 @@
                     </div>
                   </div>
                   <button
-                    type="button"
-                    class="visualization-button containedbutton-2-6-12-secondaryblue button"
+                  type="submit"
+                  class="visualization-button containedbutton-2-6-12-secondaryblue button"
                   >
                     <span>
                       <span>Visualize</span>
@@ -709,41 +680,7 @@
                 src="{% static 'lidar/images/Test Visualizations/viz-top test 1.svg' %}"
                 class="visualization-image08"
               />
-            </div>
-            <div class="visualization-side-view">
-              <div class="visualization-container20">
-                <h3 class="visualization-text21 HeadingH3">Side View</h3>
-                <span class="visualization-text22 Body">
-                  <span>
-                    If preschool children were in a line in front of the
-                    vehicle, 6 preschoolers would be hidden.
-                  </span>
-                  <span class="Body"></span>
-                </span>
-              </div>
-              <img
-                alt="image"
-                src="{% static 'lidar/images/Test Visualizations/viz-side test 1.svg' %}"
-                class="visualization-image09"
-              />
-            </div>
-            <div class="visualization-front-view">
-              <div class="visualization-container21">
-                <h3 class="visualization-text25 HeadingH3">Front View</h3>
-                <span class="visualization-text26 Body">
-                  <span>
-                    If preschool children were in a line in next to the
-                    passenger side door of the vehicle, 9 preschoolers would be
-                    hidden.
-                  </span>
-                  <span class="Body"></span>
-                </span>
-              </div>
-              <img
-                alt="image"
-                src="{% static 'lidar/images/Test Visualizations/viz-front test 1.svg' %}"
-                class="visualization-image10"
-              />
+              <!-- {{ graph|safe }} -->
             </div>
           </div>
         </div>

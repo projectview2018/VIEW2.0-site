@@ -6,6 +6,8 @@ from .s3_utils import create_s3_client
 
 def complete_scan(scan: Scan, vehicle: Vehicle):
     print(f'scan_path: {scan.lidar_scan.name}')
+    scan.scan_status = "calculating"
+    scan.save()
     # create s3 client to  access digital ocean space bucket
     s3_client = create_s3_client()
 
@@ -14,8 +16,8 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         Bucket='vehicle-scans', Key=f'media/lidar/lidar_scans/{scan.lidar_scan.name}')
 
     print('Starting scan')
-
-    mesh = trimesh.load(response['Body'], file_type='glb', force='mesh')
+    # print(f"scan before changing to binary: {response['Body'].read()}")
+    mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
     # assuming mid track and mid-height for future calculations
     driver_height = 1.2
@@ -43,6 +45,8 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     print('Updated vehicle\'s time stamp')
     vehicle.save()
     print('Vehicle\'s time stamp saved')
+    scan.scan_status = "processed"
+    scan.save()
 
 
 def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
@@ -123,3 +127,17 @@ def calculate_area(coordinates):
     area = .5 * np.absolute(S1 - S2)
 
     return area
+
+
+# def correct_mesh_frame(mesh):
+#     x_coordinates = mesh.vertices[:, 0]
+#     y_coordinates = mesh.vertices[:, 1]
+#     z_coordinates = mesh.vertices[:, 2]
+
+#     ground_z = np.min(z_coordinates)
+#     ground_range = 0.5  # m off the ground within which to remove points from mesh
+#     filt_ground = z_coordinates > (ground_z + ground_range)
+
+#     final_vertices = mesh.vertices[filt_ground]
+
+#     left_mirror

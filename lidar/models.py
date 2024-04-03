@@ -39,7 +39,7 @@ class Scan(models.Model):
     E_in = models.FloatField(default=0)
     F_ft = models.IntegerField(default=0)
     F_in = models.FloatField(default=0)
-    windshield_removed = models.BooleanField(default=False)
+    scan_status = models.TextField(default="uploaded")
     lidar_scan = models.FileField()
 
     # @property

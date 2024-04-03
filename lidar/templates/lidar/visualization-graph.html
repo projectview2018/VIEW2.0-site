@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="english">
   <head>
-    <title>Windshield Removal</title>
-    <meta property="og:title" content="WindshieldRemoval - exported project" />
+    <title>Visualization with Graph</title>
+    <meta property="og:title" content="Visualization - exported project" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -372,25 +372,15 @@
         margin-bottom: 0;
       }
     </style>
-    {% load static %}
-    {{ get_url|json_script:"get_url" }}
-    {{ put_url|json_script:"put_url" }}
-    {% url 'lidar:windshield_removal' scan_id as windshield_removal_ext %}
-    {{ windshield_removal_ext|json_script:"windshield_removal_ext" }}
-    {% url 'lidar:add_vehicle' as add_vehicle_ext %}
-    {{ add_vehicle_ext| json_script:"add_vehicle_ext" }}
-    {% url 'lidar:visualization' scan_id as visualization_ext %}
-    {{ visualization_ext|json_script:"visualization_ext" }}
-    <script type="module" crossorigin src="{% static 'lidar/windshield-removal.js' %}" defer></script>
   </head>
   <body>
     {% load static %}
     <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
     <div>
-      <link href="{% static 'lidar/windshield-removal.css' %}" rel="stylesheet" />
+      <link href="{% static 'lidar/visualization.css' %}" rel="stylesheet" />
 
-      <div class="windshield-removal-container">
-        <div class="header-v2-container header-v2-root-class-name6">
+      <div class="visualization-container">
+        <div class="header-v2-container header-v2-root-class-name4">
           <header
             data-thq="thq-navbar"
             class="header-v2-navbar-interactive elevation04"
@@ -486,91 +476,218 @@
             </div>
           </header>
         </div>
-        <div class="windshield-removal-container1">
+        <div class="visualization-content">
           <section
-            class="upload-process-masthead-container elevation01 upload-process-masthead-root-class-name1"
+            class="visualization-masthead-container elevation01 visualization-masthead-root-class-name"
           >
-            <div class="upload-process-masthead-container1">
-              <h1 class="upload-process-masthead-heading HeadingH1">
-                <span>Add a Vehicle</span>
-              </h1>
-              <h2 class="upload-process-masthead-text HeadingH2">
-                <span>Step 3/3 - Remove Windshield</span>
-              </h2>
-              <span class="upload-process-masthead-text1 Body">
-                <span>
-                  Our database displays all vehicle entries on VIEW that are
-                  contributed by the public and by researchers. Explore the
-                  database to see all the vehicle information available and
-                  click View to see blind-zone visualizations and additional
-                  safety metrics.
-                </span>
-              </span>
-            </div>
-          </section>
-          <div class="windshield-removal-container2">
-            <h1 class="windshield-removal-text HeadingH1">Add a Vehicle</h1>
-            <!-- <form name="Vehicle Entry Form" class="windshield-removal-form"> -->
-            <div class="windshield-removal-container3">
-              <div class="windshield-removal-eraser">
-                <h3 class="windshield-removal-text1">Erase Windshield</h3>
-                <span class="windshield-removal-text2 Body">
-                  In the 3D file viewer below, use the eraser tool to remove
-                  the windshield from your vehicle scan.&nbsp;&nbsp;
-                </span>
-                <div class="windshield-removal-container4 elevation01">
-                    <div id="erase_mode" style="display: none;">Erase Mode On</div>
-                    <div id="canvas_viewer"></div>
-                </div>
-                <div style="display: flex; padding-top: 20px;">
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="erase_button">Toggle Erase</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="undo_button">Undo</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="reset_button">Reset Mesh</button>
-                </div>
-              </div>
-              <div class="windshield-removal-container6">
-                <a
-                  href="{% url 'lidar:data_upload' %}"
-                  class="windshield-removal-navlink outlinedbutton button"
-                >
-                  Back
-                </a>
-                <div class="windshield-removal-container7 elevation01">
-                  <div class="windshield-removal-container8">
-                    <div class="row" id="progressbar">
-                      <div class="column" id="prog"></div>
-                    </div>
-
-                    <style>
-                      #progressbar { /*style entire bar*/
-                        height: 100%; /*set size of progress bar inside embed size*/
-                        border-radius: var(--dl-radius-radius-radius4);
-                        background: var(--dl-color-default-accentbluedark);
-                        overflow: hidden; /*hide overflow of column corners instead of adding radius*/
-                      }
-
-                      #progressbar #prog { /*style the 'completed' column*/
-                        width: 100%;
-                        height: 100%;
-                        background: var(--dl-color-secondaryblue-secondaryblue);
-                      }
-                    </style>
-                  </div>
-                </div>
+            <div class="visualization-masthead-container1">
+              <div class="visualization-masthead-container2">
                 <button
-                  id="submit_button"
-                  class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button"
+                  name="vehicle database"
+                  type="button"
+                  aria-label="back to vehicle database"
+                  class="visualization-masthead-button button"
                 >
-                  <span class="windshield-removal-text3 ButtonText">
-                    <span>Submit Entry</span>
-                    <br />
+                  <svg
+                    alt="back arrow"
+                    viewBox="0 0 1024 1024"
+                    class="visualization-masthead-icon"
+                  >
+                    <path
+                      d="M498 166l-346 346 346 346-76 76-422-422 422-422z"
+                    ></path>
+                  </svg>
+                  <img
+                    alt="Vector11314"
+                    src="{% static 'lidar/images/vector11314-wnpn.svg' %}"
+                    class="visualization-masthead-vector1"
+                  />
+                  <span class="visualization-masthead-text">
+                    <span>Vehicle Database</span>
                   </span>
                 </button>
               </div>
+              <h1 class="visualization-masthead-heading HeadingH1">
+                <span>{{ make }} {{ model }} {{ year }}</span>
+              </h1>
+            </div>
+          </section>
+          <div class="visualization-container01">
+            <img
+              alt="image"
+              src="https://play.teleporthq.io/static/svg/default-img.svg"
+              class="visualization-image"
+            />
+            <div class="visualization-container02">
+              <div class="visualization-container03">
+                <div>
+                  <div class="visualization-container05">
+                    <disclosure-inline data-popup="">
+                      <h3 class="visualization-text HeadingH3">
+                        Vehicle Scan
+                        <span data-insert-trigger="inline"></span>
+                      </h3>
+                      <disclosure-content role="note">
+                        <p>
+                          Vehicle scan was created using LiDAR, a method for
+                          measuring distances using light rays.
+                        </p>
+                      </disclosure-content>
+                    </disclosure-inline>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="visualization-container06">
+            <div class="visualization-container07 elevation01">
+              <h2 class="visualization-text HeadingH2">
+                Blind-Zone Visualizations
+              </h2>
+              <form action="{% url 'lidar:visualization' scan_id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="visualization-container08">
+                  <div>
+                    <div class="visualization-container10">
+                      <disclosure-inline data-popup="">
+                        <h3 class="visualization-text HeadingH3">
+                          Choose a Vulnerable Road User (VRU)
+                          <span data-insert-trigger="inline"></span>
+                        </h3>
+                        <disclosure-content role="note">
+                          <p>
+                            Vulnerable Road Users are people who are not in a
+                            vehicle and&nbsp;include pedestrians, cyclists, and
+                            wheelchair users.
+                          </p>
+                        </disclosure-content>
+                      </disclosure-inline>
+                    </div>
+                  </div>
+                  <fieldset>
+                    <legend>{{ VisualizationForm.vru_selected.label }}</legend>
+                    {% for radio in VisualizationForm.vru_selected %}
+                    <div class="visualization-li list-item">
+                        {{ radio }}
+                    </div>
+                    {% endfor %}
+                  </fieldset>
+                  <span class="visualization-text07 Body">
+                    *Vulnerable Road Users&nbsp;include pedestrians, cyclists,
+                    and people who use wheelchairs. A vulnerable road user is
+                    considered invisible if a driver cannot see their head. The
+                    calculations use the heights to the shoulders of 5th
+                    percentile United States female vulnerable road users.
+                  </span>
+                  <div class="visualization-vru-graphic">
+                    <img
+                      alt="image"
+                      src="{% static 'lidar/images/VRU Icons/viz01scale.svg' %}"
+                      class="visualization-image01"
+                    />
+                    <div class="visualization-container11">
+                      <img
+                        alt="image"
+                        src="{% static 'lidar/images/VRU Icons/viz02adult.svg' %}"
+                        class="visualization-image02"
+                      />
+                      <span class="visualization-text08 Body">
+                        Adult (49in)
+                      </span>
+                    </div>
+                    <div class="visualization-container12">
+                      <img
+                        alt="image"
+                        src="{% static 'lidar/images/VRU Icons/viz03bike.svg' %}"
+                        class="visualization-image03"
+                      />
+                      <span class="visualization-text09 Body">
+                        Adult on bike (47in)
+                      </span>
+                    </div>
+                    <div class="visualization-container13">
+                      <img
+                        alt="image"
+                        src="{% static 'lidar/images/VRU Icons/viz04wheelchair.svg' %}"
+                        class="visualization-image04"
+                      />
+                      <span class="visualization-text10 Body">
+                        Wheelchair user (39in)
+                      </span>
+                    </div>
+                    <div class="visualization-container14">
+                      <img
+                        alt="image"
+                        src="{% static 'lidar/images/VRU Icons/viz05elementary.svg' %}"
+                        class="visualization-image05"
+                      />
+                      <span class="visualization-text11">
+                        Elementary child (37in)
+                      </span>
+                    </div>
+                    <div class="visualization-container15">
+                      <img
+                        alt="image"
+                        src="{% static 'lidar/images/VRU Icons/viz06childbike.svg' %}"
+                        class="visualization-image06"
+                      />
+                      <span class="visualization-text12">
+                        Elementary child on bike (35in)
+                      </span>
+                    </div>
+                    <div class="visualization-container16">
+                      <img
+                        alt="image"
+                        src="{% static 'lidar/images/VRU Icons/viz07preschool.svg' %}"
+                        class="visualization-image07"
+                      />
+                      <span class="visualization-text13">
+                        Preschooler (28in)
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                  type="submit"
+                  class="visualization-button containedbutton-2-6-12-secondaryblue button"
+                  >
+                    <span>
+                      <span>Visualize</span>
+                      <br />
+                    </span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="visualization-container17">
+            <div class="visualization-container18">
+              <h2 class="visualization-text17 HeadingH2">
+                Visualization Results:&nbsp;
+              </h2>
+              <h2 id="vissVRUshown" class="visualization-text18 HeadingH2">
+                VRU Selected
+              </h2>
+            </div>
+            <div class="visualization-overhead-view">
+              <div class="visualization-container19">
+                <h3 class="visualization-text19 HeadingH3">Overhead View</h3>
+                <p class="visualization-text20 Body">
+                  Birds-eye view of the vehicle and surrounding blind zones.
+                </p>
+                <p class="visualization-text20 Body">
+                  {{ graph_str }}
+                </p>
+              </div>
+              <!-- <img
+                alt="image"
+                src="{% static 'lidar/images/Test Visualizations/viz-top test 1.svg' %}"
+                class="visualization-image08"
+              /> -->
+              {{ graph|safe }}
             </div>
           </div>
         </div>
-        <footer class="footer-footer elevation02 footer-root-class-name8">
+        <footer class="footer-footer elevation02 footer-root-class-name6">
           <span class="footer-text">
             <span class="footer-text1">Contact us :</span>
             <br />
@@ -583,7 +700,7 @@
               States Government assumes no liability for the contents or use
               thereof. The United States Government does not endorse products,
               manufacturers, or state or local policies or laws unless
-              specifically indicated. Trade or manufacturers' names may appear
+              specifically indicated. Trade or manufacturers’ names may appear
               herein solely because they are considered essential to the
               objective of this document. Site contents represent the best
               technical judgement of U.S. DOT Volpe Center staff based on their

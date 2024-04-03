@@ -533,7 +533,7 @@
   align-items: flex-start;
   flex-direction: column;
   background-size: cover;
-  background-image: linear-gradient(270deg, rgba(111, 124, 255, 0.2) 0.00%,rgba(21, 57, 108, 0.8) 100.00%),url("{{ STATIC_PREFIX }}/lidar/images/vision-diagram.png");
+  background-image: linear-gradient(270deg, rgba(111, 124, 255, 0.2) 0.00%,rgba(21, 57, 108, 0.8) 100.00%),url("images/DJP_2970.JPG");
   background-position: top left,center;
 }
 .index-container01 {
@@ -639,17 +639,17 @@
 .index-slider-slide {
   display: flex;
   background-size: cover;
-  background-image: url("{{ STATIC_PREFIX }}/lidar/images/vision-diagram.png");
+  background-image: url("images/vision-diagram.png");
 }
 .index-slider-slide1 {
   display: flex;
   background-size: cover;
-  background-image: url("{{ STATIC_PREFIX }}/images/vision-diagram.png"); 
+  background-image: url("images/DJP_2883.JPG"); 
 }
 .index-slider-slide2 {
   display: flex;
   background-size: cover;
-  background-image: url("{{ STATIC_PREFIX }}/lidar/images/vision-diagram.png");
+  background-image: url("images/DJP_2904.JPG");
 }
 .index-slider-pagination {
   display: none;

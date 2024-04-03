@@ -43,12 +43,12 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
                  'wheelchair user', 'adult on bike', 'adult']
     vru_sizes = np.array([[28, 9, 34], [37, 12, 45], [35, 12, 45], [
                          39, 26, 49], [47, 16, 58], [49, 16, 60]])
-    # store 'person height' of selected VRU in [ft]
-    vru_height = vru_sizes[vru_selected-1, 2]/12
+    # store 'shoulder height' of selected VRU in [ft]
+    vru_height = vru_sizes[vru_selected-1, 0]/12
     # store 'width' of selected VRU in [ft]
     vru_width = vru_sizes[vru_selected-1, 1]/12
 
-    max_distance = 7*15  # maximum distance plotted (multiple of 7)
+    max_distance = 7*10  # maximum distance plotted (multiple of 7)
 
     # background colors (make sure to have the same number of colors as plot divisions)
     greenBG = ['#143A1D', '#1A5A2D', '#1F723A',
@@ -161,7 +161,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
   ---------------------------------------------------------------'''
 
     # restrict angles of plot (switching min and max moves tick labels)
-    ax.set_thetamin(120)
+    ax.set_thetamin(210)
     ax.set_thetamax(-30)
 
     # make plot axes match background divisions
@@ -190,13 +190,13 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ax.patch.set_alpha(0)
 
     # shift plot over to the right by editing its bbox
-    pos = ax.get_position()
-    pos.x0 += .11  # increase value by 11% of figure sizw
+    '''pos = ax.get_position()
+    pos.x0 += .11  # increase value by 11% of figure size
     pos.x1 += .11  # must mach value for x0 for shift, otherwise it narrows the box
-    ax.set_position(pos)
+    ax.set_position(pos)'''
 
     # legend in bottom left corner of FIGURE, not PLOT
-    fig.legend(loc='lower left', fancybox=False)
+    #fig.legend(loc='lower left', fancybox=False)
 
     imgdata = StringIO()
     # save file as SVG

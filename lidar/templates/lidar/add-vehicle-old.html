@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="english">
+  <head>
+    <title>Add Vehicle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta property="twitter:card" content="summary_large_image" />
+
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}html { scroll-behavior: smooth  }
+    </style>
+    <style data-tag="default-style-sheet">
+      html {
+        font-family: Inter;
+        font-size: 16px;
+      }
+
+      body {
+        font-weight: 400;
+        font-style:normal;
+        text-decoration: none;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.15;
+        color: var(--dl-color-gray-black);
+        background-color: var(--dl-color-gray-white);
+
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/animate.css@4.1.1/animate.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css"
+    />
+    <!--This is the head section-->
+    <!-- <style> ... </style> -->
+    <style>
+      /*** Begin file selector button styling ***/
+      /* Style file selector button */
+      input[type="file"]::file-selector-button {
+        /*outline
+        border: none;
+        color: var(--dl-color-text-darktext);
+        width: auto;
+        min-width: 120px;
+        height: 50px;
+        border-radius: 30px;
+        padding: 4px 18px;
+        font-family: Roboto;
+        font-size: 20px;
+        font-weight: 500;
+        outline: #C4C4C4 solid 1.5px;
+        outline-offset: -1.5px;
+        background-color: transparent;
+        transition-duration: 280ms;*/
+        /*contained*/
+        margin: none !important;
+        color: var(--dl-color-text-whitetext);
+        background-color: var(--dl-color-secondaryblue-secondaryblue);
+        width: auto;
+        min-width: 120px;
+        height: 50px;
+        line-height: 42px;
+        border: none;
+        border-radius: 30px;
+        padding: 4px 18px;
+        font-family: Roboto;
+        font-size: 20px;
+        font-weight: 500;
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) ;
+        transition-duration: 280ms;
+      }
+
+      /* Style file selector button (focus/hover)*/
+      input[type="file"]::file-selector-button:hover, input[type="file"]::file-selector-button:focus{
+        /*background-color: #2B2D420F !important; outlined*/
+        /*contained*/
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important;
+        background-color: #5592BC !important;
+      }
+
+      /* Style file selector button (active)*/
+      input[type="file"]::file-selector-button:active{
+        /*background-color: #2B2D4224 !important; outlined*/
+        /*contained*/
+        box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12) !important;
+        background-color: #8EB6D3 !important;
+      }
+
+      /* Style file selector button (disabled)*/
+      input[type="file"]::file-selector-button:disabled{
+        color: #888888 !important;
+        background-color: #CCCCCC !important;
+        box-shadow: none !important;
+      }
+      /*** End file selector styling ***/
+
+      /*** Begin data upload styling ***/
+      #lidar-file-selector.data-upload-textinput6 {
+        /*padding: 0 8px 0 0 !important; /* remove padding so button hits edges */
+        height: auto; /* autosize based on button */
+      }
+
+      /* Prevent clipping of button shadow (NOT WORKING) */
+      /*#lidar-file-selector{
+        overflow: visible !important;
+      }*/
+      /*** End data upload styling ***/
+    </style>
+
+    <style>
+      /** --------------------------------------------------------------------
+
+        Custom Disclosure Widget Styles
+
+      --------------------------------------------------------------------- */
+
+      disclosure-inline,
+      disclosure-block {
+        position: relative;
+      }
+
+      disclosure-inline {
+        display: inline-block;
+      }
+
+      disclosure-block {
+        display: block;
+        margin: var(--dl-space-space-halfunit) 0;
+      }
+
+      disclosure-block > .disclosure__trigger,
+      disclosure-block > h1 .disclosure__trigger,
+      disclosure-block > h2 .disclosure__trigger,
+      disclosure-block > h3 .disclosure__trigger,
+      disclosure-block > h4 .disclosure__trigger,
+      disclosure-block > h5 .disclosure__trigger,
+      disclosure-block > h6 .disclosure__trigger {
+        display: block;
+        /*padding: .625rem 1.825rem .625rem .625rem;*/ /*original*/
+        padding: var(--dl-space-space-unit) var(--dl-space-space-twounits) var(--dl-space-space-unit) var(--dl-space-space-unit);
+        width: 100%;
+      }
+
+      [data-insert-trigger] {
+        margin: 0;
+      }
+
+      [data-insert-trigger="inline"] > .disclosure__trigger {
+        padding: .5rem;
+        vertical-align: middle;
+      }
+
+      [data-insert-trigger="inline"] > .disclosure__trigger::after {
+        right: 0;
+        left: 0;
+      }
+
+      /**
+       * Trigger (button) Styles
+       */
+      .disclosure__trigger {
+        background: #ffffff;
+        /*border: 1px solid rgba(0,0,0,.325);*/
+        /*elevation2*/
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+        border-radius: var(--dl-radius-radius-radius4);
+        cursor: default;
+        display: inline-block;
+        font-size: inherit;
+        line-height: normal;
+        margin: 0;
+        padding: .25em 1.75em .25em .5em;
+        position: relative;
+        text-align: left;
+        text-decoration: none;
+        z-index: 1;
+        transition-duration: 280ms;
+      }
+
+      /* override button styling on visualization page */
+      .visualization-content .disclosure__trigger {
+        background: var(--dl-color-default-accentbluedark);
+        /*elevation2*/
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+        border-radius: 50%; /*round*/
+        cursor: default;
+        display: inline-block;
+        font-size: inherit;
+        line-height: normal;
+        margin: 0 0 0.23rem; /*previously 0. trying to vertically center*/
+        padding: 0.75rem; /*50% of 1.5rem text used for h3*/
+        position: relative;
+        text-align: left;
+        text-decoration: none;
+        z-index: 3; /*raised from default 1 to cover content*/
+        transition-duration: 280ms;
+      }
+
+      .disclosure__trigger[disabled] {
+        color: inherit;
+      }
+
+      .disclosure__trigger[disabled]::after {
+        opacity: .4;
+      }
+
+      .disclosure__trigger::after {
+        border-left: .35em solid transparent;
+        border-right: .35em solid transparent;
+        border-top: .35em solid #111;
+        bottom: 0;
+        content: "";
+        height: 0;
+        margin: auto;
+        position: absolute;
+        right: .5em;
+        top: 0;
+        transform: rotate(0deg);
+        transform-origin: center;
+        transition: transform 280ms ease-in-out;
+        width: 0;
+      }
+
+      /* override pseudoelement styling on visualization page */
+      .visualization-content .disclosure__trigger::after {
+        margin: auto;
+        position: absolute;
+        top: 0;
+        content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGFsdD0iaW5mb3JtYXRpb24gaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgY2xhc3M9InZpc3VhbGl6YXRpb24taWNvbiI+Cgk8cGF0aCBkPSJNNDcwIDM4NHYtODZoODR2ODZoLTg0ek01MTIgODU0cTE0MCAwIDI0MS0xMDF0MTAxLTI0MS0xMDEtMjQxLTI0MS0xMDEtMjQxIDEwMS0xMDEgMjQxIDEwMSAyNDEgMjQxIDEwMXpNNTEyIDg2cTE3NiAwIDMwMSAxMjV0MTI1IDMwMS0xMjUgMzAxLTMwMSAxMjUtMzAxLTEyNS0xMjUtMzAxIDEyNS0zMDEgMzAxLTEyNXpNNDcwIDcyNnYtMjU2aDg0djI1NmgtODR6Ij4KCTwvcGF0aD4KCjxzY3JpcHQ+CihmdW5jdGlvbih3LGQpIHsKICAgJ3VzZSBzdHJpY3QnOwogICB2YXIgc3ZnID0gbmV3IFhNTFNlcmlhbGl6ZXIoKS5zZXJpYWxpemVUb1N0cmluZyhkLmdldEVsZW1lbnRzQnlUYWdOYW1lKCAnc3ZnJyApWyAwIF0gKTsKICAgdmFyIGJhc2U2NCA9IHcuYnRvYSggc3ZnICk7CiAgIGQuZ2V0RWxlbWVudEJ5SWQoICdiYXNlJyApLmFwcGVuZENoaWxkKCBkLmNyZWF0ZVRleHROb2RlKCAnZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCwnICsgYmFzZTY0ICkgKTsKfSh3aW5kb3csIGRvY3VtZW50KSk7Cjwvc2NyaXB0Pjwvc3ZnPg==");
+          /*encoded from SVG path of Material Icons "outlined information"*/
+        border: none;
+        height: 1.5rem;
+        width: auto;
+        transform: none;
+        transform-origin: center;
+        transition: unset;
+      }
+
+      .disclosure__trigger:not([disabled]):hover,
+      .disclosure__trigger:focus {
+        background: var(--dl-color-primaryblue-primaryblue);
+        color: #fff;
+        /*elevation8*/
+        box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12) ;
+      }
+
+      .disclosure__trigger:not([disabled]):hover::after,
+      .disclosure__trigger:focus::after {
+        border-top-color: #fff;
+      }
+
+      /* override pseudoelement styling focus on visualization page */
+      .visualization-content .disclosure__trigger:not([disabled]):hover::after,
+      .visualization-content .disclosure__trigger:focus::after {
+        filter: brightness(0) invert(1); /*invert black icon to be white*/
+      }
+
+      .disclosure__trigger[aria-expanded="true"]::after {
+        transform: rotate(180deg);
+      }
+
+      /* override pseudoelement styling when open on visualization page */
+      .visualization-content .disclosure__trigger[aria-expanded="true"]::after {
+        transform: none;
+        filter: brightness(0) invert(1); /*invert black icon to be white*/
+      }
+
+      .disclosure__trigger[aria-expanded][disabled] {
+        color: inherit;
+      }
+
+      /* style top level of disclosure boxes when open and not active */
+      .disclosure__trigger[aria-expanded="true"]:not(:hover, :focus){
+        background:var(--dl-color-default-accentbluedark);
+        /*elevation3*/
+        box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12) ;
+      }
+
+      /* override styling of disclosure when open and not active on visualization page */
+      .visualization-content .disclosure__trigger[aria-expanded="true"]:not(:hover, :focus){
+        background:var(--dl-color-primaryblue-primaryblue);
+      }
+
+      /**
+       * Trigger modifiers
+       */
+      [data-left-align] .disclosure__trigger {
+        padding: .25em .625em .25em 1.75em;
+      }
+
+      [data-left-align] .disclosure__trigger::after {
+        left: .5em;
+        right: auto;
+      }
+
+
+      /**
+       * Content Styles
+       */
+      disclosure-content.is-hidden {
+        display: none;
+      }
+
+      disclosure-content {
+        background: #fff;
+        /*border: 1px solid;*/
+        /*elevation1*/
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+        display: block;
+        height: auto;
+        margin: calc(-1* var(--dl-space-space-halfunit)) 0 0;
+        padding: var(--dl-space-space-oneandhalfunits) var(--dl-space-space-unit) var(--dl-space-space-unit);
+        border-radius: 0 0 var(--dl-radius-radius-radius4) var(--dl-radius-radius-radius4);
+      }
+
+      .has-popup disclosure-content {
+        left: 0;
+        min-width: 14em;
+        position: absolute;
+        top: calc(100% + .25em);
+        z-index: 3;
+      }
+
+      /* override popup content styling on visualization page */
+      .visualization-content .has-popup disclosure-content {
+        left: 0;
+        min-width: var(--dl-size-size-xxlarge);
+        position: absolute;
+        top: calc(100% + 4px); /*previously added var(--dl-space-space-halfunit)*/
+        z-index: 1; /*lowered from default 3 so trigger cover content*/
+        margin: 0;
+        padding: var(--dl-space-space-unit);
+        border-radius: var(--dl-radius-radius-radius4);
+        color: #fff;
+        background: var(--dl-color-primaryblue-primaryblue);
+        /*elevation3*/
+        box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12) ;
+      }
+
+      /* add arrow to popup content on visualization page */
+      /*.visualization-content .has-popup disclosure-content::after {
+        content: " ";
+        position: absolute;*/
+        /*bottom: 100%;*/  /* At the top of the tooltip */
+        /*left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }*/
+
+      disclosure-content > *:first-child {
+        margin-top: 0;
+      }
+
+      disclosure-content > *:last-child {
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <div>
+      <link href="{% static 'lidar/add-vehicle.css' %}" rel="stylesheet" />
+
+      <div class="add-vehicle-container">
+        <div class="header-v2-container header-v2-root-class-name1">
+          <header
+            data-thq="thq-navbar"
+            class="header-v2-navbar-interactive elevation04"
+          >
+            <div data-thq="thq-navbar-nav" class="header-v2-desktop-menu">
+              <a href="{% url 'lidar:index' %}" class="header-v2-navlink">
+                <h1 class="header-v2-text">
+                  <span class="header-v2-text1">
+                    VIEW Blind Zone Calculator
+                  </span>
+                  <br />
+                </h1>
+              </a>
+              <nav class="header-v2-links">
+                <a href="{% url 'lidar:index' %}" class="header-v2-navlink1">
+                  <span>Home</span>
+                </a>
+                <a
+                  href="{% url 'lidar:vehicle_database_table' %}"
+                  class="header-v2-navlink2"
+                >
+                  <span>Vehicle Database</span>
+                </a>
+                <a href="{% url 'lidar:faq' %}" class="header-v2-navlink3">
+                  <span>FAQ</span>
+                </a>
+              </nav>
+              <div class="header-v2-buttons">
+                <a
+                  href="{% url 'lidar:add_vehicle' %}"
+                  class="header-v2-add-vehicle containedbutton-2-6-12-secondaryblue button"
+                >
+                  <span class="ButtonText">Add Vehicle</span>
+                </a>
+              </div>
+            </div>
+            <div data-thq="thq-burger-menu" class="header-v2-burger-menu">
+              <a href="{% url 'lidar:index' %}">
+                <h1 class="header-v2-text4">
+                  <span class="header-v2-text5">
+                    VIEW Blind Zone Calculator
+                  </span>
+                  <br />
+                </h1>
+              </a>
+              <svg
+                id="burger-menu"
+                viewBox="0 0 1024 1024"
+                class="header-v2-icon"
+              >
+                <path
+                  d="M128 554.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 298.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 810.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"
+                ></path>
+              </svg>
+            </div>
+            <div data-thq="thq-mobile-menu" class="header-v2-mobile-menu">
+              <div class="header-v2-nav">
+                <div class="header-v2-top">
+                  <div data-thq="thq-close-menu" class="header-v2-close-menu">
+                    <svg viewBox="0 0 1024 1024" class="header-v2-icon2">
+                      <path
+                        d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <nav class="header-v2-links1">
+                  <a href="{% url 'lidar:index' %}" class="header-v2-navlink5">
+                    <span>Home</span>
+                  </a>
+                  <a
+                    href="{% url 'lidar:vehicle_database_table' %}"
+                    class="header-v2-navlink6"
+                  >
+                    <span>Vehicle Database</span>
+                  </a>
+                  <a href="{% url 'lidar:add_vehicle' %}" class="header-v2-navlink7">
+                    <span>Add Vehicle</span>
+                  </a>
+                  <a href="{% url 'lidar:faq' %}" class="header-v2-navlink8">
+                    <span>FAQ</span>
+                  </a>
+                </nav>
+                <div class="header-v2-buttons1">
+                  <a
+                    href="{% url 'lidar:add_vehicle' %}"
+                    class="header-v2-add-vehicle1 containedbutton-2-6-12-secondaryblue button"
+                  >
+                    <span>Add Vehicle</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </header>
+        </div>
+        <div class="add-vehicle-content">
+          <div class="add-vehicle-container1">
+            <div class="add-vehicle-container2 elevation01"></div>
+            <h1 class="add-vehicle-heading HeadingH1">Add a Vehicle</h1>
+            <span class="add-vehicle-text">
+              <span>
+                The VIEW blind zone calculator uses LiDAR scans of a vehicle,
+                along with vehicle and eye point measurements, to calculate and
+                visualize blind zones. Our system is compatible with
+                LiDAR-capable (Pro) iOS devices running the Polycam app.
+              </span>
+              <br />
+              <br />
+              <span>
+                To add a new vehicle, you will need access to the vehicle, a
+                LiDAR-capable (Pro) iOS device, and a tape measure. Before
+                taking a measurement, please download Polycam from the App
+                Store.
+              </span>
+            </span>
+            <div class="add-vehicle-features">
+              <div class="add-vehicle-container3">
+                <div class="add-vehicle-feature-card elevation02">
+                  <div class="add-vehicle-container4">
+                    <svg viewBox="0 0 1024 1024" class="add-vehicle-icon">
+                      <path
+                        d="M512 726q88 0 151-63t63-151-63-151-151-63-151 63-63 151 63 151 151 63zM384 86h256l78 84h136q34 0 59 26t25 60v512q0 34-25 60t-59 26h-684q-34 0-59-26t-25-60v-512q0-34 25-60t59-26h136zM376 512q0-56 40-96t96-40 96 40 40 96-40 96-96 40-96-40-40-96z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <h2 class="add-vehicle-text05 HeadingH2">Measure Vehicle</h2>
+                  <span class="add-vehicle-text06 Body">
+                    Take a LiDAR scan of your vehicle using the Polycam app and
+                    measure the eye position.
+                  </span>
+                </div>
+                <img
+                  alt="Vector11314"
+                  src="{% static 'lidar/images/vector11314-clji.svg' %}"
+                  class="add-vehicle-vector1"
+                />
+                <div class="add-vehicle-feature-card1 elevation02">
+                  <div class="add-vehicle-container5">
+                    <svg viewBox="0 0 1024 1024" class="add-vehicle-icon2">
+                      <path
+                        d="M598 554h128l-214-212-214 212h128v172h172v-172zM826 428q82 6 140 67t58 145q0 88-63 151t-151 63h-554q-106 0-181-75t-75-181q0-94 67-169t161-85q42-78 118-126t166-48q108 0 201 76t113 182z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <h2 class="add-vehicle-text07 HeadingH2">Upload Data</h2>
+                  <span class="add-vehicle-text08 Body">
+                    <span>
+                      Upload your LiDAR scan and and input vehicle measurements.
+                    </span>
+                    <span class="Body"></span>
+                  </span>
+                </div>
+                <img
+                  alt="Vector11314"
+                  src="{% static 'lidar/images/vector11314-wnpn.svg' %}"
+                  class="add-vehicle-vector11"
+                />
+                <div class="add-vehicle-feature-card2 elevation02">
+                  <div class="add-vehicle-container6">
+                    <svg viewBox="0 0 1024 1024" class="add-vehicle-icon4">
+                      <path
+                        d="M170 256v426h684v-426h-684zM854 768h170v86h-1024v-86h170q-34 0-59-26t-25-60v-426q0-34 25-60t59-26h684q34 0 59 26t25 60v426q0 34-25 60t-59 26z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <h2 class="add-vehicle-text11 HeadingH2">
+                    <span>View Results</span>
+                    <br />
+                  </h2>
+                  <span class="add-vehicle-text14 Body">
+                    VIEW processes your scan and generates blind zone
+                    visualizations.
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="add-vehicle-container7">
+              <a
+                href="{% url 'lidar:instructions' %}"
+                class="add-vehicle-button containedbutton-2-6-12-secondaryblue button"
+              >
+                <span class="ButtonText">
+                  <span>Get Started</span>
+                  <br />
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <footer class="footer-footer elevation02 footer-root-class-name2">
+          <span class="footer-text">
+            <span class="footer-text1">Contact us :</span>
+            <br />
+          </span>
+          <span class="footer-text3">
+            <span>
+              This document is funded by the Santos Family Foundation and
+              disseminated under the sponsorship of the Department of
+              Transportation in the interest of information exchange. The United
+              States Government assumes no liability for the contents or use
+              thereof. The United States Government does not endorse products,
+              manufacturers, or state or local policies or laws unless
+              specifically indicated. Trade or manufacturers’ names may appear
+              herein solely because they are considered essential to the
+              objective of this document. Site contents represent the best
+              technical judgement of U.S. DOT Volpe Center staff based on their
+              independent and objective technical analysis and expertise, and
+              are not to be misconstrued as statements of U.S. DOT policy or
+              guidance.
+            </span>
+          </span>
+        </footer>
+      </div>
+    </div>
+    <script>
+      /**
+       * ARIA Disclosure Widget
+       * Custom disclosure widget base script to show/hide
+       * all your web content.
+       *
+       * Author: Scott O'Hara
+       * Version: 2.0.1
+       * License: https://github.com/scottaohara/aria_disclosure_widget/blob/master/LICENSE
+       */
+
+      const ARIAdwOptions = {
+        baseID: 'aDW_',
+        triggerClass: 'disclosure__trigger',
+        triggerLocation: '[data-insert-trigger]',
+        contentSelector: 'disclosure-content',
+        buttonLabelAttr: 'data-trigger',
+        initialStateAttr: 'data-open',
+        triggerEnabled: true,
+        popupAttr: 'data-popup',
+        fallBackBtnText: 'More info'
+      };
+
+      const ARIAdw = function ( inst, options ) {
+        const _options = Object.assign(ARIAdwOptions, options);
+        const el = inst;
+        let trigger;
+        let triggerID;
+        let content;
+        let expandedState = el.hasAttribute(_options.initialStateAttr) || false;
+        let triggerEnabled = _options.triggerEnabled;
+
+
+        const init = function () {
+          /**
+           * Create the IDs for content / triggers, respecting
+           * the existing IDs of 1. the content > 2. the widget container > 3. generate if no usable IDs exist
+           */
+          content = el.querySelector(_options.contentSelector);
+
+          if ( !content ) {
+            console.warn('no content defined');
+            return false;
+          }
+
+          defineIDs();
+          setupTrigger();
+          setupContent();
+
+          trigger.addEventListener('click', toggleEvent);
+        };
+
+
+        const defineIDs = function ( ) {
+          if ( content.id ) {
+            triggerID = content.id + '_trigger';
+          }
+          else if ( el.id ) {
+            triggerID = el.id + '_trigger';
+          }
+          else {
+            triggerID = _options.baseID + Math.floor(Math.random() * 999);
+          }
+        };
+
+
+        /**
+        * Create the button element to serve as the
+        * trigger for the disclosure widget
+        */
+        const setupTrigger = function () {
+          let btnContent;
+          let btnLocate;
+
+          const newBtn = document.createElement('button');
+          newBtn.id = triggerID;
+          newBtn.type = 'button';
+          newBtn.classList.add('disclosure__trigger');
+          newBtn.setAttribute('aria-expanded', expandedState);
+
+          if ( el.hasAttribute('data-disabled') || !triggerEnabled ) {
+            newBtn.disabled = true;
+          }
+
+          if ( el.hasAttribute(_options.buttonLabelAttr) ) {
+            if ( el.getAttribute(_options.buttonLabelAttr) === '' ) {
+              btnContent = _options.fallBackBtnText;
+            }
+            else {
+              btnContent = el.getAttribute(_options.buttonLabelAttr);
+            }
+            el.insertBefore(newBtn, el.firstChild);
+          }
+          else {
+            btnLocate = el.querySelector(_options.triggerLocation) || false;
+            if ( btnLocate ) {
+              btnContent = btnLocate.innerHTML;
+              if ( btnContent === '' ) {
+                newBtn.setAttribute('aria-label', _options.fallBackBtnText);
+              }
+              btnLocate.innerHTML = '';
+              btnLocate.append(newBtn);
+            }
+            else {
+              btnContent = _options.fallBackBtnText;
+              el.insertBefore(newBtn, el.firstChild);
+            }
+          }
+
+          newBtn.innerHTML = btnContent;
+
+          trigger = newBtn;
+          return trigger;
+        };
+
+
+        /**
+        * Function to hide content panels which have not been
+        * specified to be revealed by default.
+        *
+        * Assigns generated IDs to the content container.
+        *
+        * If specified as a 'popup', then provide the content container
+        * a role=note and tabindex=-1. 1st, so that the element exposes a
+        * role which "makes sense" without having an accName (because if
+        * using a generic, then the contents of the element would become the
+        * generic's accname in chromium browsers... and that's bad.
+        * and 2, because without the tabindex=-1 (which is what would make
+        * the generic try to get its name from contents) the popup will
+        * revert to the hidden state due to the focusout function.
+        * That function could probably just be smarter, but this is how
+        * this is being solved for now.
+        */
+        const setupContent = function () {
+          if ( !expandedState ) {
+            content.classList.add('is-hidden');
+          }
+          if ( !content.id ) {
+            content.id = triggerID + '_content';
+          }
+
+          if ( el.hasAttribute(_options.popupAttr) ) {
+            content.tabIndex = '-1';
+            content.setAttribute('role', 'note');
+            el.classList.add('has-popup');
+            el.addEventListener('focusout', focusOutEvent, false);
+            el.addEventListener('keydown', escEvent, false);
+          }
+        };
+
+
+        /**
+        * Function to expose the expanded / collapsed state
+        * of the disclosure widget. Toggles the 'is-hidden'
+        * class on the associated content based on the state
+        * of the trigger.
+        *
+        * Updates 'expandedState' as this is needed for
+        * other functions that reuse this toggleEvent.
+        */
+        const toggleEvent = function ( e ) {
+          if ( expandedState ) {
+            trigger.setAttribute('aria-expanded', 'false');
+            content.classList.add('is-hidden');
+            expandedState = false;
+          }
+          else {
+            trigger.setAttribute('aria-expanded', 'true');
+            content.classList.remove('is-hidden');
+            expandedState = true;
+          }
+        };
+
+
+        /**
+        * If focus leaves the containing element of the
+        * trigger & the flyout content, then close the
+        * flyout and return the content to the collapsed
+        * state.
+        *
+        * Runs the toggleEvent, so checks to make sure the
+        * trigger is in the expandedState, so as to not
+        * just randomly expand content while navigating
+        * by Tab key.
+        */
+        const focusOutEvent = function ( e ) {
+          if ( !el.contains(e.relatedTarget) && expandedState === true) {
+            toggleEvent();
+          }
+        };
+
+
+        /**
+        * Close a flyout via the ESC key
+        * Reuses the toggleEvent, so also checks to make
+        * sure the trigger is in the expandedState first,
+        * so as to not allow the ESC key to unexpectedly
+        * reveal the associated content, if pressed on the
+        * trigger in the collapsed state.
+        *
+        * Focuses the trigger to ensure that if someone
+        * hits the ESC key within the exposed content, then
+        * focus does not get lost.
+        */
+        const escEvent = function ( e ) {
+          switch ( e.key ) {
+            case 'Escape':
+              if ( expandedState === true ) {
+                toggleEvent();
+                trigger.focus();
+              }
+              break;
+
+            default:
+              break;
+          }
+        };
+
+
+        init.call( this );
+      }; // ARIAdw()
+    </script>
+    <script>
+      const els = document.querySelectorAll('disclosure-inline, disclosure-block');
+      // Generate all disclosure instances
+      for ( let i = 0; i < els.length; i++ ) {
+        ARIAdw(els[i])
+      }
+    </script>
+    <script
+      defer=""
+      src="https://unpkg.com/@teleporthq/teleport-custom-scripts"
+    ></script>
+  </body>
+</html>

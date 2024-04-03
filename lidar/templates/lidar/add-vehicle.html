@@ -2,6 +2,7 @@
 <html lang="english">
   <head>
     <title>Add Vehicle</title>
+    <meta property="og:title" content="AddVehicle1 - exported project" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -39,6 +40,21 @@
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
       data-tag="font"
     />
     <link
@@ -379,13 +395,13 @@
       <link href="{% static 'lidar/add-vehicle.css' %}" rel="stylesheet" />
 
       <div class="add-vehicle-container">
-        <div class="header-v2-container header-v2-root-class-name1">
+        <div class="header-v2-container header-v2-root-class-name11">
           <header
             data-thq="thq-navbar"
             class="header-v2-navbar-interactive elevation04"
           >
             <div data-thq="thq-navbar-nav" class="header-v2-desktop-menu">
-              <a href="{% url 'lidar:index' %}" class="header-v2-navlink">
+              <a href="{% url 'lidar:index' %}"  class="header-v2-navlink">
                 <h1 class="header-v2-text">
                   <span class="header-v2-text1">
                     VIEW Blind Zone Calculator
@@ -447,7 +463,7 @@
                   </div>
                 </div>
                 <nav class="header-v2-links1">
-                  <a href="{% url 'lidar:index' %}" class="header-v2-navlink5">
+                  <a href="{% url 'lidar:index' %}"  class="header-v2-navlink5">
                     <span>Home</span>
                   </a>
                   <a
@@ -466,7 +482,7 @@
                 <div class="header-v2-buttons1">
                   <a
                     href="{% url 'lidar:add_vehicle' %}"
-                    class="header-v2-add-vehicle1 containedbutton-2-6-12-secondaryblue button"
+                    class="header-v2-add-vehicle containedbutton-2-6-12-secondaryblue button"
                   >
                     <span>Add Vehicle</span>
                   </a>
@@ -476,8 +492,32 @@
           </header>
         </div>
         <div class="add-vehicle-content">
-          <div class="add-vehicle-container1">
-            <div class="add-vehicle-container2 elevation01"></div>
+          <section
+            class="add-a-vehicle-masthead-container elevation01 add-a-vehicle-masthead-root-class-name"
+          >
+            <div class="add-a-vehicle-masthead-container1">
+              <h1 class="add-a-vehicle-masthead-heading HeadingH1">
+                <span>Add a Vehicle</span>
+              </h1>
+              <span class="add-a-vehicle-masthead-text Body">
+                <span>
+                  The VIEW blind zone calculator uses LiDAR scans of a vehicle,
+                  along with vehicle and eye point measurements, to calculate
+                  and visualize blind zones. Our system is compatible with
+                  LiDAR-capable (Pro) iOS devices running the Polycam app.
+                </span>
+              </span>
+              <span class="add-a-vehicle-masthead-text1 Body">
+                <span>
+                  To add a new vehicle, you will need access to the vehicle, a
+                  LiDAR-capable (Pro) iOS device, and a tape measure. Before
+                  taking a measurement, please download Polycam from the App
+                  Store.
+                </span>
+              </span>
+            </div>
+          </section>
+          <div class="add-vehicle-container01">
             <h1 class="add-vehicle-heading HeadingH1">Add a Vehicle</h1>
             <span class="add-vehicle-text">
               <span>
@@ -495,81 +535,52 @@
                 Store.
               </span>
             </span>
-            <div class="add-vehicle-features">
-              <div class="add-vehicle-container3">
-                <div class="add-vehicle-feature-card elevation02">
-                  <div class="add-vehicle-container4">
-                    <svg viewBox="0 0 1024 1024" class="add-vehicle-icon">
-                      <path
-                        d="M512 726q88 0 151-63t63-151-63-151-151-63-151 63-63 151 63 151 151 63zM384 86h256l78 84h136q34 0 59 26t25 60v512q0 34-25 60t-59 26h-684q-34 0-59-26t-25-60v-512q0-34 25-60t59-26h136zM376 512q0-56 40-96t96-40 96 40 40 96-40 96-96 40-96-40-40-96z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <h2 class="add-vehicle-text05 HeadingH2">Measure Vehicle</h2>
-                  <span class="add-vehicle-text06 Body">
-                    Take a LiDAR scan of your vehicle using the Polycam app and
-                    measure the eye position.
-                  </span>
-                </div>
-                <img
-                  alt="Vector11314"
-                  src="{% static 'lidar/images/vector11314-clji.svg' %}"
-                  class="add-vehicle-vector1"
-                />
-                <div class="add-vehicle-feature-card1 elevation02">
-                  <div class="add-vehicle-container5">
-                    <svg viewBox="0 0 1024 1024" class="add-vehicle-icon2">
-                      <path
-                        d="M598 554h128l-214-212-214 212h128v172h172v-172zM826 428q82 6 140 67t58 145q0 88-63 151t-151 63h-554q-106 0-181-75t-75-181q0-94 67-169t161-85q42-78 118-126t166-48q108 0 201 76t113 182z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <h2 class="add-vehicle-text07 HeadingH2">Upload Data</h2>
-                  <span class="add-vehicle-text08 Body">
-                    <span>
-                      Upload your LiDAR scan and and input vehicle measurements.
+          </div>
+          <section class="add-vehicle-container02">
+            <div class="add-vehicle-container03">
+              <div class="add-vehicle-container04 elevation02">
+                <section class="add-vehicle-container05">
+                  <section class="add-vehicle-container06"></section>
+                  <div class="add-vehicle-container07">
+                    <h2 class="add-vehicle-text05 HeadingH2">Collect Data</h2>
+                    <span class="add-vehicle-text06 Body">
+                      Take measurements of the seat position and scan the
+                      exterior of your vehicle using LiDAR in the Polycam app.
                     </span>
-                    <span class="Body"></span>
-                  </span>
-                </div>
-                <img
-                  alt="Vector11314"
-                  src="{% static 'lidar/images/vector11314-wnpn.svg' %}"
-                  class="add-vehicle-vector11"
-                />
-                <div class="add-vehicle-feature-card2 elevation02">
-                  <div class="add-vehicle-container6">
-                    <svg viewBox="0 0 1024 1024" class="add-vehicle-icon4">
-                      <path
-                        d="M170 256v426h684v-426h-684zM854 768h170v86h-1024v-86h170q-34 0-59-26t-25-60v-426q0-34 25-60t59-26h684q34 0 59 26t25 60v426q0 34-25 60t-59 26z"
-                      ></path>
-                    </svg>
+                    <a
+                      href="{% url 'lidar:add_vehicle' %}"
+                      class="add-vehicle-add-vehicle containedbutton-2-6-12-secondaryblue button"
+                    >
+                      <span class="ButtonText">View Instructions</span>
+                    </a>
                   </div>
-                  <h2 class="add-vehicle-text11 HeadingH2">
-                    <span>View Results</span>
-                    <br />
-                  </h2>
-                  <span class="add-vehicle-text14 Body">
-                    VIEW processes your scan and generates blind zone
-                    visualizations.
-                  </span>
-                </div>
+                </section>
+              </div>
+              <div class="add-vehicle-container08 elevation02">
+                <section class="add-vehicle-container09">
+                  <section class="add-vehicle-container10"></section>
+                  <div class="add-vehicle-container11">
+                    <h2 class="add-vehicle-text08 HeadingH2">Upload Data</h2>
+                    <span class="add-vehicle-text09 Body">
+                      Once you've collected measurements, add your vehicle
+                      information, measurements, and LiDAR scan for processing.
+                    </span>
+                    <a
+                      href="{% url 'lidar:add_vehicle' %}"
+                      class="add-vehicle-add-vehicle containedbutton-2-6-12-secondaryblue button"
+                    >
+                      <span>
+                        <span class="ButtonText">Get started</span>
+                        <br />
+                      </span>
+                    </a>
+                  </div>
+                </section>
               </div>
             </div>
-            <div class="add-vehicle-container7">
-              <a
-                href="{% url 'lidar:instructions' %}"
-                class="add-vehicle-button containedbutton-2-6-12-secondaryblue button"
-              >
-                <span class="ButtonText">
-                  <span>Get Started</span>
-                  <br />
-                </span>
-              </a>
-            </div>
-          </div>
+          </section>
         </div>
-        <footer class="footer-footer elevation02 footer-root-class-name2">
+        <footer class="footer-footer elevation02 footer-root-class-name12">
           <span class="footer-text">
             <span class="footer-text1">Contact us :</span>
             <br />

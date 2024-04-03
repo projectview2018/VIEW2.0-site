@@ -1,16 +1,13 @@
 const completed_scan_list_raw = document.getElementById("completed_scan_list");
 const completed_scan_data = JSON.parse(completed_scan_list_raw.textContent);
-console.log(completed_scan_data);
 
 const vehicle_list_raw = document.getElementById("vehicle_list");
 const data = JSON.parse(vehicle_list_raw.textContent);
-console.log(data);
 
 let vehicle_to_scan_dict = [];
 for (let car of data) {
   vehicle_to_scan_dict[car["pk"]] = [];
 }
-console.log(vehicle_to_scan_dict);
 for (let scan of completed_scan_data) {
   vehicle_to_scan_dict[scan["vehicle"]].push({
     fields: {

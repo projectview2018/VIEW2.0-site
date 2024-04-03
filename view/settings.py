@@ -50,7 +50,7 @@ DEBUG = True
 #     ALLOWED_HOSTS = []
 
 ALLOWED_HOSTS = ['127.0.0.1', 'view2-vd8vm.ondigitalocean.app',
-                 'localhost', '127.0.0.1', '0.0.0.0', '192.168.85.28']
+                 'localhost', '127.0.0.1', '0.0.0.0']
 CSRF_TRUSTED_ORIGINS = ['https://view2-vd8vm.ondigitalocean.app']
 
 # Application definition

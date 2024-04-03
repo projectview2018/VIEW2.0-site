@@ -209,3 +209,18 @@ class ScanForm(forms.ModelForm):
         }
         fields = ['driver_side_start', 'A_ft', 'A_in', 'B_ft', 'B_in', 'C_ft', 'C_in', 'D_ft', 'D_in',
                   'E_ft', 'E_in', 'F_ft', 'F_in', 'lidar_scan']
+
+
+class VisualizationForm(forms.Form):
+    VRUS = [
+        ('1', 'Preschool child (28 inches)'),
+        ('2', 'Elementary school child on bicycle (35 inches)'),
+        ('3', 'Elementary school child (37 inches)'),
+        ('4', 'Wheelchair user (39 inches)'),
+        ('5', 'Adult on bicycle (47 inches)'),
+        ('6', 'Adult (49 inches)'),
+    ]
+    vru_selected = forms.ChoiceField(
+        # label="vru_form",
+        widget=forms.RadioSelect(attrs={"type": "radio", "name": "radio"}),
+        choices=VRUS,)

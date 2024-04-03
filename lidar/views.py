@@ -1,14 +1,15 @@
+import os
+import json
+from django.core import serializers
+from .models import Vehicle, Scan, CompletedScan
+from .s3_utils import get_object, generate_presigned_url_get, generate_presigned_url_put
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 import threading
-from .forms import ScanForm, VehicleForm
+from .forms import ScanForm, VehicleForm, VisualizationForm
 from .perform_scan import complete_scan
-from .s3_utils import get_object, generate_presigned_url_get, generate_presigned_url_put
-from .models import Vehicle, Scan, CompletedScan
-from django.core import serializers
-import json
-import os
+from .plot_visualizations import viz_overhead
 
 
 def index(request):
@@ -104,8 +105,8 @@ def vehicle_database_table(request):
 #     year = vehicle.vehicle_year
 #     return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year})
 
-def visualization(request, vehicle_id):
-    scan = Scan.objects.get(pk=vehicle_id)
+def visualization(request, scan_id):
+    scan = Scan.objects.get(pk=scan_id)
     vehicle = scan.vehicle
     make = vehicle.vehicle_make
     model = vehicle.vehicle_model
@@ -128,15 +129,23 @@ def visualization(request, vehicle_id):
         num_completed_scans = CompletedScan.objects.filter(
             raw_scan=scan).count()
         if num_completed_scans > 0:
+            if request.method == 'POST':
+                print("visualization form submitted, request was POST")
+                viz_form = VisualizationForm(request.POST)
+                if viz_form.is_valid():
+                    print("viz_from was valid")
+                    completed_scan = CompletedScan.objects.get(raw_scan=scan)
 
-            completed_scans = CompletedScan.objects.filter(raw_scan=scan)
-            completed_scan = completed_scans.latest("completed_scan_added")
-            print("Loading Visualization page. Scan is processed.")
-            return render(request, 'lidar/visualization.html', {'make': make, 'model': model, 'year': year, 'date': completed_scan.completed_scan_added})
+                    print("Loading Visualization page. Scan is processed.")
+                    [graph, graph_str] = viz_overhead(
+                        json.loads(completed_scan.nvp_xs), json.loads(completed_scan.nvp_ys), (scan.F_m + ((scan.E_m - scan.F_m) / 2) + 1.2), ((scan.B_m - scan.A_m) / 2), int(viz_form.cleaned_data['vru_selected']))
+                    return render(request, 'lidar/visualization-graph.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'graph': graph, 'graph_str': graph_str})
+            else:
+                viz_form = VisualizationForm()
         else:
             print(
                 "Tried to load Visualization page. Scan should be processed, some error occurred.")
-            return render(request, 'lidar/404.html', {})
+        return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year})
 
 
 def windshield_removal(request, scan_id):

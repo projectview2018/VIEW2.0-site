@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="english">
   <head>
-    <title>Visualization</title>
+    <title>Visualization with Graph</title>
     <meta property="og:title" content="Visualization - exported project" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
@@ -508,7 +508,7 @@
                 </button>
               </div>
               <h1 class="visualization-masthead-heading HeadingH1">
-                <span>{{ year }} {{ make }} {{ model }} ({{ date }} UTC)</span>
+                <span>{{ make }} {{ model }} {{ year }}</span>
               </h1>
             </div>
           </section>
@@ -671,16 +671,19 @@
             <div class="visualization-overhead-view">
               <div class="visualization-container19">
                 <h3 class="visualization-text19 HeadingH3">Overhead View</h3>
-                <span class="visualization-text20 Body">
+                <p class="visualization-text20 Body">
                   Birds-eye view of the vehicle and surrounding blind zones.
-                </span>
+                </p>
+                <p class="visualization-text20 Body">
+                  {{ graph_str }}
+                </p>
               </div>
-              <img
+              <!-- <img
                 alt="image"
                 src="{% static 'lidar/images/Test Visualizations/viz-top test 1.svg' %}"
                 class="visualization-image08"
-              />
-              <!-- {{ graph|safe }} -->
+              /> -->
+              {{ graph|safe }}
             </div>
           </div>
         </div>

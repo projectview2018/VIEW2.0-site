@@ -127,3 +127,17 @@ def calculate_area(coordinates):
     area = .5 * np.absolute(S1 - S2)
 
     return area
+
+
+# def correct_mesh_frame(mesh):
+#     x_coordinates = mesh.vertices[:, 0]
+#     y_coordinates = mesh.vertices[:, 1]
+#     z_coordinates = mesh.vertices[:, 2]
+
+#     ground_z = np.min(z_coordinates)
+#     ground_range = 0.5  # m off the ground within which to remove points from mesh
+#     filt_ground = z_coordinates > (ground_z + ground_range)
+
+#     final_vertices = mesh.vertices[filt_ground]
+
+#     left_mirror

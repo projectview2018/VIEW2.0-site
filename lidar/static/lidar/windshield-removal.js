@@ -41756,7 +41756,7 @@ class Model {
     this.undoStack = [];
     this.currentErase = {};
     this.loader = new GLTFLoader();
-    this.get_url = "2011HondaOdysseyScan1.glb";
+    this.get_url = JSON.parse(document.getElementById("get_url").textContent);
     this.meshObj;
     this.loader.load(
       this.get_url,

@@ -592,7 +592,7 @@
 .index-container02 {
   width: 40%;
   display: flex;
-  padding: var(--dl-space-space-unit);
+  padding: var(--dl-space-space-unit) 0;
   align-items: flex-start;
   flex-direction: column;
 }

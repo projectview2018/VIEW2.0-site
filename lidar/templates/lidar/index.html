@@ -2,7 +2,7 @@
 <html lang="english">
   <head>
     <title>Home</title>
-    <meta property="og:title" content="exported project" />
+    <meta property="og:title" content="Index1 - exported project" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -40,6 +40,21 @@
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
       data-tag="font"
     />
     <link
@@ -375,12 +390,12 @@
   </head>
   <body>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}"/>
     <div>
       <link href="{% static 'lidar/index.css' %}" rel="stylesheet" />
 
       <div class="index-container">
-        <div class="header-v2-container header-v2-root-class-name9">
+        <div class="header-v2-container header-v2-root-class-name10">
           <header
             data-thq="thq-navbar"
             class="header-v2-navbar-interactive elevation04"
@@ -502,73 +517,78 @@
           </section>
           <section class="index-intro">
             <div class="index-container02">
-              <div class="index-container03">
-                <h2 class="index-text08">About VIEW</h2>
-                <h3 class="index-text09 HeadingH2">
-                  <span>A free blind-zone measurement tool</span>
-                  <br />
-                </h3>
-                <span class="index-text12 Body">
-                  VIEW is a crowd-sourced database with visualizations of
-                  blind-zones for different types of vehicles. You can use our
-                  tool to take measurements of a vehicle and see the blind-zone
-                  information, or you can find a vehicle in our database.
-                </span>
-                <h4 class="HeadingH4">Blind Zone</h4>
-                <span class="index-text14 Body">
-                  The area around the vehicle that cannot be seen directly by
-                  the current driver
-                </span>
-                <h4 class="HeadingH4">Direct Vision</h4>
-                <span class="index-text16">
-                  Anything that can be seen by a driver without the help of
-                  devices such as mirrors or cameras.
-                </span>
-              </div>
-              <div class="index-container04">
-                <img
-                  alt="image"
-                  src="{% static 'lidar/images/vehicle zones diagram 1-400w.png' %}"
-                  class="index-image"
-                />
+              <h2 class="index-heading1">About VIEW</h2>
+              <h3 class="index-text08 HeadingH2">
+                <span>A free blind zone measurement tool</span>
+                <br />
+              </h3>
+              <span class="index-text11 Body">
+                VIEW is a measurement tool and crowd-sourced database with
+                visualizations of blind-zones for many types of vehicles. It
+                uses LiDAR technology and seat measurements to calculate what
+                space around the vehicle is visible from the driver's eyepoint.
+              </span>
+            </div>
+            <div class="index-container03">
+              <div
+                data-thq="slider"
+                data-loop="true"
+                data-autoplay="true"
+                data-navigation="false"
+                data-pagination="false"
+                class="index-slider swiper"
+              >
+                <div data-thq="slider-wrapper" class="swiper-wrapper">
+                  <div
+                    data-thq="slider-slide"
+                    class="index-slider-slide swiper-slide"
+                  ></div>
+                  <div
+                    data-thq="slider-slide"
+                    class="index-slider-slide1 swiper-slide"
+                  ></div>
+                  <div
+                    data-thq="slider-slide"
+                    class="index-slider-slide2 swiper-slide"
+                  ></div>
+                </div>
+                <div
+                  data-thq="slider-pagination"
+                  class="index-slider-pagination swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal"
+                >
+                  <div
+                    data-thq="slider-pagination-bullet"
+                    class="swiper-pagination-bullet swiper-pagination-bullet-active"
+                  ></div>
+                  <div
+                    data-thq="slider-pagination-bullet"
+                    class="swiper-pagination-bullet"
+                  ></div>
+                  <div
+                    data-thq="slider-pagination-bullet"
+                    class="swiper-pagination-bullet"
+                  ></div>
+                </div>
+                <div
+                  data-thq="slider-button-prev"
+                  class="index-slider-button-prev swiper-button-prev"
+                ></div>
+                <div
+                  data-thq="slider-button-next"
+                  class="index-slider-button-next swiper-button-next"
+                ></div>
               </div>
             </div>
           </section>
-          <div class="index-banner">
-            <div class="index-container05 elevation03">
-              <h2 class="index-text17 HeadingH2">
-                <span>Why this matters</span>
-                <br class="index-text19" />
-                <span>
-                  <span></span>
-                  <span></span>
-                </span>
-              </h2>
-              <span class="index-text23 BodyMedium">
-                Research shows that drivers respond 0.7 seconds faster with
-                direct vision than with indirect vision In addition, according
-                to a study done by the University of Leeds, drivers react up to
-                50% faster to hazards in their direct vision compared to
-                indirect vision.
-              </span>
-              <a
-                href="{% url 'lidar:faq' %}"
-                class="index-learn-more-button containedbutton-2-6-12-accentblue button"
-              >
-                <span class="ButtonText">
-                  <span>Learn More</span>
-                  <br />
-                </span>
-              </a>
-            </div>
-          </div>
           <section class="index-users elevation01">
-            <div class="index-container06">
-              <h2 class="index-text27">Who It Helps</h2>
-              <h3 class="index-text28 HeadingH2">
-                VIEW is designed to help all kinds of people.
-              </h3>
-              <div class="index-container07">
+            <div class="index-container04">
+              <div class="index-container05">
+                <h2 class="index-text12">Who It Helps</h2>
+                <h3 class="index-text13 HeadingH2">
+                  VIEW is designed to help all kinds of people.
+                </h3>
+              </div>
+              <div class="index-container06">
                 <div class="index-feature-card elevation02">
                   <svg viewBox="0 0 1024 1024" class="index-icon">
                     <path
@@ -578,10 +598,10 @@
                   <img
                     alt="image"
                     src="{% static 'lidar/images/User Icons/landingusers01buyers.svg' %}"
-                    class="index-image1"
+                    class="index-image"
                   />
-                  <h4 class="index-text29 HeadingH3">Vehicle Buyers</h4>
-                  <span class="index-text30 Body">
+                  <h4 class="index-text14 HeadingH3">Vehicle Buyers</h4>
+                  <span class="index-text15 Body">
                     Discover blind-zones to help make purchase decisions.
                   </span>
                 </div>
@@ -594,10 +614,10 @@
                   <img
                     alt="image"
                     src="{% static 'lidar/images/User Icons/landingusers02fleet.svg' %}"
-                    class="index-image2"
+                    class="index-image1"
                   />
-                  <h4 class="index-text31 HeadingH3">Fleet Manager</h4>
-                  <span class="index-text32 Body">
+                  <h4 class="index-text16 HeadingH3">Fleet Manager</h4>
+                  <span class="index-text17 Body">
                     Measure and address blind zones in vehicles on the road.
                   </span>
                 </div>
@@ -610,25 +630,104 @@
                   <img
                     alt="image"
                     src="{% static 'lidar/images/User Icons/landingusers03orgs.svg' %}"
-                    class="index-image3"
+                    class="index-image2"
                   />
-                  <h4 class="index-text33 HeadingH3">
+                  <h4 class="index-text18 HeadingH3">
                     <span>Organizations</span>
                     <br />
                   </h4>
-                  <span class="index-text36 Body">
+                  <span class="index-text21 Body">
                     Access blind-zone information to raise awareness.
                   </span>
                 </div>
               </div>
             </div>
           </section>
-          <div class="index-about">
-            <div class="index-container08">
+          <div class="index-container07">
+            <div class="index-banner">
+              <div class="index-container08 elevation03">
+                <h2 class="index-text22 HeadingH2">
+                  <span class="HeadingH2">Why This Matters</span>
+                  <span class="HeadingH2"></span>
+                  <br />
+                  <span class="HeadingH2"></span>
+                </h2>
+                <span class="index-text27 BodyMedium">
+                  Research shows that drivers respond 0.7 seconds faster with
+                  direct vision than with indirect vision In addition, according
+                  to a study done by the University of Leeds, drivers react up
+                  to 50% faster to hazards in their direct vision compared to
+                  indirect vision.
+                </span>
+                <a
+                  href="{% url 'lidar:faq' %}"
+                  class="index-learn-more-button containedbutton-2-6-12-accentblue button"
+                >
+                  <span class="ButtonText">
+                    <span>Learn More</span>
+                    <br />
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="index-direct-vs-indirect-vision">
               <div class="index-container09">
-                <h2 class="index-text37">Who We Are</h2>
-                <h3 class="index-text38 HeadingH2">About Us</h3>
-                <span class="index-text39">
+                <div class="index-container10">
+                  <img
+                    alt="Diagram looking out through windshield of vehicle with forms of direct vision, indirect vision, and blind zones color-coded"
+                    src="{% static 'lidar/images/vision-diagram.png' %}"
+                    loading="lazy"
+                    class="index-image3"
+                  />
+                </div>
+                <div class="index-container11">
+                  <div class="index-container12">
+                    <h3 class="index-heading2">Indirect Vision</h3>
+                    <span class="index-text31 Body">
+                      <span>
+                        What a driver can see with the aid of devices such as
+                        mirros and cameras.
+                      </span>
+                      <br />
+                    </span>
+                  </div>
+                  <div class="index-container13">
+                    <h3 class="index-heading3">
+                      <span>Blind Zone</span>
+                      <br />
+                    </h3>
+                    <span class="index-text36 Body">
+                      <span>
+                        What a driver can see with the aid of devices such as
+                        mirros and cameras.
+                      </span>
+                      <br />
+                    </span>
+                  </div>
+                  <div class="index-container14">
+                    <h3 class="index-heading4">
+                      <span class="index-text39">Direct Vision</span>
+                      <br class="index-text40" />
+                    </h3>
+                    <span class="index-text41 Body">
+                      <span>
+                        What a driver can see directly with their own eyes.
+                      </span>
+                      <br />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="index-container15 elevation01">
+          <section class="index-about">
+            <div class="index-container16">
+              <div class="index-container17">
+                <h2 class="index-text44">Who We Are</h2>
+                <h3 class="index-text45 HeadingH2">About Us</h3>
+                <span class="index-text46">
                   <span class="Body">
                     We are a group of safety researchers and professionals at
                     the U.S. DOT Volpe Center focused on addressing the rising
@@ -650,37 +749,37 @@
                   <span class="Body">solutions to save lives.</span>
                 </span>
               </div>
-            </div>
-            <div class="index-container10">
-              <div class="index-container11">
-                <img
-                  alt="image"
-                  src="{% static 'lidar/images/image202209080953341322-p6r8-500w.png' %}"
-                  class="index-image4"
-                />
+              <div class="index-container18">
+                <div class="index-container19">
+                  <img
+                    alt="image"
+                    src="{% static 'lidar/images/image202209080953341322-p6r8-500w.png' %}"
+                    class="index-image4"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <section class="index-learn elevation01">
-            <div class="index-container12">
-              <h1 class="index-curious HeadingH2">Curious to learn more?</h1>
-              <span class="index-faq-explanation-text BodyMedium">
-                Find answers to frequently asked questions about the work we do,
-                vehicle blind-zones, and how to use the site.
-              </span>
-              <a
-                href="{% url 'lidar:faq' %}"
-                class="index-fa-qs-button containedbutton-2-6-12-accentblue button"
-              >
-                <span class="index-text45">
-                  <span>FAQs</span>
-                  <br />
-                </span>
-              </a>
-            </div>
           </section>
+        </div>
+        <section class="index-learn elevation01">
+          <div class="index-container20">
+            <h1 class="index-curious HeadingH2">Curious to learn more?</h1>
+            <span class="index-faq-explanation-text BodyMedium">
+              Find answers to frequently asked questions about the work we do,
+              vehicle blind-zones, and how to use the site.
+            </span>
+            <a
+              href="{% url 'lidar:faq' %}"
+              class="index-fa-qs-button containedbutton-2-6-12-accentblue button"
+            >
+              <span class="index-text52">
+                <span>FAQs</span>
+                <br />
+              </span>
+            </a>
+          </div>
         </section>
-        <footer class="footer-footer elevation02 footer-root-class-name">
+        <footer class="footer-footer elevation02 footer-root-class-name11">
           <span class="footer-text">
             <span class="footer-text1">Contact us :</span>
             <br />

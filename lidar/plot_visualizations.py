@@ -208,3 +208,4 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     data = imgdata.getvalue()
 
     return [data, graph_str]
+

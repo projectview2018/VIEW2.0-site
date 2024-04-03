@@ -17,7 +17,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
 
     print('Starting scan')
     # print(f"scan before changing to binary: {response['Body'].read()}")
-    mesh = trimesh.load(response['Body'], file_type='glb', force='mesh')
+    mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
     # assuming mid track and mid-height for future calculations
     driver_height = 1.2

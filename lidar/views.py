@@ -85,11 +85,17 @@ def vehicle_database_table(request):
     vehicle_list = Vehicle.objects.all()
     for vehicle in vehicle_list:
         vehicle.vehicle_updated = vehicle.vehicle_updated.date()
+    completed_scan_list = CompletedScan.objects.all()
 
     vehicle_list = json.loads(serializers.serialize("json", vehicle_list))
+    completed_scan_list = json.loads(
+        serializers.serialize("json", completed_scan_list))
+    for completed_scan in completed_scan_list:
+        completed_scan["vehicle"] = json.loads(serializers.serialize(
+            "json", [Scan.objects.get(pk=completed_scan["fields"]["raw_scan"])]))[0]["fields"]["vehicle"]
 
     return render(request, 'lidar/vehicle-database-table.html',
-                  {'vehicle_list': vehicle_list})
+                  {'vehicle_list': vehicle_list, 'completed_scan_list': completed_scan_list})
 
 
 # def visualization(request, vehicle_id):

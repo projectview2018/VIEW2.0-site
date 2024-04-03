@@ -434,6 +434,11 @@
   display: flex;
   flex-direction: row;
 }
+
+.visualization-masthead-button:hover {
+  cursor: pointer;
+}
+
 .visualization-masthead-icon {
   fill: var(--dl-color-primaryblue-primaryblue);
   width: auto;
@@ -456,6 +461,18 @@
   font-weight: 500;
   margin-left: -4px;
 }
+
+/*match hover/active color of icon and text (editing icon)*/
+.visualization-masthead-button:hover .visualization-masthead-icon, .visualization-masthead-button:focus .visualization-masthead-icon {
+  fill: var(--dl-color-primaryblue-primarybluedark);
+}
+
+/*match hover/active color of icon and text (editing text)*/
+.visualization-masthead-button:hover .visualization-masthead-text, .visualization-masthead-button:focus .visualization-masthead-text {
+  color: var(--dl-color-primaryblue-primarybluedark);
+  text-decoration: underline;
+}
+
 .visualization-masthead-heading {
   color: var(--dl-color-text-darktext);
   margin-top: var(--dl-space-space-unit);

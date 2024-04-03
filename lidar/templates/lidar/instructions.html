@@ -478,6 +478,41 @@
         </div>
         <div class="instructions-container01">
           <section
+            class="instructions-masthead-container elevation01 instructions-masthead-root-class-name"
+          >
+            <div class="instructions-masthead-container1">
+              <div class="instructions-masthead-container2">
+                <a
+                  href="{% url 'lidar:add_vehicle' %}"
+                  name="vehicle database"
+                  aria-label="back to vehicle database"
+                  class="instructions-masthead-navlink button"
+                >
+                  <svg
+                    alt="back arrow"
+                    viewBox="0 0 1024 1024"
+                    class="instructions-masthead-icon"
+                  >
+                    <path
+                      d="M498 166l-346 346 346 346-76 76-422-422 422-422z"
+                    ></path>
+                  </svg>
+                  <img
+                    alt="Vector11314"
+                    src="{% static 'lidar/images/vector11314-wnpn.svg' %}"
+                    class="instructions-masthead-vector1"
+                  />
+                  <span class="instructions-masthead-text">
+                    <span>Add a Vehicle</span>
+                  </span>
+                </a>
+              </div>
+              <h1 class="instructions-masthead-heading HeadingH1">
+                <span>Measurement &amp; Scanning Instructions</span>
+              </h1>
+            </div>
+          </section>
+          <section
             class="upload-process-masthead-container elevation01 upload-process-masthead-root-class-name3"
           >
             <div class="upload-process-masthead-container1">
@@ -500,9 +535,16 @@
           </section>
           <div class="instructions-container02">
             <h1 class="instructions-text HeadingH1">Add a Vehicle</h1>
+            <a
+              href="{% static 'lidar/images/view_measurement_instructions.pdf' %}"
+              rel="noreferrer noopener"
+              class="instructions-link outlinedbutton button"
+            >
+              Instructions PDF Download
+            </a>
             <div class="instructions-container03">
               <div class="instructions-materials">
-                <h3 class="instructions-text001">
+                <h3 class="instructions-text001 HeadingH3">
                   <span class="HeadingH3">Materials Needed</span>
                   <br />
                 </h3>
@@ -521,7 +563,7 @@
                       <span class="Body">Polycam app (download on the</span>
                       <a
                         href="https://apps.apple.com/us/app/polycam-3d-scanner-lidar-360/id1532482376"
-                        class="instructions-link"
+                        class="instructions-link1"
                       >
                         App Store
                       </a>
@@ -608,7 +650,7 @@
                   </span>
                   <a
                     href="https://www.fhwa.dot.gov/policyinformation/tmguide/tmg_2013/vehicle-types.cfm"
-                    class="instructions-link1"
+                    class="instructions-link2"
                   >
                     https://www.fhwa.dot.gov/policyinformation/tmguide/tmg_2013/vehicle-types.cfm
                   </a>
@@ -621,7 +663,7 @@
                   </span>
                   <a
                     href="https://afdc.energy.gov/data/10380"
-                    class="instructions-link2"
+                    class="instructions-link3"
                   >
                     https://afdc.energy.gov/data/10380
                   </a>
@@ -699,8 +741,8 @@
                     </ol>
                     <div class="instructions-container04">
                       <img
-                        src="{% static 'lidar/images/Measurement Instructions Diagr/seat_location_tape_marker_aligned.jpg' %}"
                         alt="Photo of car driver's seat with tape markings showing high front and low back seat positions"
+                        src="{% static 'lidar/images/Measurement Instructions Diagr/seat_location_tape_marker_aligned.jpg' %}"
                         loading="lazy"
                         class="instructions-tape-markings"
                       />
@@ -722,8 +764,8 @@
                     </span>
                     <div class="instructions-container05">
                       <img
-                        src="{% static 'lidar/images//Measurement Instructions Diagr/measuring_tape_hood_guide_closeup.jpg' %}"
                         alt="Photo of vehicle with person placing tape measures along hood and side of vehicle"
+                        src="{% static 'lidar/images//Measurement Instructions Diagr/measuring_tape_hood_guide_closeup.jpg' %}"
                         loading="lazy"
                         class="instructions-hood-guide"
                       />
@@ -818,8 +860,8 @@
                     </span>
                     <div class="instructions-container06">
                       <img
-                        src="{% static 'lidar/images/Measurement Instructions Diagr/measuring_tape_height_guide_horizontal.jpg' %}"
                         alt="Photo of two people measuring a vehicle with tape measure guide along seat and tape measure running from ground to tape measure guide"
+                        src="{% static 'lidar/images/Measurement Instructions Diagr/measuring_tape_height_guide_horizontal.jpg' %}"
                         loading="lazy"
                         class="instructions-seat-height-guide"
                       />
@@ -880,7 +922,7 @@
                       <span>Download the Polycam app from the</span>
                       <a
                         href="https://apps.apple.com/us/app/polycam-3d-scanner-lidar-360/id1532482376"
-                        class="instructions-link3"
+                        class="instructions-link4"
                       >
                         App Store
                       </a>
@@ -903,7 +945,7 @@
                     <div class="instructions-container07">
                       <img
                         alt="Screenshot of bottom bar of Polycam app with camera action button highlighted"
-                        src="{% static 'lidar/images/Measurement Instructions Diagr/polycam homescreen diagram export 1.jpg' %}"
+                        src="{% static 'lidar/images/Measurement Instructions Diagr/Polycam Homescreen Diagram Export 1.jpg' %}"
                         loading="lazy"
                         class="instructions-image4"
                       />
@@ -917,7 +959,7 @@
                     <div class="instructions-container08">
                       <img
                         alt="Screenshot of camera view on Polycam app with video icon and LiDAR buttons highlighted and labeled"
-                        src="{% static 'lidar/images/Measurement Instructions Diagr/polycam camera diagram export 1.jpg' %}"
+                        src="{% static 'lidar/images/Measurement Instructions Diagr/Polycam Camera Diagram Export 1.jpg' %}"
                         loading="lazy"
                         class="instructions-image5"
                       />
@@ -947,8 +989,8 @@
                     </span>
                     <div class="instructions-container09">
                       <img
-                        src="{% static 'lidar/images/Measurement Instructions Diagr/scan_closeup_01.jpg' %}"
                         alt="Phone held in hand in front of car with screen showing camera view of 3d-scan in-progress"
+                        src="{% static 'lidar/images/Measurement Instructions Diagr/scan_closeup_01.jpg' %}"
                         loading="lazy"
                         class="instructions-scan-closeup"
                       />

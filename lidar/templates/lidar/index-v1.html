@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="english">
+  <head>
+    <title>Home</title>
+    <meta property="og:title" content="exported project" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta property="twitter:card" content="summary_large_image" />
+
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}html { scroll-behavior: smooth  }
+    </style>
+    <style data-tag="default-style-sheet">
+      html {
+        font-family: Inter;
+        font-size: 16px;
+      }
+
+      body {
+        font-weight: 400;
+        font-style:normal;
+        text-decoration: none;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.15;
+        color: var(--dl-color-gray-black);
+        background-color: var(--dl-color-gray-white);
+
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/animate.css@4.1.1/animate.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css"
+    />
+    <!--This is the head section-->
+    <!-- <style> ... </style> -->
+    <style>
+      /*** Begin file selector button styling ***/
+      /* Style file selector button */
+      input[type="file"]::file-selector-button {
+        /*outline
+        border: none;
+        color: var(--dl-color-text-darktext);
+        width: auto;
+        min-width: 120px;
+        height: 50px;
+        border-radius: 30px;
+        padding: 4px 18px;
+        font-family: Roboto;
+        font-size: 20px;
+        font-weight: 500;
+        outline: #C4C4C4 solid 1.5px;
+        outline-offset: -1.5px;
+        background-color: transparent;
+        transition-duration: 280ms;*/
+        /*contained*/
+        margin: none !important;
+        color: var(--dl-color-text-whitetext);
+        background-color: var(--dl-color-secondaryblue-secondaryblue);
+        width: auto;
+        min-width: 120px;
+        height: 50px;
+        line-height: 42px;
+        border: none;
+        border-radius: 30px;
+        padding: 4px 18px;
+        font-family: Roboto;
+        font-size: 20px;
+        font-weight: 500;
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) ;
+        transition-duration: 280ms;
+      }
+
+      /* Style file selector button (focus/hover)*/
+      input[type="file"]::file-selector-button:hover, input[type="file"]::file-selector-button:focus{
+        /*background-color: #2B2D420F !important; outlined*/
+        /*contained*/
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important;
+        background-color: #5592BC !important;
+      }
+
+      /* Style file selector button (active)*/
+      input[type="file"]::file-selector-button:active{
+        /*background-color: #2B2D4224 !important; outlined*/
+        /*contained*/
+        box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12) !important;
+        background-color: #8EB6D3 !important;
+      }
+
+      /* Style file selector button (disabled)*/
+      input[type="file"]::file-selector-button:disabled{
+        color: #888888 !important;
+        background-color: #CCCCCC !important;
+        box-shadow: none !important;
+      }
+      /*** End file selector styling ***/
+
+      /*** Begin data upload styling ***/
+      #lidar-file-selector.data-upload-textinput6 {
+        /*padding: 0 8px 0 0 !important; /* remove padding so button hits edges */
+        height: auto; /* autosize based on button */
+      }
+
+      /* Prevent clipping of button shadow (NOT WORKING) */
+      /*#lidar-file-selector{
+        overflow: visible !important;
+      }*/
+      /*** End data upload styling ***/
+    </style>
+
+    <style>
+      /** --------------------------------------------------------------------
+
+        Custom Disclosure Widget Styles
+
+      --------------------------------------------------------------------- */
+
+      disclosure-inline,
+      disclosure-block {
+        position: relative;
+      }
+
+      disclosure-inline {
+        display: inline-block;
+      }
+
+      disclosure-block {
+        display: block;
+        margin: var(--dl-space-space-halfunit) 0;
+      }
+
+      disclosure-block > .disclosure__trigger,
+      disclosure-block > h1 .disclosure__trigger,
+      disclosure-block > h2 .disclosure__trigger,
+      disclosure-block > h3 .disclosure__trigger,
+      disclosure-block > h4 .disclosure__trigger,
+      disclosure-block > h5 .disclosure__trigger,
+      disclosure-block > h6 .disclosure__trigger {
+        display: block;
+        /*padding: .625rem 1.825rem .625rem .625rem;*/ /*original*/
+        padding: var(--dl-space-space-unit) var(--dl-space-space-twounits) var(--dl-space-space-unit) var(--dl-space-space-unit);
+        width: 100%;
+      }
+
+      [data-insert-trigger] {
+        margin: 0;
+      }
+
+      [data-insert-trigger="inline"] > .disclosure__trigger {
+        padding: .5rem;
+        vertical-align: middle;
+      }
+
+      [data-insert-trigger="inline"] > .disclosure__trigger::after {
+        right: 0;
+        left: 0;
+      }
+
+      /**
+       * Trigger (button) Styles
+       */
+      .disclosure__trigger {
+        background: #ffffff;
+        /*border: 1px solid rgba(0,0,0,.325);*/
+        /*elevation2*/
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+        border-radius: var(--dl-radius-radius-radius4);
+        cursor: default;
+        display: inline-block;
+        font-size: inherit;
+        line-height: normal;
+        margin: 0;
+        padding: .25em 1.75em .25em .5em;
+        position: relative;
+        text-align: left;
+        text-decoration: none;
+        z-index: 1;
+        transition-duration: 280ms;
+      }
+
+      /* override button styling on visualization page */
+      .visualization-content .disclosure__trigger {
+        background: var(--dl-color-default-accentbluedark);
+        /*elevation2*/
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+        border-radius: 50%; /*round*/
+        cursor: default;
+        display: inline-block;
+        font-size: inherit;
+        line-height: normal;
+        margin: 0 0 0.23rem; /*previously 0. trying to vertically center*/
+        padding: 0.75rem; /*50% of 1.5rem text used for h3*/
+        position: relative;
+        text-align: left;
+        text-decoration: none;
+        z-index: 3; /*raised from default 1 to cover content*/
+        transition-duration: 280ms;
+      }
+
+      .disclosure__trigger[disabled] {
+        color: inherit;
+      }
+
+      .disclosure__trigger[disabled]::after {
+        opacity: .4;
+      }
+
+      .disclosure__trigger::after {
+        border-left: .35em solid transparent;
+        border-right: .35em solid transparent;
+        border-top: .35em solid #111;
+        bottom: 0;
+        content: "";
+        height: 0;
+        margin: auto;
+        position: absolute;
+        right: .5em;
+        top: 0;
+        transform: rotate(0deg);
+        transform-origin: center;
+        transition: transform 280ms ease-in-out;
+        width: 0;
+      }
+
+      /* override pseudoelement styling on visualization page */
+      .visualization-content .disclosure__trigger::after {
+        margin: auto;
+        position: absolute;
+        top: 0;
+        content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGFsdD0iaW5mb3JtYXRpb24gaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgY2xhc3M9InZpc3VhbGl6YXRpb24taWNvbiI+Cgk8cGF0aCBkPSJNNDcwIDM4NHYtODZoODR2ODZoLTg0ek01MTIgODU0cTE0MCAwIDI0MS0xMDF0MTAxLTI0MS0xMDEtMjQxLTI0MS0xMDEtMjQxIDEwMS0xMDEgMjQxIDEwMSAyNDEgMjQxIDEwMXpNNTEyIDg2cTE3NiAwIDMwMSAxMjV0MTI1IDMwMS0xMjUgMzAxLTMwMSAxMjUtMzAxLTEyNS0xMjUtMzAxIDEyNS0zMDEgMzAxLTEyNXpNNDcwIDcyNnYtMjU2aDg0djI1NmgtODR6Ij4KCTwvcGF0aD4KCjxzY3JpcHQ+CihmdW5jdGlvbih3LGQpIHsKICAgJ3VzZSBzdHJpY3QnOwogICB2YXIgc3ZnID0gbmV3IFhNTFNlcmlhbGl6ZXIoKS5zZXJpYWxpemVUb1N0cmluZyhkLmdldEVsZW1lbnRzQnlUYWdOYW1lKCAnc3ZnJyApWyAwIF0gKTsKICAgdmFyIGJhc2U2NCA9IHcuYnRvYSggc3ZnICk7CiAgIGQuZ2V0RWxlbWVudEJ5SWQoICdiYXNlJyApLmFwcGVuZENoaWxkKCBkLmNyZWF0ZVRleHROb2RlKCAnZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCwnICsgYmFzZTY0ICkgKTsKfSh3aW5kb3csIGRvY3VtZW50KSk7Cjwvc2NyaXB0Pjwvc3ZnPg==");
+          /*encoded from SVG path of Material Icons "outlined information"*/
+        border: none;
+        height: 1.5rem;
+        width: auto;
+        transform: none;
+        transform-origin: center;
+        transition: unset;
+      }
+
+      .disclosure__trigger:not([disabled]):hover,
+      .disclosure__trigger:focus {
+        background: var(--dl-color-primaryblue-primaryblue);
+        color: #fff;
+        /*elevation8*/
+        box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12) ;
+      }
+
+      .disclosure__trigger:not([disabled]):hover::after,
+      .disclosure__trigger:focus::after {
+        border-top-color: #fff;
+      }
+
+      /* override pseudoelement styling focus on visualization page */
+      .visualization-content .disclosure__trigger:not([disabled]):hover::after,
+      .visualization-content .disclosure__trigger:focus::after {
+        filter: brightness(0) invert(1); /*invert black icon to be white*/
+      }
+
+      .disclosure__trigger[aria-expanded="true"]::after {
+        transform: rotate(180deg);
+      }
+
+      /* override pseudoelement styling when open on visualization page */
+      .visualization-content .disclosure__trigger[aria-expanded="true"]::after {
+        transform: none;
+        filter: brightness(0) invert(1); /*invert black icon to be white*/
+      }
+
+      .disclosure__trigger[aria-expanded][disabled] {
+        color: inherit;
+      }
+
+      /* style top level of disclosure boxes when open and not active */
+      .disclosure__trigger[aria-expanded="true"]:not(:hover, :focus){
+        background:var(--dl-color-default-accentbluedark);
+        /*elevation3*/
+        box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12) ;
+      }
+
+      /* override styling of disclosure when open and not active on visualization page */
+      .visualization-content .disclosure__trigger[aria-expanded="true"]:not(:hover, :focus){
+        background:var(--dl-color-primaryblue-primaryblue);
+      }
+
+      /**
+       * Trigger modifiers
+       */
+      [data-left-align] .disclosure__trigger {
+        padding: .25em .625em .25em 1.75em;
+      }
+
+      [data-left-align] .disclosure__trigger::after {
+        left: .5em;
+        right: auto;
+      }
+
+
+      /**
+       * Content Styles
+       */
+      disclosure-content.is-hidden {
+        display: none;
+      }
+
+      disclosure-content {
+        background: #fff;
+        /*border: 1px solid;*/
+        /*elevation1*/
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+        display: block;
+        height: auto;
+        margin: calc(-1* var(--dl-space-space-halfunit)) 0 0;
+        padding: var(--dl-space-space-oneandhalfunits) var(--dl-space-space-unit) var(--dl-space-space-unit);
+        border-radius: 0 0 var(--dl-radius-radius-radius4) var(--dl-radius-radius-radius4);
+      }
+
+      .has-popup disclosure-content {
+        left: 0;
+        min-width: 14em;
+        position: absolute;
+        top: calc(100% + .25em);
+        z-index: 3;
+      }
+
+      /* override popup content styling on visualization page */
+      .visualization-content .has-popup disclosure-content {
+        left: 0;
+        min-width: var(--dl-size-size-xxlarge);
+        position: absolute;
+        top: calc(100% + 4px); /*previously added var(--dl-space-space-halfunit)*/
+        z-index: 1; /*lowered from default 3 so trigger cover content*/
+        margin: 0;
+        padding: var(--dl-space-space-unit);
+        border-radius: var(--dl-radius-radius-radius4);
+        color: #fff;
+        background: var(--dl-color-primaryblue-primaryblue);
+        /*elevation3*/
+        box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12) ;
+      }
+
+      /* add arrow to popup content on visualization page */
+      /*.visualization-content .has-popup disclosure-content::after {
+        content: " ";
+        position: absolute;*/
+        /*bottom: 100%;*/  /* At the top of the tooltip */
+        /*left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }*/
+
+      disclosure-content > *:first-child {
+        margin-top: 0;
+      }
+
+      disclosure-content > *:last-child {
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <div>
+      <link href="{% static 'lidar/index.css' %}" rel="stylesheet" />
+
+      <div class="index-container">
+        <div class="header-v2-container header-v2-root-class-name9">
+          <header
+            data-thq="thq-navbar"
+            class="header-v2-navbar-interactive elevation04"
+          >
+            <div data-thq="thq-navbar-nav" class="header-v2-desktop-menu">
+              <a href="{% url 'lidar:index' %}" class="header-v2-navlink">
+                <h1 class="header-v2-text">
+                  <span class="header-v2-text1">
+                    VIEW Blind Zone Calculator
+                  </span>
+                  <br />
+                </h1>
+              </a>
+              <nav class="header-v2-links">
+                <a href="{% url 'lidar:index' %}" class="header-v2-navlink1">
+                  <span>Home</span>
+                </a>
+                <a
+                  href="{% url 'lidar:vehicle_database_table' %}"
+                  class="header-v2-navlink2"
+                >
+                  <span>Vehicle Database</span>
+                </a>
+                <a href="{% url 'lidar:faq' %}" class="header-v2-navlink3">
+                  <span>FAQ</span>
+                </a>
+              </nav>
+              <div class="header-v2-buttons">
+                <a
+                  href="{% url 'lidar:add_vehicle' %}"
+                  class="header-v2-add-vehicle containedbutton-2-6-12-secondaryblue button"
+                >
+                  <span class="ButtonText">Add Vehicle</span>
+                </a>
+              </div>
+            </div>
+            <div data-thq="thq-burger-menu" class="header-v2-burger-menu">
+              <a href="{% url 'lidar:index' %}">
+                <h1 class="header-v2-text4">
+                  <span class="header-v2-text5">
+                    VIEW Blind Zone Calculator
+                  </span>
+                  <br />
+                </h1>
+              </a>
+              <svg
+                id="burger-menu"
+                viewBox="0 0 1024 1024"
+                class="header-v2-icon"
+              >
+                <path
+                  d="M128 554.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 298.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 810.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"
+                ></path>
+              </svg>
+            </div>
+            <div data-thq="thq-mobile-menu" class="header-v2-mobile-menu">
+              <div class="header-v2-nav">
+                <div class="header-v2-top">
+                  <div data-thq="thq-close-menu" class="header-v2-close-menu">
+                    <svg viewBox="0 0 1024 1024" class="header-v2-icon2">
+                      <path
+                        d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <nav class="header-v2-links1">
+                  <a href="{% url 'lidar:index' %}" class="header-v2-navlink5">
+                    <span>Home</span>
+                  </a>
+                  <a
+                    href="{% url 'lidar:vehicle_database_table' %}"
+                    class="header-v2-navlink6"
+                  >
+                    <span>Vehicle Database</span>
+                  </a>
+                  <a href="{% url 'lidar:add_vehicle' %}" class="header-v2-navlink7">
+                    <span>Add Vehicle</span>
+                  </a>
+                  <a href="{% url 'lidar:faq' %}" class="header-v2-navlink8">
+                    <span>FAQ</span>
+                  </a>
+                </nav>
+                <div class="header-v2-buttons1">
+                  <a
+                    href="{% url 'lidar:add_vehicle' %}"
+                    class="header-v2-add-vehicle1 containedbutton-2-6-12-secondaryblue button"
+                  >
+                    <span>Add Vehicle</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </header>
+        </div>
+        <section class="index-content">
+          <section id="hero" class="index-hero elevation01">
+            <div class="index-container01">
+              <h1 class="index-heading HeadingH1">
+                <span>SAFER VEHICLES,</span>
+                <br />
+                <span>SAFER STREETS</span>
+                <br />
+              </h1>
+              <span class="index-text04">
+                See the hidden dangers of your vehicle with our blind zone
+                visualizer.
+              </span>
+              <a
+                href="{% url 'lidar:add_vehicle' %}"
+                class="index-add-vehicle-button actionbutton-accentblue"
+              >
+                <span class="ButtonText">
+                  <span>Add Vehicle</span>
+                  <br />
+                </span>
+              </a>
+            </div>
+          </section>
+          <section class="index-intro">
+            <div class="index-container02">
+              <div class="index-container03">
+                <h2 class="index-text08">About VIEW</h2>
+                <h3 class="index-text09 HeadingH2">
+                  <span>A free blind-zone measurement tool</span>
+                  <br />
+                </h3>
+                <span class="index-text12 Body">
+                  VIEW is a crowd-sourced database with visualizations of
+                  blind-zones for different types of vehicles. You can use our
+                  tool to take measurements of a vehicle and see the blind-zone
+                  information, or you can find a vehicle in our database.
+                </span>
+                <h4 class="HeadingH4">Blind Zone</h4>
+                <span class="index-text14 Body">
+                  The area around the vehicle that cannot be seen directly by
+                  the current driver
+                </span>
+                <h4 class="HeadingH4">Direct Vision</h4>
+                <span class="index-text16">
+                  Anything that can be seen by a driver without the help of
+                  devices such as mirrors or cameras.
+                </span>
+              </div>
+              <div class="index-container04">
+                <img
+                  alt="image"
+                  src="{% static 'lidar/images/vehicle zones diagram 1-400w.png' %}"
+                  class="index-image"
+                />
+              </div>
+            </div>
+          </section>
+          <div class="index-banner">
+            <div class="index-container05 elevation03">
+              <h2 class="index-text17 HeadingH2">
+                <span>Why this matters</span>
+                <br class="index-text19" />
+                <span>
+                  <span></span>
+                  <span></span>
+                </span>
+              </h2>
+              <span class="index-text23 BodyMedium">
+                Research shows that drivers respond 0.7 seconds faster with
+                direct vision than with indirect vision In addition, according
+                to a study done by the University of Leeds, drivers react up to
+                50% faster to hazards in their direct vision compared to
+                indirect vision.
+              </span>
+              <a
+                href="{% url 'lidar:faq' %}"
+                class="index-learn-more-button containedbutton-2-6-12-accentblue button"
+              >
+                <span class="ButtonText">
+                  <span>Learn More</span>
+                  <br />
+                </span>
+              </a>
+            </div>
+          </div>
+          <section class="index-users elevation01">
+            <div class="index-container06">
+              <h2 class="index-text27">Who It Helps</h2>
+              <h3 class="index-text28 HeadingH2">
+                VIEW is designed to help all kinds of people.
+              </h3>
+              <div class="index-container07">
+                <div class="index-feature-card elevation02">
+                  <svg viewBox="0 0 1024 1024" class="index-icon">
+                    <path
+                      d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
+                    ></path>
+                  </svg>
+                  <img
+                    alt="image"
+                    src="{% static 'lidar/images/User Icons/landingusers01buyers.svg' %}"
+                    class="index-image1"
+                  />
+                  <h4 class="index-text29 HeadingH3">Vehicle Buyers</h4>
+                  <span class="index-text30 Body">
+                    Discover blind-zones to help make purchase decisions.
+                  </span>
+                </div>
+                <div class="index-feature-card1 elevation02">
+                  <svg viewBox="0 0 1024 1024" class="index-icon2">
+                    <path
+                      d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
+                    ></path>
+                  </svg>
+                  <img
+                    alt="image"
+                    src="{% static 'lidar/images/User Icons/landingusers02fleet.svg' %}"
+                    class="index-image2"
+                  />
+                  <h4 class="index-text31 HeadingH3">Fleet Manager</h4>
+                  <span class="index-text32 Body">
+                    Measure and address blind zones in vehicles on the road.
+                  </span>
+                </div>
+                <div class="index-feature-card2 elevation02">
+                  <svg viewBox="0 0 1024 1024" class="index-icon4">
+                    <path
+                      d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
+                    ></path>
+                  </svg>
+                  <img
+                    alt="image"
+                    src="{% static 'lidar/images/User Icons/landingusers03orgs.svg' %}"
+                    class="index-image3"
+                  />
+                  <h4 class="index-text33 HeadingH3">
+                    <span>Organizations</span>
+                    <br />
+                  </h4>
+                  <span class="index-text36 Body">
+                    Access blind-zone information to raise awareness.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div class="index-about">
+            <div class="index-container08">
+              <div class="index-container09">
+                <h2 class="index-text37">Who We Are</h2>
+                <h3 class="index-text38 HeadingH2">About Us</h3>
+                <span class="index-text39">
+                  <span class="Body">
+                    We are a group of safety researchers and professionals at
+                    the U.S. DOT Volpe Center focused on addressing the rising
+                    number of pedestrian and bicyclist fatalities.
+                  </span>
+                  <br class="Body" />
+                  <br class="Body" />
+                  <span class="Body">
+                    In partnership with Federal and non-Federal stakeholders, we
+                    aim to quantify and understand the safety impacts of large
+                    blind zones and to inform
+                  </span>
+                  <a
+                    href="https://www.transportation.gov/NRSS/SafeSystem"
+                    class="index-link"
+                  >
+                    Safe System Approach
+                  </a>
+                  <span class="Body">solutions to save lives.</span>
+                </span>
+              </div>
+            </div>
+            <div class="index-container10">
+              <div class="index-container11">
+                <img
+                  alt="image"
+                  src="{% static 'lidar/images/image202209080953341322-p6r8-500w.png' %}"
+                  class="index-image4"
+                />
+              </div>
+            </div>
+          </div>
+          <section class="index-learn elevation01">
+            <div class="index-container12">
+              <h1 class="index-curious HeadingH2">Curious to learn more?</h1>
+              <span class="index-faq-explanation-text BodyMedium">
+                Find answers to frequently asked questions about the work we do,
+                vehicle blind-zones, and how to use the site.
+              </span>
+              <a
+                href="{% url 'lidar:faq' %}"
+                class="index-fa-qs-button containedbutton-2-6-12-accentblue button"
+              >
+                <span class="index-text45">
+                  <span>FAQs</span>
+                  <br />
+                </span>
+              </a>
+            </div>
+          </section>
+        </section>
+        <footer class="footer-footer elevation02 footer-root-class-name">
+          <span class="footer-text">
+            <span class="footer-text1">Contact us :</span>
+            <br />
+          </span>
+          <span class="footer-text3">
+            <span>
+              This document is funded by the Santos Family Foundation and
+              disseminated under the sponsorship of the Department of
+              Transportation in the interest of information exchange. The United
+              States Government assumes no liability for the contents or use
+              thereof. The United States Government does not endorse products,
+              manufacturers, or state or local policies or laws unless
+              specifically indicated. Trade or manufacturers’ names may appear
+              herein solely because they are considered essential to the
+              objective of this document. Site contents represent the best
+              technical judgement of U.S. DOT Volpe Center staff based on their
+              independent and objective technical analysis and expertise, and
+              are not to be misconstrued as statements of U.S. DOT policy or
+              guidance.
+            </span>
+          </span>
+        </footer>
+      </div>
+    </div>
+    <script>
+      /**
+       * ARIA Disclosure Widget
+       * Custom disclosure widget base script to show/hide
+       * all your web content.
+       *
+       * Author: Scott O'Hara
+       * Version: 2.0.1
+       * License: https://github.com/scottaohara/aria_disclosure_widget/blob/master/LICENSE
+       */
+
+      const ARIAdwOptions = {
+        baseID: 'aDW_',
+        triggerClass: 'disclosure__trigger',
+        triggerLocation: '[data-insert-trigger]',
+        contentSelector: 'disclosure-content',
+        buttonLabelAttr: 'data-trigger',
+        initialStateAttr: 'data-open',
+        triggerEnabled: true,
+        popupAttr: 'data-popup',
+        fallBackBtnText: 'More info'
+      };
+
+      const ARIAdw = function ( inst, options ) {
+        const _options = Object.assign(ARIAdwOptions, options);
+        const el = inst;
+        let trigger;
+        let triggerID;
+        let content;
+        let expandedState = el.hasAttribute(_options.initialStateAttr) || false;
+        let triggerEnabled = _options.triggerEnabled;
+
+
+        const init = function () {
+          /**
+           * Create the IDs for content / triggers, respecting
+           * the existing IDs of 1. the content > 2. the widget container > 3. generate if no usable IDs exist
+           */
+          content = el.querySelector(_options.contentSelector);
+
+          if ( !content ) {
+            console.warn('no content defined');
+            return false;
+          }
+
+          defineIDs();
+          setupTrigger();
+          setupContent();
+
+          trigger.addEventListener('click', toggleEvent);
+        };
+
+
+        const defineIDs = function ( ) {
+          if ( content.id ) {
+            triggerID = content.id + '_trigger';
+          }
+          else if ( el.id ) {
+            triggerID = el.id + '_trigger';
+          }
+          else {
+            triggerID = _options.baseID + Math.floor(Math.random() * 999);
+          }
+        };
+
+
+        /**
+        * Create the button element to serve as the
+        * trigger for the disclosure widget
+        */
+        const setupTrigger = function () {
+          let btnContent;
+          let btnLocate;
+
+          const newBtn = document.createElement('button');
+          newBtn.id = triggerID;
+          newBtn.type = 'button';
+          newBtn.classList.add('disclosure__trigger');
+          newBtn.setAttribute('aria-expanded', expandedState);
+
+          if ( el.hasAttribute('data-disabled') || !triggerEnabled ) {
+            newBtn.disabled = true;
+          }
+
+          if ( el.hasAttribute(_options.buttonLabelAttr) ) {
+            if ( el.getAttribute(_options.buttonLabelAttr) === '' ) {
+              btnContent = _options.fallBackBtnText;
+            }
+            else {
+              btnContent = el.getAttribute(_options.buttonLabelAttr);
+            }
+            el.insertBefore(newBtn, el.firstChild);
+          }
+          else {
+            btnLocate = el.querySelector(_options.triggerLocation) || false;
+            if ( btnLocate ) {
+              btnContent = btnLocate.innerHTML;
+              if ( btnContent === '' ) {
+                newBtn.setAttribute('aria-label', _options.fallBackBtnText);
+              }
+              btnLocate.innerHTML = '';
+              btnLocate.append(newBtn);
+            }
+            else {
+              btnContent = _options.fallBackBtnText;
+              el.insertBefore(newBtn, el.firstChild);
+            }
+          }
+
+          newBtn.innerHTML = btnContent;
+
+          trigger = newBtn;
+          return trigger;
+        };
+
+
+        /**
+        * Function to hide content panels which have not been
+        * specified to be revealed by default.
+        *
+        * Assigns generated IDs to the content container.
+        *
+        * If specified as a 'popup', then provide the content container
+        * a role=note and tabindex=-1. 1st, so that the element exposes a
+        * role which "makes sense" without having an accName (because if
+        * using a generic, then the contents of the element would become the
+        * generic's accname in chromium browsers... and that's bad.
+        * and 2, because without the tabindex=-1 (which is what would make
+        * the generic try to get its name from contents) the popup will
+        * revert to the hidden state due to the focusout function.
+        * That function could probably just be smarter, but this is how
+        * this is being solved for now.
+        */
+        const setupContent = function () {
+          if ( !expandedState ) {
+            content.classList.add('is-hidden');
+          }
+          if ( !content.id ) {
+            content.id = triggerID + '_content';
+          }
+
+          if ( el.hasAttribute(_options.popupAttr) ) {
+            content.tabIndex = '-1';
+            content.setAttribute('role', 'note');
+            el.classList.add('has-popup');
+            el.addEventListener('focusout', focusOutEvent, false);
+            el.addEventListener('keydown', escEvent, false);
+          }
+        };
+
+
+        /**
+        * Function to expose the expanded / collapsed state
+        * of the disclosure widget. Toggles the 'is-hidden'
+        * class on the associated content based on the state
+        * of the trigger.
+        *
+        * Updates 'expandedState' as this is needed for
+        * other functions that reuse this toggleEvent.
+        */
+        const toggleEvent = function ( e ) {
+          if ( expandedState ) {
+            trigger.setAttribute('aria-expanded', 'false');
+            content.classList.add('is-hidden');
+            expandedState = false;
+          }
+          else {
+            trigger.setAttribute('aria-expanded', 'true');
+            content.classList.remove('is-hidden');
+            expandedState = true;
+          }
+        };
+
+
+        /**
+        * If focus leaves the containing element of the
+        * trigger & the flyout content, then close the
+        * flyout and return the content to the collapsed
+        * state.
+        *
+        * Runs the toggleEvent, so checks to make sure the
+        * trigger is in the expandedState, so as to not
+        * just randomly expand content while navigating
+        * by Tab key.
+        */
+        const focusOutEvent = function ( e ) {
+          if ( !el.contains(e.relatedTarget) && expandedState === true) {
+            toggleEvent();
+          }
+        };
+
+
+        /**
+        * Close a flyout via the ESC key
+        * Reuses the toggleEvent, so also checks to make
+        * sure the trigger is in the expandedState first,
+        * so as to not allow the ESC key to unexpectedly
+        * reveal the associated content, if pressed on the
+        * trigger in the collapsed state.
+        *
+        * Focuses the trigger to ensure that if someone
+        * hits the ESC key within the exposed content, then
+        * focus does not get lost.
+        */
+        const escEvent = function ( e ) {
+          switch ( e.key ) {
+            case 'Escape':
+              if ( expandedState === true ) {
+                toggleEvent();
+                trigger.focus();
+              }
+              break;
+
+            default:
+              break;
+          }
+        };
+
+
+        init.call( this );
+      }; // ARIAdw()
+    </script>
+    <script>
+      const els = document.querySelectorAll('disclosure-inline, disclosure-block');
+      // Generate all disclosure instances
+      for ( let i = 0; i < els.length; i++ ) {
+        ARIAdw(els[i])
+      }
+    </script>
+    <script
+      defer=""
+      src="https://unpkg.com/@teleporthq/teleport-custom-scripts"
+    ></script>
+  </body>
+</html>

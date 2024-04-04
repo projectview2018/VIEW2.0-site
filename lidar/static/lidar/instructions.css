@@ -819,6 +819,7 @@
 }
 .instructions-text030 {
   font-family: "Roboto";
+  overflow-wrap: anywhere;
 }
 .instructions-text036 {
   font-size: 0.8rem;
@@ -1291,6 +1292,10 @@
   }
 }
 @media(max-width: 479px) {
+  .instructions-container02 {
+    padding-left: var(--dl-space-space-twounits);
+    padding-left: var(--dl-space-space-twounits);
+  }
   .instructions-front-front-and-front-back {
     flex-direction: column;
   }

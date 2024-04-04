@@ -1186,6 +1186,7 @@
   align-items: flex-start;
   margin-bottom: var(--dl-space-space-halfunit);
   justify-content: flex-start;
+  border-radius: 50px;
 }
 .data-upload-textinput15 {
   height: 50px;
@@ -1224,6 +1225,7 @@
   margin-left: var(--dl-space-space-threeunits);
   margin-right: var(--dl-space-space-threeunits);
   border-radius: var(--dl-radius-radius-radius4);
+  display: none;
 }
 .data-upload-container7 {
   display: contents;

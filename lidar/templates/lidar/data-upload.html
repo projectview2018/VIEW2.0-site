@@ -113,6 +113,10 @@
       #lidar-file-selector.data-upload-textinput6 {
         /*padding: 0 8px 0 0 !important; /* remove padding so button hits edges */
         height: auto; /* autosize based on button */
+        background: var(--dl-color-default-accentblue);
+        border-radius: 50px;
+        border: none;
+        padding: 0;
       }
 
       /* Prevent clipping of button shadow (NOT WORKING) */
@@ -485,7 +489,7 @@
                 <span>Add a Vehicle</span>
               </h1>
               <h2 class="upload-process-masthead-text HeadingH2">
-                <span>Step 2/3 - Upload Data</span>
+                <span>Step 1/2 - Upload Data</span>
               </h2>
               <span class="upload-process-masthead-text1 Body">
                 <span>Placeholder description</span>
@@ -631,17 +635,17 @@
                     GLB (.glb) file on your device.
                   </span>
                   <div class="data-upload-li-dar-scan-upload">
-                    <div class="data-upload-container4">
+                    <div class="data-upload-container4 elevation01">
                       {{ scan_form.lidar_scan }}
                     </div>
                   </div>
                 </div>
                 <div class="data-upload-container5">
                   <a
-                    href="{% url 'lidar:instructions' %}"
+                    href="{% url 'lidar:add_vehicle' %}"
                     class="data-upload-navlink outlinedbutton button"
                   >
-                    Back
+                    Cancel
                   </a>
                   <div class="data-upload-container6 elevation01">
                     <div class="data-upload-container7">

@@ -35,6 +35,9 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # # interpolated front-of-hood to eye distance interpolated (in)
     # eye_point_full = 84
 
+    print(f"nvp_x_cartesian: {nvp_x_cartesian}")
+    print(f"nvp_y_cartesian: {nvp_y_cartesian}")
+
     # VRU sizes (taken fron VIEW 1.0)
     # 'toddler', 'elementary', 'elem_bike', 'wheelchair', 'adult_bike', 'adult'
     # shoulder height, width, person height (all in [in])

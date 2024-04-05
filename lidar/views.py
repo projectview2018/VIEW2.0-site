@@ -124,9 +124,10 @@ def visualization(request, scan_id):
         return render(request, 'lidar/404.html', {})
     elif scan.scan_status == "calculating":
         print("Tried to load Visualization page. Scan is still being processed.")
-        thread = threading.Thread(
-            target=complete_scan, args=(scan, vehicle))
-        thread.start()
+        #  FOR TESTING SHOULD BE DELETED
+        # thread = threading.Thread(
+        #     target=complete_scan, args=(scan, vehicle))
+        # thread.start()
         return render(request, 'lidar/404.html', {})
     elif scan.scan_status == "processed":  # scan should be processed and status updated as such
         num_completed_scans = CompletedScan.objects.filter(
@@ -137,14 +138,17 @@ def visualization(request, scan_id):
                 viz_form = VisualizationForm(request.POST)
                 if viz_form.is_valid():
                     print("viz_from was valid")
+                    # completed_scan = CompletedScan.objects.get(raw_scan=scan)
                     completed_scan = CompletedScan.objects.get(raw_scan=scan)
-
                     print("Loading Visualization page. Scan is processed.")
                     [graph, graph_str] = viz_overhead(
                         json.loads(completed_scan.nvp_xs), json.loads(completed_scan.nvp_ys), (scan.F_m + ((scan.E_m - scan.F_m) / 2) + 1.2), ((scan.B_m - scan.A_m) / 2), int(viz_form.cleaned_data['vru_selected']))
                     return render(request, 'lidar/visualization-graph.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'graph': graph, 'graph_str': graph_str})
             else:
                 viz_form = VisualizationForm()
+                #  FOR TESTING SHOULD BE DELETED
+                # scan.scan_status = "modified"
+                # scan.save()
         else:
             print(
                 "Tried to load Visualization page. Scan should be processed, some error occurred.")

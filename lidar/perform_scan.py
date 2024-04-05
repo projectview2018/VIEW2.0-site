@@ -20,7 +20,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
     # assuming mid track and mid-height for future calculations
-    driver_height = 1.2
+    driver_height = 0.8
     # eye pos in front-left frame, using scan-frame axes
     eye_x_m = scan.D_m
     eye_y_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
@@ -116,7 +116,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     if driver_side_start:
         nvp_rays *= -1
     print('Vectors calculated, NVPS found')
-    return [-int(x) for x in nvp_rays[0, :]], [int(y) for y in nvp_rays[2, :]]
+    return [-int(x) for x in nvp_rays[:, 0]], [int(y) for y in nvp_rays[:, 2]]
 
 
 def calculate_area(coordinates):
@@ -133,29 +133,35 @@ def calculate_area(coordinates):
 
 
 def get_eye_in_mesh_frame(mesh, eye_pos, driver_start):
-    ground_y = np.min(mesh.vertices[:, 1])
-    ground_range = 0.5  # m off the ground within which to remove points from mesh
-    filt_ground = mesh.vertices[:, 1] > (ground_y + ground_range)
-
-    final_vertices = mesh.vertices[filt_ground]
-    # get front of car vertex
-    front_car_z_value = abs(
-        final_vertices[np.argmin(final_vertices[:, 2])][2])
     if (driver_start):
-        left_mirror_idx = np.argmin(final_vertices[:, 0])
-        # right_mirror_idx = np.argmax(final_vertices[:, 0])
+        min_height = np.min(mesh.vertices[:, 1])
+    vertices = mesh.vertices[mesh.vertices[:, 1] > min_height + 0.3, :]
 
-        left_mirror_vertex = final_vertices[left_mirror_idx]
-        # right_mirror_vertex = final_vertices[right_mirror_idx]
+    z_front = np.min(vertices[:, 2])
+    min_pos = np.min(vertices, axis=0)
+    max_pos = np.max(vertices, axis=0)
 
-        # only get points that are behind the side mirrors
-        filt_mirrors = final_vertices[:, 2] > (left_mirror_vertex[2] + 0.25)
+    min_idx = np.argmin(vertices, axis=0)
+    max_idx = np.argmax(vertices, axis=0)
+    z_of_min_x = vertices[min_idx[0], 2]
+    z_of_max_x = vertices[max_idx[0], 2]
 
-        final_vertices = final_vertices[filt_mirrors]
-        left_car_x_value = abs(
-            final_vertices[np.argmin(final_vertices[:, 0])][0])
+    min_percent = (z_of_min_x - min_pos[2]) / (max_pos[2] - min_pos[2])
+    if min_percent < 0.7:
+        filtered_by_min = vertices[vertices[:, 2] > z_of_min_x + 0.25, :]
+    else:
+        filtered_by_min = vertices
+    min_pos[0] = np.min(filtered_by_min[:, 0])
 
-        new_eye_pos = [eye_pos[0] - left_car_x_value,
-                       eye_pos[1], eye_pos[2] - front_car_z_value]
+    max_percent = (z_of_max_x - min_pos[2]) / (max_pos[2] - min_pos[2])
+    if max_percent < 0.7:
+        filtered_by_max = vertices[vertices[:, 2] > z_of_max_x + 0.25, :]
+    else:
+        filtered_by_max = vertices
+    max_pos[0] = np.max(filtered_by_max[:, 0])
 
+    new_eye_pos = [eye_pos[0] + min_pos[0],
+                   eye_pos[1] + min_height, eye_pos[2] + z_front]
+    # print(f"new eye posiition: {new_eye_pos}")
+    # print(f"mesh vertice size after frame shift: {mesh.vertices.size}")
     return new_eye_pos

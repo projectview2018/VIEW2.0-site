@@ -106,13 +106,13 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     hypot = np.sqrt(np.sum(nvp_rays * nvp_rays, axis=0))
     nvp_rays /= hypot  # Normalize
     nvp_rays *= -(eye_pos[1] - floor_y_val) / \
-        nvp_rays[1, :]  # scale until ground hit
+        np.stack([nvp_rays[:, 1]] * 3).T  # scale until ground hit
     nvp_rays *= 100
     nvp_rays = np.floor(nvp_rays)
     if driver_side_start:
         nvp_rays *= -1
     print('Vectors calculated, NVPS found')
-    return [-int(x) for x in nvp_rays[0, :]], [int(y) for y in nvp_rays[2, :]]
+    return [-int(x) for x in nvp_rays[:, 0]], [int(y) for y in nvp_rays[:, 2]]
 
 
 def calculate_area(coordinates):

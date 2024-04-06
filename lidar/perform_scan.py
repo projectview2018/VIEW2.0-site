@@ -64,7 +64,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     # The directions to cast rays
     yaws = np.deg2rad(np.arange(70, 200) +
                       (0 if driver_side_start else 180))
-    pitches = np.deg2rad(np.arange(-85, -5))
+    pitches = np.deg2rad(np.arange(-85, -1))
     print('Found desired pitches and yaws')
 
     # An (p x 3) matrix where each row is equal to eye_pos
@@ -84,8 +84,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
         # Perform raycasts
         intersections = mesh.ray.intersects_first(eye_pos_repeated, rays)
         print(f'Raycasts performed for yaw: {yaw}')
-
-        face_idx_vals = np.where(intersections >= 0)[0]
+        face_idx_vals = intersections[intersections >= 0]
 
         if face_idx_vals.size > 0:
             face_idx = face_idx_vals[-1]

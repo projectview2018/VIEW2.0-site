@@ -139,7 +139,7 @@ def visualization(request, scan_id):
 
                     print("Loading Visualization page. Scan is processed.")
                     [graph, graph_str] = viz_overhead(
-                        json.loads(completed_scan.nvp_xs), json.loads(completed_scan.nvp_ys), (scan.F_m + ((scan.E_m - scan.F_m) / 2) + 1.2), ((scan.B_m - scan.A_m) / 2), int(viz_form.cleaned_data['vru_selected']))
+                        json.loads(completed_scan.nvp_xs), json.loads(completed_scan.nvp_ys), (scan.F_m + ((scan.E_m - scan.F_m) / 2) + 0.8), ((scan.B_m - scan.A_m) / 2), int(viz_form.cleaned_data['vru_selected']))
                     return render(request, 'lidar/visualization-graph.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'graph': graph, 'graph_str': graph_str})
         else:
             print(

@@ -20,7 +20,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
     # assuming mid track and mid-height for future calculations
-    driver_height = 1.2
+    driver_height = 0.8
     eye_x_m = scan.D_m
     eye_y_m = scan.A_m - ((scan.B_m - scan.A_m) / 2)
     eye_z_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height

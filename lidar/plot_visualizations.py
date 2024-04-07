@@ -14,41 +14,39 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
        for viewing, if desired.
 
     Takes inputs:
-    vp_x_cartesian = np.array([nums])
-    nvp_y_cartesian = np.array([nums])
+    vp_x_cartesian = np.array([nums]) [cm]
+    nvp_y_cartesian = np.array([nums]) [cm]
     eye_height_full = num # eye height calculated from interpolated seat-ground + 
-      human eye point on seat (in)
+      human eye point on seat [m]
     eye_point_full = num # interpolated front-of-hood to eye distance 
-      interpolated (in)
-    vru_selected = num # options: 1=toddler, 2=elementary, 3=elem_bike, 
+      interpolated [m]
+    vru_selected = array # options: 1=toddler, 2=elementary, 3=elem_bike, 
       4=wheelchair, 5=adult_bike, 6=adult
 
     *np.array requires importing the numpy library (import numpy as np)
     '''
     #  FOR TESTING
-    nvp_x_cartesian = np.array([-5744, -5744, -5744, -5744, -5744, -5744, -5744, -5744, -5744, -5744, -5744, -10414, 5782, 5782, 5782, 5782, 5782, 5782, 5782, 5782, 5782, 5782, 5782, 5782, 5782, 5782, -2741, -2741, -3670, -10627, -10627, -10627, -10627, -10627, -10627, -10627, -10627, -10627, -5518, -5518, -5518, -5518, -5518, -5518, -5518, -5518, -5518, -5518, -5949, -5949, 25447, 25447, 1604, 1604, 1570, 1570, 1570,
-                               1570, 1657, 1657, 1657, 1657, 1657, 1657, 1657, 1657, 1657, 1657, 1508, 1508, 1508, 1663, 1663, 1663, 2556, 2079, 2079, 1562, 1012, 1012, 1012, 1012, 1012, 863, 803, 1080, 787, 787, 787, 693, 693, 1028, 1028, 1028, 1028, 445, 445, 445, 445, 354, 283, 283, 283, 283, 283, 114, 114, 114, 114, 17, 17, 17, -207, -207, -207, -207, -207, -433, -433, -433, -433, -554, -383, -383, -383, -579, -579, -579, -579, -579])
-    nvp_y_cartesian = np.array([1841, 1841, 1841, 1841, 1841, 1841, 1841, 1841, 1841, 1841, 1841, 2509, -606, -606, -606, -606, -606, -606, -606, -606, -606, -606, -606, -606, -606, -606, 24, 24, -693, -3284, -3284, -3284, -3284, -3284, -3284, -3284, -3284, -3284, -2496, -2496, -2496, -2496, -2496, -2496, -2496, -2496, -2496, -2496, -3223, -3223, 16112, 16112, 1035, 1035, 1156, 1156, 1156, 1156, 1642, 1642, 1642,
-                               1642, 1642, 1642, 1642, 1642, 1642, 1642, 1667, 1667, 1667, 2073, 2073, 2073, 3310, 2948, 2948, 2627, 1724, 1724, 1724, 1724, 1724, 1615, 1621, 2253, 1825, 1825, 1825, 1823, 1823, 3214, 3214, 3214, 3214, 1893, 1893, 1893, 1893, 1874, 1948, 1948, 1948, 1948, 1948, 1869, 1869, 1869, 1869, 1852, 1852, 1852, 2463, 2463, 2463, 2463, 2463, 3188, 3188, 3188, 3188, 3138, 1787, 1787, 1787, 1788, 1788, 1788, 1788, 1788])
-    # eye height calculated from interpolated seat-ground + human eye point on seat (in)
-    eye_height_full = 60
-    # interpolated front-of-hood to eye distance interpolated (in)
-    eye_point_full = 84
+    nvp_x_cartesian = np.array([185, 186, 186, 194, 195, 195, 195, 198, 197, 200, 200, 202, 202, 202, 202, 203, 203, 203, 203, 203, 204, 203, 203, 203, 203, 214, 214, 215, 216, 214, 211, 213, 210, 210, 210, 219, 220, 221, 219, 217, 216, 215, 224, 222, 221, 220, 215, 215, 225, 224, 221, 220, 216, 226, 222, 221, 218, 214, 222, 219, 217, 213, 220, 217, 212, 220, 216, 221, 216, 223, 232, 234, 234, 232, 232, 228, 235, 236, 228, 235, 228, 227, 225, 228, 229, 228, 225, 223, 225, 231, 228, 233, 237, 241, 247, 238, 239, 280, 272, 245, 236, 222, 203, 187, 170, 149, 116, 79, 57, 15, 1, -34, -61, -98, -124, -167, -190, -227, -263, -289, -313, -347, -382, -382, -430, -452, -483, -508, -536, -539])
+    nvp_y_cartesian = np.array([-22, -15, -15, -18, -14, -14, -14, -12, -10, -9, -9, -7, -7, -7, -7, -4, -4, -4, -3, -3, 0, 2, 2, 2, 5, 7, 7, 9, 10, 11, 8, 13, 8, 14, 15, 16, 18, 21, 20, 23, 23, 23, 25, 27, 28, 28, 31, 31, 33, 37, 36, 37, 38, 41, 42, 46, 44, 46, 48, 50, 52, 51, 52, 55, 59, 61, 61, 69, 67, 72, 77, 81, 81, 84, 90, 92, 94, 98, 104, 103, 107, 113, 120, 121, 132, 136, 141, 150, 153, 166, 172, 186, 202, 216, 235, 243, 265, 334, 351, 355, 356, 391, 411, 425, 450, 450, 474, 476, 474, 476, 474, 475, 474, 501, 500, 500, 498, 497, 494, 495, 494, 492, 491, 464, 460, 458, 456, 453, 453, 428])
+    # eye height calculated from interpolated seat-ground + human eye point on seat [m]
+    eye_height_full = ((18.3-16.25)*0.0254)+1.2
+    # interpolated front-of-hood to eye distance interpolated [m]
+    eye_point_full = ((84-70)+20.5)*0.0254
 
-    # VRU sizes (taken fron VIEW 1.0)
-    # 'toddler', 'elementary', 'elem_bike', 'wheelchair', 'adult_bike', 'adult'
-    # shoulder height, width, person height (all in [in])
-    # DOESN'T CONTAIN DEPTH, BUT ASSUMES THAT BICYCLES ARE 4X DEPTH OF PEOPLE AND IGNORES WHEELCHAIRS?
+    '''VRU sizes (taken fron VIEW 1.0)
+      'toddler', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
+      shoulder height, width, person height (all in [in])
+      DOESN'T CONTAIN DEPTH, BUT ASSUMES THAT BICYCLES ARE 4X DEPTH OF PEOPLE AND IGNORES WHEELCHAIRS?'''
     vru_label = ['toddler', 'elementary school child', 'elementary schooler on bike',
                  'wheelchair user', 'adult on bike', 'adult']
-    vru_sizes = np.array([[28, 9, 34], [37, 12, 45], [35, 12, 45], [
+    vru_sizes = np.array([[28, 9, 34], [35, 12, 45], [37, 12, 45], [
                          39, 26, 49], [47, 16, 58], [49, 16, 60]])
     # store 'shoulder height' of selected VRU in [ft]
     vru_height = vru_sizes[vru_selected-1, 0]/12
     # store 'width' of selected VRU in [ft]
     vru_width = vru_sizes[vru_selected-1, 1]/12
 
-    max_distance = 7*15  # maximum distance plotted (multiple of 7)
+    max_distance = 7*5  # maximum distance plotted (multiple of 7)
 
     # start and end angles for plotting [deg]
     plot_start = -20
@@ -61,7 +59,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ''' -------------------------
   Begin initial data processing
   --------------------------'''
-    # convert from [cm] to [ft]
+    # convert vehicle measurements from [m] to [ft]
+    eye_height_full = eye_height_full*3.28084
+    eye_point_full = eye_point_full*3.28084
+    
+    # convert NVP data from [cm] to [ft]
     nvp_x_cartesian_ft = np.asarray(nvp_x_cartesian)*0.032808399
     nvp_y_cartesian_ft = np.asarray(nvp_y_cartesian)*0.032808399
 
@@ -135,9 +137,9 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ''' ----------------------------------------------------------------
   Begin calculate minimum distance from hood to VRU in front of driver
   -----------------------------------------------------------------'''
-    # store eye and hood data passed to function (convert to [ft])
-    eye_height = eye_height_full/12
-    hood_length = eye_point_full/12
+    # store eye and hood data passed to function
+    eye_height = eye_height_full
+    hood_length = eye_point_full
 
     # store hood length in line with eye point in polar coordinates
     hood_r = hood_length

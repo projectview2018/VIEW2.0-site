@@ -1188,6 +1188,19 @@
   text-align: left;
   line-height: normal;
 }
+.instructions-video-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  margin-top: var(--dl-space-space-unit);
+}
+.instructions-video { /* auto-scale video while maintaining aspect ratio */
+  width: 100%;
+  height: auto;
+  max-width: 800px;
+  aspect-ratio: 16/9;
+}
 .instructions-ul11 {
   list-style-type: decimal;
 }

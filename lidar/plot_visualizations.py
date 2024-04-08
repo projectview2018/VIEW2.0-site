@@ -133,70 +133,99 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ''' ------------------------------------
   End calculate NVPs for seeing vru_selected
   ---------------------------------------'''
-    
-    ''' ----------------------------------------------------------------
-  Begin calculate minimum distance from hood to VRU in front of driver
-  -----------------------------------------------------------------'''
-    # store eye and hood data passed to function
-    eye_height = eye_height_full
-    hood_length = eye_point_full
 
-    # store hood length in line with eye point in polar coordinates
-    hood_r = hood_length
-    hood_theta = np.pi/2  # 90 deg in rad
-
+    ''' ---------------------------------------------------------
+  Begin note minimum distance from hood to VRU in front of driver
+  ------------------------------------------------------------'''
     # find nvp in front of driver (with tolerance)
-    # b/w 89 and 90deg (taking ind0 since returns array inside variable)
+      # b/w 89 and 90deg (taking ind0 since returns array inside variable)
     front_range_indices = np.where(np.logical_and(
-        theta_sorted >= hood_theta-mth.radians(1), theta_sorted <= hood_theta+mth.radians(1)))[0]
+          theta_sorted >= (mth.pi/2)-mth.radians(1), 
+          theta_sorted <= (mth.pi/2)+mth.radians(1)))[0]
+    
     # find index of minimum of selected entries
     front_r_min_index = front_range_indices[np.argmin(
         r_sorted[front_range_indices])]
-    front_r_min = r_sorted[front_r_min_index]
-    front_theta_min = theta_sorted[front_r_min_index]
-
-    # generate r values and heights b/w eye and closest NVP in increments of 1 VRU width
-    # includes final r value to over- rather than under-estimate
-    r_fit_nvp = np.arange(0, front_r_min+vru_width, vru_width)
-    # generate height height values for each r value
-    height_fit_nvp = np.linspace(eye_height, 0, len(r_fit_nvp))
-
-    # remove nvp_fit data before hood_r
-    to_keep = r_fit_nvp >= hood_r  # keep r values at least a hood's-distance away
-    r_hood_nvp = r_fit_nvp[to_keep]
-    height_hood_nvp = height_fit_nvp[to_keep]
-
-    # find r values with height lower than vru height
-    # store inds of all heights lower than vru height
-    vru_fit_ind = np.where(height_hood_nvp < vru_height)[0]
-    # store value of first r that meets the conditions above (absolute distance)
-    r_vru_fit = r_hood_nvp[vru_fit_ind[0]]
+    
+    # store r value that meets the conditions above (absolute location)
+    r_vru_fit = r_vru_nvp[front_r_min_index]
 
     # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
-    front_vru_dist = r_vru_fit-hood_r  # [ft]
+    front_vru_dist = r_vru_fit-eye_point_full  # [ft]
 
-    # plot closest forward-visible VRU
-    '''(theta might be slightly off but hopefully covered by dot size,
-    distance is rounded since working in increments of 1 unit)'''
-    ax.plot(hood_theta, r_vru_fit, '#2bb0e5', marker='o', markersize=5,
-            linewidth=0, label='Closest Forward-Visible VRU')
-
-    ''' NOT CURRENTLY IN USE, BUT COULD MAKE PLOT MORE INTERESTING
-  # VRU arc
-  ax.bar(np.pi/2, 2, width=np.pi/3, bottom=r_vru_fit,
-         color='#2bb0e5', edgecolor='#2bb0e5', label='Visible VRU Arc')
-  '''
-
-    # note distance to closest visible VRU
-    ax.text(0.05, 0.05, 'The closest forward-visible\n' + vru_label[vru_selected-1] + '\nis ' +
-            str(round(front_vru_dist)) + 'ft in front of the vehicle',
-            transform=ax.transAxes, fontsize=12, verticalalignment='center',
-            bbox=dict(boxstyle='square', facecolor='#fff', alpha=0))
+    # store note (str) of distance to closest forward-visible VRU to pass to site
     graph_str = 'The closest forward-visible ' + \
-        vru_label[vru_selected-1] + ' is ' + \
+      vru_label[vru_selected-1] + ' is ' + \
         str(round(front_vru_dist)) + 'ft in front of the vehicle'
+    ''' -------------------------------------------------------
+  End note minimum distance from hood to VRU in front of driver
+  ----------------------------------------------------------'''
+
+    ''' ----------------------------------------------------------------
+  Begin calculate minimum distance from hood to VRU in front of driver
+  OBSOLETE AND LIKELY INCORRECT
+  -----------------------------------------------------------------'''
+  #   # store eye and hood data passed to function
+  #   eye_height = eye_height_full
+  #   hood_length = eye_point_full
+
+  #   # store hood length in line with eye point in polar coordinates
+  #   hood_r = hood_length
+  #   hood_theta = np.pi/2  # 90 deg in rad
+
+  #   # find nvp in front of driver (with tolerance)
+  #   # b/w 89 and 90deg (taking ind0 since returns array inside variable)
+  #   front_range_indices = np.where(np.logical_and(
+  #       theta_sorted >= hood_theta-mth.radians(1), theta_sorted <= hood_theta+mth.radians(1)))[0]
+  #   # find index of minimum of selected entries
+  #   front_r_min_index = front_range_indices[np.argmin(
+  #       r_sorted[front_range_indices])]
+  #   front_r_min = r_sorted[front_r_min_index]
+  #   front_theta_min = theta_sorted[front_r_min_index]
+
+  #   # generate r values and heights b/w eye and closest NVP in increments of 1 VRU width
+  #   # includes final r value to over- rather than under-estimate
+  #   r_fit_nvp = np.arange(0, front_r_min+vru_width, vru_width)
+  #   # generate height height values for each r value
+  #   height_fit_nvp = np.linspace(eye_height, 0, len(r_fit_nvp))
+
+  #   # remove nvp_fit data before hood_r
+  #   to_keep = r_fit_nvp >= hood_r  # keep r values at least a hood's-distance away
+  #   r_hood_nvp = r_fit_nvp[to_keep]
+  #   height_hood_nvp = height_fit_nvp[to_keep]
+
+  #   # find r values with height lower than vru height
+  #   # store inds of all heights lower than vru height
+  #   vru_fit_ind = np.where(height_hood_nvp < vru_height)[0]
+  #   # store value of first r that meets the conditions above (absolute distance)
+  #   r_vru_fit = r_hood_nvp[vru_fit_ind[0]]
+
+  #   # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
+  #   front_vru_dist = r_vru_fit-hood_r  # [ft]
+
+  #   # plot closest forward-visible VRU
+  #   '''(theta might be slightly off but hopefully covered by dot size,
+  #   distance is rounded since working in increments of 1 unit)'''
+  #   ax.plot(hood_theta, r_vru_fit, '#2bb0e5', marker='o', markersize=5,
+  #           linewidth=0, label='Closest Forward-Visible VRU')
+
+  #   ''' NOT CURRENTLY IN USE, BUT COULD MAKE PLOT MORE INTERESTING
+  # # VRU arc
+  # ax.bar(np.pi/2, 2, width=np.pi/3, bottom=r_vru_fit,
+  #        color='#2bb0e5', edgecolor='#2bb0e5', label='Visible VRU Arc')
+  # '''
+
+  #   # note distance to closest visible VRU
+  #   ax.text(0.05, 0.05, 'The closest forward-visible\n' + vru_label[vru_selected-1] + '\nis ' +
+  #           str(round(front_vru_dist)) + 'ft in front of the vehicle',
+  #           transform=ax.transAxes, fontsize=12, verticalalignment='center',
+  #           bbox=dict(boxstyle='square', facecolor='#fff', alpha=0))
+  #   graph_str = 'The closest forward-visible ' + \
+  #       vru_label[vru_selected-1] + ' is ' + \
+  #       str(round(front_vru_dist)) + 'ft in front of the vehicle'
     ''' --------------------------------------------------------------
   End calculate minimum distance from hood to VRU in front of driver
+  OBSOLETE AND LIKELY INCORRECT
   ---------------------------------------------------------------'''
 
     # restrict angles of plot (switching min and max moves tick labels)

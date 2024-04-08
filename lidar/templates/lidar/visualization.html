@@ -398,6 +398,7 @@
     </style>
     {% load static %}
     {{ loading|json_script:"loading" }}
+    {{ graph_str|json_script:"graph_str" }}
     <script src="{% static 'lidar/visualization.js' %}" defer></script>
   </head>
   <body>
@@ -578,6 +579,16 @@
                 <div class="visualization-container08">
                   <div>
                     <div class="visualization-container10">
+                      <h3 class="visualization-text HeadingH3">
+                        Choose an Eye Position
+                      </h3>
+                    </div>
+                  </div>
+                  <fieldset>
+                    {{ VisualizationForm.eye_position_selected }}
+                  </fieldset>
+                  <div>
+                    <div class="visualization-container10">
                       <disclosure-inline data-popup="">
                         <h3 class="visualization-text HeadingH3">
                           Choose a Vulnerable Road User (VRU)
@@ -594,12 +605,7 @@
                     </div>
                   </div>
                   <fieldset>
-                    <legend>{{ VisualizationForm.vru_selected.label }}</legend>
-                    {% for radio in VisualizationForm.vru_selected %}
-                    <div class="visualization-li list-item">
-                        {{ radio }}
-                    </div>
-                    {% endfor %}
+                    {{ VisualizationForm.vru_selected }}
                   </fieldset>
                   <span class="visualization-text07 Body">
                     *Vulnerable Road Users&nbsp;include pedestrians, cyclists,
@@ -688,7 +694,7 @@
               </form>
             </div>
           </div>
-          <div class="visualization-container17">
+          <div id="example_container" class="visualization-container17">
             <div class="visualization-container18">
               <h2 class="visualization-text17 HeadingH2">
                 Visualization Results:&nbsp;
@@ -709,7 +715,28 @@
                 src="{% static 'lidar/images/Test Visualizations/viz-top test 1.svg' %}"
                 class="visualization-image08"
               />
-              <!-- {{ graph|safe }} -->
+            </div>
+          </div>
+          <div id="graph_container" class="visualization-container17">
+            <div class="visualization-container18">
+              <h2 class="visualization-text17 HeadingH2">
+                Visualization Results:&nbsp;
+              </h2>
+              <h2 id="vissVRUshown" class="visualization-text18 HeadingH2">
+                VRU Selected
+              </h2>
+            </div>
+            <div class="visualization-overhead-view">
+              <div class="visualization-container19">
+                <h3 class="visualization-text19 HeadingH3">Overhead View</h3>
+                <p class="visualization-text20 Body">
+                  Birds-eye view of the vehicle and surrounding blind zones.
+                </p>
+                <p class="visualization-text20 Body">
+                  {{ graph_str }}
+                </p>
+              </div>
+              {{ graph|safe }}
             </div>
           </div>
         </div>

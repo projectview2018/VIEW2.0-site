@@ -46,7 +46,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # store 'width' of selected VRU in [ft]
     vru_width = vru_sizes[vru_selected-1, 1]/12
 
-    max_distance = 7*5  # maximum distance plotted (multiple of 7)
+    max_distance = 7*7  # maximum distance plotted (multiple of 7)
 
     # start and end angles for plotting [deg]
     plot_start = -20
@@ -212,21 +212,39 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ax.grid(True, color='#fff')
     ax.spines['polar'].set_visible(False)
 
-    # plot car image
-    image_file = "Vehicle-Overhead-09.png"
-    # create s3 client to  access digital ocean space bucket for image
-    s3_client = create_s3_client()
+    ''' ---------------------------
+  Begin car image scaling/plotting
+  -----------------------------'''
+    # Choose whether to show a car or truck-sized vehicle on the plot.
+    # Numbers taken from VIEW 1.0: eye_height_full < 70 [in] = car, eye_height_full >= 70 [in] = truck     
+    
+    image_file = "Vehicle-Overhead-09.png" # import car image
+    s3_client = create_s3_client() # create s3 client to  access digital ocean space bucket for image
 
     # Get recently uploaded scan from the bucket
     response = s3_client.get_object(
         Bucket='vehicle-scans', Key=f'static/lidar/images/{image_file}')
 
     img = Image.open(response['Body'])
-    # change image zoom based on vehicle size
-    imagebox = OffsetImage(img, zoom=0.03)
-    ab = AnnotationBbox(imagebox, (0, 0), frameon=False)
+
+    # Change scaling and position based on vehicle size (convert height to [in] for comparison)
+    # image placement is in polar (theta, r) and will only plot angles included in the axes.
+    # NEED TO FIGURE OUT HOW TO SHIFT IMAGE DOWN AND HAVE IT SHOW UP
+    if eye_height_full*12 >= 40:
+        imagebox = OffsetImage(img, zoom=0.07) # change image zoom to fit truck-sized vehicle
+        ab = AnnotationBbox(imagebox, (0, 1.5), frameon=False) # position to likely eye position for truck
+          # currently not shifted down but needs to be
+    else: # assumes all other cases are cars
+        imagebox = OffsetImage(img, zoom=0.045) # change image zoom to fit car-sized vehicle
+        ab = AnnotationBbox(imagebox, (0, 0.9), frameon=False) # position to likely eye position for car
+    
     ax.add_artist(ab)
     ax.patch.set_alpha(0)
+      
+
+    ''' ------------------------
+  End car image scaling/plotting
+  ---------------------------'''
 
     # shift plot over to the right by editing its bbox
     '''pos = ax.get_position()

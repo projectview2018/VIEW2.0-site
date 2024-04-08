@@ -400,13 +400,12 @@
     {{ loading|json_script:"loading" }}
     {{ graph_str|json_script:"graph_str" }}
     <script src="{% static 'lidar/visualization.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <link href="{% static 'lidar/visualization.css' %}" rel="stylesheet" />
   </head>
   <body>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
     <div>
-      <link href="{% static 'lidar/visualization.css' %}" rel="stylesheet" />
-
       <div class="visualization-container">
         <div class="header-v2-container header-v2-root-class-name4">
           <header
@@ -504,7 +503,16 @@
             </div>
           </header>
         </div>
-        <div class="visualization-content">
+        <div style="display: none;" id="load_wrapper">
+          <h1 id="load_header" class="HeadingH3">
+            Processing your scan...
+          </h1>
+          <div class="loader"></div>
+          <p id="load_text" class="Body">
+            This can take up to five minutes, and the page may reload several times.
+          </p>
+        </div>
+        <div style="display: none;" class="visualization-content">
           <section
             class="visualization-masthead-container elevation01 visualization-masthead-root-class-name"
           >
@@ -694,7 +702,7 @@
               </form>
             </div>
           </div>
-          <div id="example_container" class="visualization-container17">
+          <div id="example_container" style="display: none;" class="visualization-container17">
             <div class="visualization-container18">
               <h2 class="visualization-text17 HeadingH2">
                 Visualization Results:&nbsp;
@@ -717,7 +725,7 @@
               />
             </div>
           </div>
-          <div id="graph_container" class="visualization-container17">
+          <div id="graph_container" style="display: none;" class="visualization-container17">
             <div class="visualization-container18">
               <h2 class="visualization-text17 HeadingH2">
                 Visualization Results:&nbsp;

@@ -371,13 +371,13 @@
         margin-bottom: 0;
       }
     </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <link href="{% static 'lidar/404.css' %}" rel="stylesheet" />
   </head>
   <body>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
     <div>
-      <link href="{% static 'lidar/404.css' %}" rel="stylesheet" />
-
       <div class="not-found-container">
         <h3>OOPS! PAGE NOT FOUND</h3>
         <div class="not-found-container1">

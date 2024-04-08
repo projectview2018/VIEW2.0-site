@@ -371,12 +371,13 @@
         margin-bottom: 0;
       }
     </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <link href="{% static 'lidar/vehicle-database-loading.css' %}" rel="stylesheet" />
   </head>
   <body>
-    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    {% load static %}
     <div>
-      <link href="{% static 'lidar/vehicle-database-loading.css' %}" rel="stylesheet" />
-
       <div class="vehicle-database-loading-container">
         <div class="vehicle-database-loading-vehicle-database-loading">
           <img

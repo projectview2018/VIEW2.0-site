@@ -230,7 +230,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # Change scaling and position based on vehicle size (convert height to [in] for comparison)
     # image placement is in polar (theta, r) and will only plot angles included in the axes.
     # NEED TO FIGURE OUT HOW TO SHIFT IMAGE DOWN AND HAVE IT SHOW UP
-    if eye_height_full*12 >= 40:
+    if eye_height_full*12 >= 70:
         imagebox = OffsetImage(img, zoom=0.07) # change image zoom to fit truck-sized vehicle
         ab = AnnotationBbox(imagebox, (0, 1.5), frameon=False) # position to likely eye position for truck
           # currently not shifted down but needs to be

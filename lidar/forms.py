@@ -221,9 +221,9 @@ class VisualizationForm(forms.Form):
         ("6", 'Adult (49 inches)'),
     ]
     eye_positions = [
-        ("1", "5th-Percentile Female"),
-        ("2", "50th-Percentile Male"),
-        ("3", "95th-Percentile Female"),
+        ("1", "5th-Percentile Female (60 inches)"),
+        ("2", "50th-Percentile Male (69 inches)"),
+        ("3", "95th-Percentile Male (74 inches)"),
     ]
 
     vru_selected = forms.MultipleChoiceField(

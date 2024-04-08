@@ -371,6 +371,31 @@
       disclosure-content > *:last-child {
         margin-bottom: 0;
       }
+      .visualization-container08 fieldset {
+        width: 100%;
+      }
+      #id_eye_position_selected {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      #id_vru_selected {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      #id_eye_position_selected div {
+        margin-right: var(--dl-space-space-oneandhalfunits);
+        margin-bottom: var(--dl-space-space-halfunit);
+      }
+      #id_vru_selected div {
+        margin-right: var(--dl-space-space-oneandhalfunits);
+        margin-bottom: var(--dl-space-space-halfunit);
+      }
+      #id_eye_position_selected label {
+        text-wrap: nowrap;
+      }
+      #id_vru_selected label {
+        text-wrap: nowrap;
+      }
       #load_wrapper {
         margin: auto;
         text-align: center;
@@ -587,9 +612,17 @@
                 <div class="visualization-container08">
                   <div>
                     <div class="visualization-container10">
-                      <h3 class="visualization-text HeadingH3">
-                        Choose an Eye Position
-                      </h3>
+                      <disclosure-inline data-popup="">
+                        <h3 class="visualization-text HeadingH3">
+                          Choose a Driver Height
+                          <span data-insert-trigger="inline"></span>
+                        </h3>
+                        <disclosure-content role="note">
+                          <p>
+                            Driver heights correspond to heights commonly used in vehicle testing, rounded to the nearest inch.
+                          </p>
+                        </disclosure-content>
+                      </disclosure-inline>
                     </div>
                   </div>
                   <fieldset>
@@ -598,7 +631,7 @@
                   <div>
                     <div class="visualization-container10">
                       <disclosure-inline data-popup="">
-                        <h3 class="visualization-text HeadingH3">
+                        <h3 class="visualization-text HeadingH3" style="margin-top: var(--dl-space-space-unit);">
                           Choose a Vulnerable Road User (VRU)
                           <span data-insert-trigger="inline"></span>
                         </h3>
@@ -612,7 +645,7 @@
                       </disclosure-inline>
                     </div>
                   </div>
-                  <fieldset>
+                  <fieldset style="padding-bottom: 2px;">
                     {{ VisualizationForm.vru_selected }}
                   </fieldset>
                   <span class="visualization-text07 Body">
@@ -622,7 +655,7 @@
                     calculations use the heights to the shoulders of 5th
                     percentile United States female vulnerable road users.
                   </span>
-                  <div class="visualization-vru-graphic">
+                  <div class="visualization-vru-graphic" style="margin-top: 24px;">
                     <img
                       alt="image"
                       src="{% static 'lidar/images/VRU Icons/viz01scale.svg' %}"

@@ -1,8 +1,19 @@
+const vru_labels = [
+  "pre-school child",
+  "elementary school child on bike",
+  "elementary school child",
+  "wheelchair user",
+  "adult on bike",
+  "adult",
+];
+
 const loadingStatus = JSON.parse(
   document.getElementById("loading").textContent
 );
-const graphStatus = JSON.parse(
-  document.getElementById("graph_str1").textContent
+const graphStr1 = JSON.parse(document.getElementById("graph_str1").textContent);
+const graphStr2 = JSON.parse(document.getElementById("graph_str2").textContent);
+const vrusSelected = JSON.parse(
+  document.getElementById("vrus_selected").textContent
 );
 
 if (loadingStatus === true) {
@@ -29,11 +40,18 @@ if (loadingStatus === true) {
       return false;
     }
   }
-  if (graphStatus) {
-    let exampleContainer = document.getElementById("graph_container");
-    exampleContainer.style.display = "flex";
-  } else {
-    let graphContainer = document.getElementById("example_container");
+  if (graphStr1) {
+    let graphContainer = document.getElementById("graph_container");
     graphContainer.style.display = "flex";
+
+    let vru1Text = document.getElementById("vru1_entry_text");
+    vru1Text.innerText = `${vru_labels[vrusSelected[0] - 1]} blindzone`;
+
+    if (graphStr2) {
+      let vru2 = document.getElementById("vru2_entry");
+      vru2.style.display = "flex";
+      let vru2Text = document.getElementById("vru2_entry_text");
+      vru2Text.innerText = `${vru_labels[vrusSelected[1] - 1]} blindzone`;
+    }
   }
 }

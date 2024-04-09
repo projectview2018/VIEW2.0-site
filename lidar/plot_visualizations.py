@@ -269,8 +269,6 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     
     ax.add_artist(ab)
     ax.patch.set_alpha(0)
-      
-
     ''' ------------------------
   End car image scaling/plotting
   ---------------------------'''
@@ -280,6 +278,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     pos.x0 += .11  # increase value by 11% of figure sizw
     pos.x1 += .11  # must mach value for x0 for shift, otherwise it narrows the box
     ax.set_position(pos)'''
+
+    # dislaimer that vehicle pictured is not to scale
+    ax.text(0.75, 0, '*vehicle pictured is not to scale', transform=ax.transAxes, 
+            fontsize=10, verticalalignment='center', bbox=dict(boxstyle='square', 
+                                                               facecolor='#fff', alpha=0))
 
     # legend in bottom left corner of FIGURE, not PLOT
     #fig.legend(loc='lower left', fancybox=False)

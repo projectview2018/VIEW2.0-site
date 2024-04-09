@@ -434,13 +434,12 @@
             defer
             data-visual-url = "{% url 'lidar:visualization' 1 %}"
             data-current-url = "{% url 'lidar:vehicle_database_table' %}"></script>
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <link href="{% static 'lidar/vehicle-database-table.css' %}" rel="stylesheet" />
   </head>
   <body>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
     <div>
-      <link href="{% static 'lidar/vehicle-database-table.css' %}" rel="stylesheet" />
-
       <div class="vehicle-database-table-container">
         <div class="header-v2-container header-v2-root-class-name">
           <header

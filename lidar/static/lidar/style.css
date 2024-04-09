@@ -121,6 +121,34 @@
 .outlinedbutton:focus {
   background-color: #2B2D420F !important;
 }
+.outlinedbutton-inline {
+  color: var(--dl-color-text-darktext);
+  width: auto;
+  outline: #C4C4C4 solid 1.5px;
+  padding: 5px 10px;
+  text-align: center;
+  font-family: Roboto;
+  font-weight: 400;
+  border-radius: 30px;
+  outline-offset: -1.5px;
+  background-color: none;
+  transition-duration: 280ms;
+}
+.outlinedbutton-inline:hover {
+  background-color: #2B2D420F;
+  cursor: pointer;
+}
+.outlinedbutton-inline:disabled {
+  color: #888888;
+  box-shadow: none;
+  background-color: #CCCCCC;
+}
+.outlinedbutton-inline:active {
+  background-color: #2B2D4224;
+}
+.outlinedbutton-inline:focus {
+  background-color: #2B2D420F;
+}
 .headerbutton-secondaryblue {
   color: var(--dl-color-text-whitetext);
   width: auto;
@@ -256,6 +284,35 @@
   color: #888888 !important;
   box-shadow: none !important;
   background-color: #CCCCCC !important;
+}
+.containedbutton-inline {
+  color: var(--dl-color-text-whitetext);
+  width: auto;
+  padding: 5px 12px;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  font-family: roboto;
+  font-weight: 500;
+  border-radius: 30px;
+  background-color: var(--dl-color-secondaryblue-secondaryblue);
+  transition-duration: 280ms;
+}
+.containedbutton-inline:hover {
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  background-color: #5592BC;
+}
+.containedbutton-inline:active {
+  box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12);
+  background-color: #8EB6D3;
+}
+.containedbutton-inline:focus {
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  background-color: #5592BC;
+}
+.containedbutton-inline:disabled {
+  color: #888888;
+  box-shadow: none;
+  background-color: #CCCCCC;
 }
 .input {
   color: var(--dl-color-gray-black);

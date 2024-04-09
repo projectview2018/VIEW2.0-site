@@ -7,7 +7,7 @@ from .s3_utils import create_s3_client
 import math as mth
 
 
-def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_full, vru_selected):
+def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_full, eye_pos, vru_selected, vehicle):
     '''
     Takes NVPs, vehicle measurements, and VRU. Plots overhead view of blind zone
       with nearest forward-visible VRU. Saves the figure as an SVG and returns fig
@@ -16,8 +16,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     Takes inputs:
     vp_x_cartesian = np.array([nums]) [cm]
     nvp_y_cartesian = np.array([nums]) [cm]
-    eye_height_full = num # eye height calculated from interpolated seat-ground +
-      human eye point on seat [m]
+    eye_height_full = num # eye height calculated from interpolated seat-ground [m]
     eye_point_full = num # interpolated front-of-hood to eye distance
       interpolated [m]
     vru_selected = array # options: 1=toddler, 2=elementary, 3=elem_bike,
@@ -34,10 +33,24 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     eye_height_full = ((18.3-16.25)*0.0254)+1.2
     # interpolated front-of-hood to eye distance interpolated [m]
     eye_point_full = ((84-70)+20.5)*0.0254
+    height_percentile = "Nth-Percentile Female"
     # vru_selected = [1, 3]
 
+    # SHOULD BE UNCOMMENTED WHEN TESTING IS DONE
+    # set true eye height (height of chair PLUS height of sitting person to eye) according to eye position
+    # height_percentile = ""
+    # if (eye_pos == 1):
+    #     eye_height_full += (0.0254 * 60)  # [m]
+    #     height_percentile = "5th-Percentile Female"
+    # elif (eye_pos == 2):
+    #     eye_height_full += (0.0254 * 69)  # [m]
+    #     height_percentile = "50th-Percentile Male"
+    # else:
+    #     eye_height_full += (0.0254 * 74)  # [m]
+    #     height_percentile = "95th-Percentile Male"
+
     '''VRU sizes (taken fron VIEW 1.0)
-      'toddler', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
+      'pre-school', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
       shoulder height, width, person height (all in [in])
       DOESN'T CONTAIN DEPTH, BUT ASSUMES THAT BICYCLES ARE 4X DEPTH OF PEOPLE AND IGNORES WHEELCHAIRS?'''
     vru_label = ['pre-school child', 'elementary school child', 'elementary schooler on bike',
@@ -50,8 +63,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # start and end angles for plotting [deg]
     plot_start = -20
     plot_end = 200
-    handles = []
-    plot_legend_labels = []
+
     # background colors (make sure to have the same number of colors as plot divisions)
     greenBG = ['#143A1D', '#1A5A2D', '#1F723A',
                '#429344', '#7CBC55', '#A6C991', '#CAE4BB']
@@ -184,6 +196,12 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ax.set_ylim(0, max_distance)  # [0,round(max(r))]
     plt.yticks(tick_list)  # range(0,round(max(r)),round(max(r)/7))
 
+    # label the radial axis
+    label_position = ax.get_rlabel_position()
+    print(f"label position: {label_position}")
+    ax.text(np.radians(plot_end + 20), 5 + ax.get_rmax()/2., 'Radial Distance from Vehicle\n[ft]',
+            rotation=-1 * label_position, horizontalalignment='right', ha='center', va='center')
+
     ax.grid(True, color='#fff')
     ax.spines['polar'].set_visible(False)
 
@@ -231,12 +249,16 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ax.set_position(pos)'''
 
     # dislaimer that vehicle pictured is not to scale
-    ax.text(0.75, 0, '*vehicle pictured is not to scale', transform=ax.transAxes,
+    ax.text(-0.37, -0.12, '*vehicle pictured is not to scale', transform=ax.transAxes,
             fontsize=10, verticalalignment='center', bbox=dict(boxstyle='square',
                                                                facecolor='#fff', alpha=0))
 
     # legend in bottom left corner of FIGURE, not PLOT
-    fig.legend(loc='lower left', fancybox=False)
+    fig.legend(loc='lower right', fontsize="12", fancybox=False)
+
+    # title for the graph
+    plt.title(
+        f"Blindzones for {height_percentile} Driver in {vehicle}", fontsize=15)
 
     imgdata = StringIO()
     # save file as SVG

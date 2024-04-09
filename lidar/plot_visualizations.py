@@ -40,7 +40,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
       'toddler', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
       shoulder height, width, person height (all in [in])
       DOESN'T CONTAIN DEPTH, BUT ASSUMES THAT BICYCLES ARE 4X DEPTH OF PEOPLE AND IGNORES WHEELCHAIRS?'''
-    vru_label = ['toddler', 'elementary school child', 'elementary schooler on bike',
+    vru_label = ['pre-school child', 'elementary school child', 'elementary schooler on bike',
                  'wheelchair user', 'adult on bike', 'adult']
     vru_sizes = np.array([[28, 9, 34], [35, 12, 45], [37, 12, 45], [
                          39, 26, 49], [47, 16, 58], [49, 16, 60]])

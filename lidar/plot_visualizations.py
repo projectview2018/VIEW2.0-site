@@ -34,7 +34,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     eye_height_full = ((18.3-16.25)*0.0254)+1.2
     # interpolated front-of-hood to eye distance interpolated [m]
     eye_point_full = ((84-70)+20.5)*0.0254
-    vru_selected = [1, 3]
+    # vru_selected = [1, 3]
 
     '''VRU sizes (taken fron VIEW 1.0)
       'toddler', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
@@ -50,7 +50,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # start and end angles for plotting [deg]
     plot_start = -20
     plot_end = 200
-
+    handles = []
+    plot_legend_labels = []
     # background colors (make sure to have the same number of colors as plot divisions)
     greenBG = ['#143A1D', '#1A5A2D', '#1F723A',
                '#429344', '#7CBC55', '#A6C991', '#CAE4BB']
@@ -100,13 +101,14 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     for i in range(0, 7):
         colorBG = greenBG[i]
         ax.bar(np.pi/2, max_distance/7, width=mth.radians(plot_end-plot_start), bottom=i*max_distance/7,
-               color=colorBG, edgecolor=colorBG, label='Visible Zone')  # 294 previously max(r)
+               color=colorBG, edgecolor=colorBG, label='_Visible Zone')  # 294 previously max(r)
 
     # plot NVPs
-    ax.plot(theta_sorted, r_sorted, '#000', linewidth=0)
+    ax.plot(theta_sorted, r_sorted, '#000',
+            linewidth=0)
     ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
     # 65% opacity (a6) 404040bf is darker
-    ax.fill(theta_sorted, r_sorted, '#5c5c5ca6', label='Blind Zone')
+    ax.fill(theta_sorted, r_sorted, '#5c5c5ca6', label="ground blindzone")
 
     vru_plot_colors = ['#2bb0e5', '#800080']
     vru_fill_colors = ['#2bb0e5a6', '#800080']
@@ -141,7 +143,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         ax.plot(theta_sorted, r_vru_nvp,
                 vru_plot_colors[vru_index], linewidth=1)
         ax.fill(theta_sorted, r_vru_nvp, vru_fill_colors[vru_index],
-                label='Blind Zone to VRU')
+                label=f"{vru_label[vru-1]} blindzone")
         ''' ------------------------------------
       End calculate NVPs for seeing vru_selected
       ---------------------------------------'''
@@ -234,7 +236,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
                                                                facecolor='#fff', alpha=0))
 
     # legend in bottom left corner of FIGURE, not PLOT
-    # fig.legend(loc='lower left', fancybox=False)
+    fig.legend(loc='lower left', fancybox=False)
 
     imgdata = StringIO()
     # save file as SVG
@@ -247,4 +249,6 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     data = imgdata.getvalue()
 
+    print(f"graph_str1: {graph_str[0]}")
+    print(f"graph_str2: {graph_str[1]}")
     return [data, graph_str]

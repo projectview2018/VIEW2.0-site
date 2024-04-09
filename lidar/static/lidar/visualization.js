@@ -2,7 +2,7 @@ const loadingStatus = JSON.parse(
   document.getElementById("loading").textContent
 );
 const graphStatus = JSON.parse(
-  document.getElementById("graph_str").textContent
+  document.getElementById("graph_str1").textContent
 );
 
 if (loadingStatus === true) {

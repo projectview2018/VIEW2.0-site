@@ -32,7 +32,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # eye height calculated from interpolated seat-ground + human eye point on seat [m]
     # eye_height_full = ((18.3-16.25)*0.0254)+1.2
     # interpolated front-of-hood to eye distance interpolated [m]
-    eye_point_full = ((84-70)+20.5)*0.0254
+    # eye_point_full = ((84-70)+20.5)*0.0254
     height_percentile = "Nth-Percentile Female"
     # vru_selected = [1, 3]
 
@@ -173,9 +173,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
             r_sorted[front_range_indices])]
         # store r value that meets the conditions above (absolute location)
         r_vru_fit = r_vru_nvp[front_r_min_index]
+        # print(f"distance from eye to hood: {eye_point_full}")
+        # print(f"distance from eye to {vru_label[vru-1]}: {r_vru_fit}")
         # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
         front_vru_dist = r_vru_fit-eye_point_full  # [ft]
-
+        # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
         # store note (str) of distance to closest forward-visible VRU to pass to site
         graph_str[vru_index] = ('The closest forward-visible ' +
                                 vru_label[vru-1] + ' is ' +
@@ -198,7 +200,6 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     # label the radial axis
     label_position = ax.get_rlabel_position()
-    print(f"label position: {label_position}")
     ax.text(np.radians(plot_end + 20), 5 + ax.get_rmax()/2., 'Radial Distance from Vehicle\n[ft]',
             rotation=-1 * label_position, horizontalalignment='right', ha='center', va='center')
 
@@ -272,6 +273,4 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     data = imgdata.getvalue()
 
-    print(f"graph_str1: {graph_str[0]}")
-    print(f"graph_str2: {graph_str[1]}")
     return [data, graph_str]

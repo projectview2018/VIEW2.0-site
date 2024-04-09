@@ -139,8 +139,17 @@ def visualization(request, scan_id):
                     print("Loading Visualization page. Scan is processed.")
 
                     vehicle_str = f"{year} {make} {model}"
+                    if (eye_pos == 1):
+                        nvp_xs = json.loads(completed_scan.nvp_5th_female_xs)
+                        nvp_ys = json.loads(completed_scan.nvp_5th_female_ys)
+                    elif (eye_pos == 2):
+                        nvp_xs = json.loads(completed_scan.nvp_50th_male_xs)
+                        nvp_ys = json.loads(completed_scan.nvp_50th_male_ys)
+                    else:
+                        nvp_xs = json.loads(completed_scan.nvp_95th_male_xs)
+                        nvp_ys = json.loads(completed_scan.nvp_95th_male_ys)
                     [graph, graph_str] = viz_overhead(
-                        json.loads(completed_scan.nvp_xs), json.loads(completed_scan.nvp_ys), (scan.F_m + ((scan.E_m - scan.F_m) / 2)), ((scan.B_m - scan.A_m) / 2), eye_pos, vrus_selected, vehicle_str)
+                        nvp_xs, nvp_ys, (scan.F_m + ((scan.E_m - scan.F_m) / 2)), ((scan.B_m - scan.A_m) / 2), eye_pos, vrus_selected, vehicle_str)
                     return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': graph, 'graph_str1': graph_str[0], 'graph_str2': graph_str[1], "loading": False})
 
             return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': None, 'graph_str1': None, 'graph_str2': None,  "loading": False})

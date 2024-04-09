@@ -19,22 +19,40 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     # print(f"scan before changing to binary: {response['Body'].read()}")
     mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
-    # assuming mid track and mid-height for future calculations
-    driver_height = 1.2
-    eye_x_m = scan.D_m
-    eye_y_m = scan.A_m - ((scan.B_m - scan.A_m) / 2)
-    eye_z_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
-    eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
-    # eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
-    nvp_xs, nvp_ys = find_nvps(mesh, eye_pos, scan.driver_side_start)
-    print('Found NVPs')
-    coordinates = np.stack([nvp_xs, nvp_ys]).T
-    coordinates = np.concatenate([np.zeros((1, 2)), coordinates])
+    driver_heights = np.array([60.0, 69.0, 74.0]) * 0.0254
+    list_of_nvps = []  # list to hold all six sets of nvps for three driver heights
+    # list to hold all three coordinates to calculate areas for three driver heights
+    list_of_coordinates = []
+    # driver_height = 1.2
+    height_index = 1
+    for driver_height in driver_heights:
+        print(f"calculating nvps for height #{height_index}")
+        # assuming mid track and mid-height for future calculations
+        eye_x_m = scan.D_m
+        eye_y_m = scan.A_m - ((scan.B_m - scan.A_m) / 2)
+        eye_z_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
+        eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
+        # eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
+        nvp_xs, nvp_ys = find_nvps(mesh, eye_pos, scan.driver_side_start)
+        print(f"Found NVPs for height #{height_index}")
+        list_of_nvps.append(nvp_xs)
+        list_of_nvps.append(nvp_ys)
+        coordinates = np.stack([nvp_xs, nvp_ys]).T
+        coordinates = np.concatenate([np.zeros((1, 2)), coordinates])
+        list_of_coordinates.append(coordinates)
+        height_index += 1
+
     completed_scan = CompletedScan(
         raw_scan=scan,
-        nvp_xs=nvp_xs,
-        nvp_ys=nvp_ys,
-        area=calculate_area(coordinates),
+        nvp_5th_female_xs=list_of_nvps[0],
+        nvp_5th_female_ys=list_of_nvps[1],
+        nvp_50th_male_xs=list_of_nvps[2],
+        nvp_50th_male_ys=list_of_nvps[3],
+        nvp_95th_male_xs=list_of_nvps[4],
+        nvp_95th_male_ys=list_of_nvps[5],
+        female_5th_area=calculate_area(list_of_coordinates[0]),
+        male_50th_area=calculate_area(list_of_coordinates[1]),
+        male_95th_area=calculate_area(list_of_coordinates[2]),
     )
     # print('Saving original scan')
     # scan.save()
@@ -64,7 +82,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     # The directions to cast rays
     yaws = np.deg2rad(np.arange(70, 200) +
                       (0 if driver_side_start else 180))
-    pitches = np.deg2rad(np.arange(-85, -5))
+    pitches = np.deg2rad(np.arange(-85, -1))
     print('Found desired pitches and yaws')
 
     # An (p x 3) matrix where each row is equal to eye_pos
@@ -84,8 +102,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
         # Perform raycasts
         intersections = mesh.ray.intersects_first(eye_pos_repeated, rays)
         print(f'Raycasts performed for yaw: {yaw}')
-
-        face_idx_vals = np.where(intersections >= 0)[0]
+        face_idx_vals = intersections[intersections >= 0]
 
         if face_idx_vals.size > 0:
             face_idx = face_idx_vals[-1]
@@ -107,13 +124,13 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     hypot = np.sqrt(np.sum(nvp_rays * nvp_rays, axis=0))
     nvp_rays /= hypot  # Normalize
     nvp_rays *= -(eye_pos[1] - floor_y_val) / \
-        nvp_rays[1, :]  # scale until ground hit
+        np.stack([nvp_rays[:, 1]] * 3).T  # scale until ground hit
     nvp_rays *= 100
     nvp_rays = np.floor(nvp_rays)
     if driver_side_start:
         nvp_rays *= -1
     print('Vectors calculated, NVPS found')
-    return [-int(x) for x in nvp_rays[0, :]], [int(y) for y in nvp_rays[2, :]]
+    return [-int(x) for x in nvp_rays[:, 0]], [int(y) for y in nvp_rays[:, 2]]
 
 
 def calculate_area(coordinates):

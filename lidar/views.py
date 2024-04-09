@@ -122,10 +122,12 @@ def visualization(request, scan_id):
         thread = threading.Thread(
             target=complete_scan, args=(scan, vehicle))
         thread.start()
-        return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, "loading": True})
+        return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make,
+                                                            'model': model, 'year': year, 'date': scan.scan_added, "loading": True})
     elif scan.scan_status == "calculating":
         print("Tried to load Visualization page. Scan is still being processed.")
-        return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, "loading": True})
+        return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make,
+                                                            'model': model, 'year': year, 'date': scan.scan_added, "loading": True})
     elif scan.scan_status == "processed":  # scan should be processed and status updated as such
         num_completed_scans = CompletedScan.objects.filter(
             raw_scan=scan).count()
@@ -139,12 +141,17 @@ def visualization(request, scan_id):
 
                     print("Loading Visualization page. Scan is processed.")
                     [graph, graph_str] = viz_overhead(
-                        json.loads(completed_scan.nvp_xs), json.loads(completed_scan.nvp_ys), (scan.F_m + ((scan.E_m - scan.F_m) / 2) + 1.2), ((scan.B_m - scan.A_m) / 2), int(viz_form.cleaned_data['vru_selected']))
-                    return render(request, 'lidar/visualization-graph.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'graph': graph, 'graph_str': graph_str})
+                        json.loads(completed_scan.nvp_xs), json.loads(
+                            completed_scan.nvp_ys), (scan.F_m + ((scan.E_m - scan.F_m) / 2) + 1.2),
+                        ((scan.B_m - scan.A_m) / 2), int(viz_form.cleaned_data['vru_selected']))
+                    return render(request, 'lidar/visualization-graph.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make,
+                                                                              'model': model, 'year': year, 'graph': graph, 'graph_str1': graph_str[0],
+                                                                              'graph_str2': graph_str[1]})
         else:
             print(
                 "Tried to load Visualization page. Scan should be processed, some error occurred.")
-        return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, "loading": False})
+        return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 
+                                                            'year': year, 'date': scan.scan_added, "loading": False})
 
 
 def windshield_removal(request, scan_id):

@@ -407,9 +407,25 @@
         padding: 1px;
       }
       .legend_entry_color {
-        width: 24px;
-        height: 10px;
+        width: 40px;
+        height: 8px;
         margin-right: 10px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: right;
+      }
+      .visible_zone_color {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: 1px;
+        width: 40px;
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
+      .visible_zone_color_box {
+        width: 10px;
+        height: 8px;
+        flex-grow: 1;
       }
       #load_wrapper {
         margin: auto;
@@ -775,16 +791,36 @@
                 </p>
                 <div id="graph_legend">
                   <div class="legend_entry" id="ground_entry">
-                    <div class="legend_entry_color" id="ground_entry_color" style="background-color: #5c5c5ca6;"></div>
+                    <div class="legend_entry_color">
+                      <div id="ground_entry_color" style="background-color: #5c5c5ca6; width: 16px; height: 100%;"></div>
+                    </div>
                     <div class="legend_entry_text" id="ground_entry_text">ground blindzone</div>
                   </div>
                   <div class="legend_entry" id="vru1_entry">
-                    <div class="legend_entry_color" id="vru1_entry_color" style="background-color: #2bb0e5;"></div>
+                    <div class="legend_entry_color">
+                      <div id="vru1_entry_color" style="background-color: #2bb0e5; width: 16px; height: 100%;"></div>
+                    </div>
                     <div class="legend_entry_text" id="vru1_entry_text"></div>
                   </div>
                   <div class="legend_entry" id="vru2_entry" style="display: none;">
-                    <div class="legend_entry_color" id="vru2_entry_color" style="background-color: #800080;"></div>
+                    <div class="legend_entry_color">
+                      <div id="vru2_entry_color" style="background-color: #800080; width: 16px; height: 100%;"></div>
+                    </div>
                     <div class="legend_entry_text" id="vru2_entry_text"></div>
+                  </div>
+                  <div class="legend_entry" id="visible_zone_entry">
+                    <div class="visible_zone_color">
+                      <div class="visible_zone_color_box" style="background-color: #CAE4BB;"></div>
+                      <div class="visible_zone_color_box" style="background-color: #A6C991;"></div>
+                      <div class="visible_zone_color_box" style="background-color: #7CBC55;"></div>
+                      <div class="visible_zone_color_box" style="background-color: #429344;"></div>
+                      <div class="visible_zone_color_box" style="background-color: #1F723A;"></div>
+                      <div class="visible_zone_color_box" style="background-color: #1A5A2D;"></div>
+                      <div class="visible_zone_color_box" style="background-color: #143A1D;"></div>
+                    </div>
+                    <div>
+                      visible zone
+                    </div>
                   </div>
                 </div>
               </div>

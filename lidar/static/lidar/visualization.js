@@ -44,6 +44,14 @@ if (loadingStatus === true) {
     let graphContainer = document.getElementById("graph_container");
     graphContainer.style.display = "flex";
 
+    let graphContainerHeading = document.getElementById("vissVRUshown");
+    graphContainerHeading.innerText =
+      vrusSelected.length > 1
+        ? `${vru_labels[vrusSelected[0] - 1]} and ${
+            vru_labels[vrusSelected[1] - 1]
+          }`
+        : `${vru_labels[vrusSelected[0] - 1]}`;
+
     let vru1Text = document.getElementById("vru1_entry_text");
     vru1Text.innerText = `${vru_labels[vrusSelected[0] - 1]} blindzone`;
 

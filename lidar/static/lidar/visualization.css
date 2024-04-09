@@ -1003,6 +1003,14 @@
 .visualization-text20 {
   width: auto;
 }
+/* select svg (plot) in overhead view container */
+.visualization-overhead-view > svg {
+  width: 70%;
+  height: auto;
+  max-width: 800px;
+  margin-left: var(--dl-space-space-twounits);
+  border: 2px solid #c5c5c5;
+}
 .visualization-image08 {
   width: 70%;
   max-width: 800px;
@@ -1147,6 +1155,10 @@
     margin-left: 0;
     margin-right: 0;
   }
+  /* select svg (plot) in overhead view container */
+  .visualization-overhead-view > svg {
+    margin-left: 0;
+  }
 }
 @media(max-width: 479px) {
   .visualization-ul {
@@ -1166,6 +1178,10 @@
     margin-bottom: var(--dl-space-space-twounits);
   }
   .visualization-image10 {
+    width: 100%;
+  }
+  /* select svg (plot) in overhead view container */
+  .visualization-overhead-view > svg {
     width: 100%;
   }
 }

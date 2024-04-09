@@ -378,14 +378,7 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-      }
-      #search_bar {
-        box-shadow: 0px 1px 4px black;
-      }
-      #clear_search_bar {
-        cursor: pointer;
-        background-color: gray;
-        border-radius: 4px;
+        flex-wrap: wrap;
       }
       #vehicle_table {
         border-collapse: separate;
@@ -559,7 +552,7 @@
           <section class="vehicle-database-table-container1">
             <div id="table_wrapper">
               <div id="table_header">
-                <div>
+                <div id="search_bar_container", class="elevation03">
                   <select name="search_col_select" id="search_col_select">
                     <option value="0">Last Updated</option>
                     <option value="1">Make</option>
@@ -567,18 +560,20 @@
                     <option value="3">Year</option>
                   </select>
                   <input type="text" id="search_bar" name="search_bar" placeholder="Search for Last Updated">
-                  <button id="clear_search_bar" type="button">Clear</button>
+                  <button id="clear_search_bar" type="button", class="outlinedbutton-inline">Clear</button>
                 </div>
-                <div>
+                <div id="entry_select_container">
                   <label for="num_row_select">Entries Shown:</label>
-                  <select name="num_row_select" id="num_row_select">
+                  <select name="num_row_select" id="num_row_select" class="elevation03">
                     <option value="25">25</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
                     <option value="All">All</option>
                   </select>
+                </div>
+                <div id="sort_select_container">
                   <label for="sort_selct">Sort By:</label>
-                  <select name="sort_select" id="sort_select">
+                  <select name="sort_select" id="sort_select" class="elevation03">
                     <option value="0">Default</option>
                     <option value="1">Last Updated (Old-New)</option>
                     <option value="2">Last Updated (New-Old)</option>
@@ -601,7 +596,7 @@
                   <th>Year</th>
                   <th>Body Class</th>
                   <th>Weight Class</th>
-                  <th>ID</th>
+                  <th>Scan Details</th>
                 </tr>
               </table>
               <div id="table_footer">

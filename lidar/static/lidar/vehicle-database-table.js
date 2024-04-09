@@ -113,7 +113,7 @@ function createDropdown(vehicle_id) {
 
   let submit_button = document.createElement("button");
   submit_button.innerText = "View";
-  submit_button.classList.add("view_button");
+  submit_button.classList.add("containedbutton-inline");
 
   new ViewButtonController(dropdown, submit_button);
 
@@ -403,7 +403,7 @@ class PageSelectorViewController {
     let first_page = document.createElement("a");
     first_page.innerText = "<< First";
     first_page.dataset.pagenum = 1;
-    first_page.classList.add("pagination_elt");
+    first_page.classList.add("pagination_elt", "page_turn");
     if (this.model.page !== 1) {
       first_page.addEventListener("click", (e) => this.handlePageChange(e));
       first_page.classList.add("clickable_page");
@@ -415,7 +415,7 @@ class PageSelectorViewController {
     let prev_page = document.createElement("a");
     prev_page.innerText = "< Previous";
     prev_page.dataset.pagenum = this.model.page - 1;
-    prev_page.classList.add("pagination_elt");
+    prev_page.classList.add("pagination_elt", "page_turn");
     if (this.model.page !== 1) {
       prev_page.addEventListener("click", (e) => this.handlePageChange(e));
       prev_page.classList.add("clickable_page");
@@ -441,7 +441,7 @@ class PageSelectorViewController {
     let next_page = document.createElement("a");
     next_page.innerText = "Next >";
     next_page.dataset.pagenum = this.model.page + 1;
-    next_page.classList.add("pagination_elt");
+    next_page.classList.add("pagination_elt", "page_turn");
     if (this.model.page !== this.model.num_pages) {
       next_page.addEventListener("click", (e) => this.handlePageChange(e));
       next_page.classList.add("clickable_page");
@@ -453,7 +453,7 @@ class PageSelectorViewController {
     let last_page = document.createElement("a");
     last_page.innerText = "Last >>";
     last_page.dataset.pagenum = this.model.num_pages;
-    last_page.classList.add("pagination_elt");
+    last_page.classList.add("pagination_elt", "page_turn");
     if (this.model.page !== this.model.num_pages) {
       last_page.addEventListener("click", (e) => this.handlePageChange(e));
       last_page.classList.add("clickable_page");

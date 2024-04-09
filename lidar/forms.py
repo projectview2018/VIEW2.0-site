@@ -213,14 +213,23 @@ class ScanForm(forms.ModelForm):
 
 class VisualizationForm(forms.Form):
     VRUS = [
-        ('1', 'Preschool child (28 inches)'),
-        ('2', 'Elementary school child on bicycle (35 inches)'),
-        ('3', 'Elementary school child (37 inches)'),
-        ('4', 'Wheelchair user (39 inches)'),
-        ('5', 'Adult on bicycle (47 inches)'),
-        ('6', 'Adult (49 inches)'),
+        ("1", 'Preschool child (28 inches)'),
+        ("2", 'Elementary school child on bicycle (35 inches)'),
+        ("3", 'Elementary school child (37 inches)'),
+        ("4", 'Wheelchair user (39 inches)'),
+        ("5", 'Adult on bicycle (47 inches)'),
+        ("6", 'Adult (49 inches)'),
     ]
-    vru_selected = forms.ChoiceField(
-        # label="vru_form",
-        widget=forms.RadioSelect(attrs={"type": "radio", "name": "radio"}),
+    eye_positions = [
+        ("1", "5th-Percentile Female (60 inches)"),
+        ("2", "50th-Percentile Male (69 inches)"),
+        ("3", "95th-Percentile Male (74 inches)"),
+    ]
+
+    vru_selected = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(),
         choices=VRUS,)
+    eye_position_selected = forms.ChoiceField(
+        widget=forms.RadioSelect(),
+        choices=eye_positions,
+    )

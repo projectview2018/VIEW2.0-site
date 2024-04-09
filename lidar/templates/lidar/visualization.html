@@ -371,6 +371,31 @@
       disclosure-content > *:last-child {
         margin-bottom: 0;
       }
+      .visualization-container08 fieldset {
+        width: 100%;
+      }
+      #id_eye_position_selected {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      #id_vru_selected {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      #id_eye_position_selected div {
+        margin-right: var(--dl-space-space-oneandhalfunits);
+        margin-bottom: var(--dl-space-space-halfunit);
+      }
+      #id_vru_selected div {
+        margin-right: var(--dl-space-space-oneandhalfunits);
+        margin-bottom: var(--dl-space-space-halfunit);
+      }
+      #id_eye_position_selected label {
+        text-wrap: nowrap;
+      }
+      #id_vru_selected label {
+        text-wrap: nowrap;
+      }
       #load_wrapper {
         margin: auto;
         text-align: center;
@@ -398,14 +423,14 @@
     </style>
     {% load static %}
     {{ loading|json_script:"loading" }}
+    {{ graph_str|json_script:"graph_str" }}
     <script src="{% static 'lidar/visualization.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <link href="{% static 'lidar/visualization.css' %}" rel="stylesheet" />
   </head>
   <body>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
     <div>
-      <link href="{% static 'lidar/visualization.css' %}" rel="stylesheet" />
-
       <div class="visualization-container">
         <div class="header-v2-container header-v2-root-class-name4">
           <header
@@ -503,7 +528,16 @@
             </div>
           </header>
         </div>
-        <div class="visualization-content">
+        <div style="display: none;" id="load_wrapper">
+          <h1 id="load_header" class="HeadingH3">
+            Processing your scan...
+          </h1>
+          <div class="loader"></div>
+          <p id="load_text" class="Body">
+            This can take up to five minutes, and the page may reload several times.
+          </p>
+        </div>
+        <div style="display: none;" class="visualization-content">
           <section
             class="visualization-masthead-container elevation01 visualization-masthead-root-class-name"
           >
@@ -580,6 +614,24 @@
                     <div class="visualization-container10">
                       <disclosure-inline data-popup="">
                         <h3 class="visualization-text HeadingH3">
+                          Choose a Driver Height
+                          <span data-insert-trigger="inline"></span>
+                        </h3>
+                        <disclosure-content role="note">
+                          <p>
+                            Driver heights correspond to heights commonly used in vehicle testing, rounded to the nearest inch.
+                          </p>
+                        </disclosure-content>
+                      </disclosure-inline>
+                    </div>
+                  </div>
+                  <fieldset>
+                    {{ VisualizationForm.eye_position_selected }}
+                  </fieldset>
+                  <div>
+                    <div class="visualization-container10">
+                      <disclosure-inline data-popup="">
+                        <h3 class="visualization-text HeadingH3" style="margin-top: var(--dl-space-space-unit);">
                           Choose a Vulnerable Road User (VRU)
                           <span data-insert-trigger="inline"></span>
                         </h3>
@@ -593,13 +645,8 @@
                       </disclosure-inline>
                     </div>
                   </div>
-                  <fieldset>
-                    <legend>{{ VisualizationForm.vru_selected.label }}</legend>
-                    {% for radio in VisualizationForm.vru_selected %}
-                    <div class="visualization-li list-item">
-                        {{ radio }}
-                    </div>
-                    {% endfor %}
+                  <fieldset style="padding-bottom: 2px;">
+                    {{ VisualizationForm.vru_selected }}
                   </fieldset>
                   <span class="visualization-text07 Body">
                     *Vulnerable Road Users&nbsp;include pedestrians, cyclists,
@@ -608,7 +655,7 @@
                     calculations use the heights to the shoulders of 5th
                     percentile United States female vulnerable road users.
                   </span>
-                  <div class="visualization-vru-graphic">
+                  <div class="visualization-vru-graphic" style="margin-top: 24px;">
                     <img
                       alt="image"
                       src="{% static 'lidar/images/VRU Icons/viz01scale.svg' %}"
@@ -688,7 +735,7 @@
               </form>
             </div>
           </div>
-          <div class="visualization-container17">
+          <div id="example_container" style="display: none;" class="visualization-container17">
             <div class="visualization-container18">
               <h2 class="visualization-text17 HeadingH2">
                 Visualization Results:&nbsp;
@@ -709,7 +756,28 @@
                 src="{% static 'lidar/images/Test Visualizations/viz-top test 1.svg' %}"
                 class="visualization-image08"
               />
-              <!-- {{ graph|safe }} -->
+            </div>
+          </div>
+          <div id="graph_container" style="display: none;" class="visualization-container17">
+            <div class="visualization-container18">
+              <h2 class="visualization-text17 HeadingH2">
+                Visualization Results:&nbsp;
+              </h2>
+              <h2 id="vissVRUshown" class="visualization-text18 HeadingH2">
+                VRU Selected
+              </h2>
+            </div>
+            <div class="visualization-overhead-view">
+              <div class="visualization-container19">
+                <h3 class="visualization-text19 HeadingH3">Overhead View</h3>
+                <p class="visualization-text20 Body">
+                  Birds-eye view of the vehicle and surrounding blind zones.
+                </p>
+                <p class="visualization-text21 Body">
+                  {{ graph_str }}
+                </p>
+              </div>
+              {{ graph|safe }}
             </div>
           </div>
         </div>

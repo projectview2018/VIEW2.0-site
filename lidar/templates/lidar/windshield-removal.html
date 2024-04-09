@@ -382,13 +382,12 @@
     {% url 'lidar:visualization' scan_id as visualization_ext %}
     {{ visualization_ext|json_script:"visualization_ext" }}
     <script type="module" crossorigin src="{% static 'lidar/windshield-removal.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <link href="{% static 'lidar/windshield-removal.css' %}" rel="stylesheet" />
   </head>
   <body>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
     <div>
-      <link href="{% static 'lidar/windshield-removal.css' %}" rel="stylesheet" />
-
       <div class="windshield-removal-container">
         <div class="header-v2-container header-v2-root-class-name6">
           <header

@@ -372,13 +372,13 @@
         margin-bottom: 0;
       }
     </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
+    <link href="{% static 'lidar/faq.css' %}" rel="stylesheet" />
   </head>
   <body>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
     <div>
-      <link href="{% static 'lidar/faq.css' %}" rel="stylesheet" />
-
       <div class="faq-container">
         <div class="header-v2-container header-v2-root-class-name3">
           <header

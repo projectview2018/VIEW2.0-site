@@ -249,6 +249,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     ax.set_position(pos)'''
 
     # dislaimer that vehicle pictured is not to scale
+    # ax.text(0.75, 0, '*vehicle pictured is not to scale', transform=ax.transAxes,
     ax.text(-0.37, -0.12, '*vehicle pictured is not to scale', transform=ax.transAxes,
             fontsize=10, verticalalignment='center', bbox=dict(boxstyle='square',
                                                                facecolor='#fff', alpha=0))

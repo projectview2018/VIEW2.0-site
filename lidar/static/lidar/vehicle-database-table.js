@@ -143,7 +143,7 @@ class Model {
     this.current_list = this.vehicle_lists[1];
 
     // search controller
-    this.search_field_index = 0;
+    this.search_field_index = 2;
     this.seach_value = "";
 
     // row controller
@@ -229,6 +229,7 @@ class SearchController {
     this.seachColSelector = document.getElementById("search_col_select");
     this.searchBar = document.getElementById("search_bar");
     this.clearButton = document.getElementById("clear_search_bar");
+    this.seachColSelector.value = '2';
     this.seachColSelector.addEventListener("change", () =>
       this.handleSeachFieldChange()
     );

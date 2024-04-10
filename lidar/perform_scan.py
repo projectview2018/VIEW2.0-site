@@ -19,31 +19,45 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     # print(f"scan before changing to binary: {response['Body'].read()}")
     mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
-    driver_heights = np.array([60.0, 69.0, 74.0]) * 0.0254
+    # array of information for 5th female, 50th male, 95th male , respectively [m]
+    driver_sitting_heights = np.array(
+        [69.8, 80.4, 86]) * 0.01  # convert from cm to m
+    # high, mid, low [m]
+    driver_seat_heights = np.array(
+        [scan.E_m, scan.F_m + ((scan.E_m - scan.F_m) / 2), scan.F_m])
+    # forward, mid, back [m]
+    driver_seat_positions = np.array(
+        [scan.A_m, (scan.A_m + ((scan.B_m - scan.A_m) / 2)), scan.B_m]) + scan.C_m
+    driver_eye_heights = []  # list to hold total eye heights for each driver height
     list_of_nvps = []  # list to hold all six sets of nvps for three driver heights
     # list to hold all three coordinates to calculate areas for three driver heights
     list_of_coordinates = []
     # driver_height = 1.2
-    height_index = 1
-    for driver_height in driver_heights:
-        print(f"calculating nvps for height #{height_index}")
+    for height_index in range(len(driver_sitting_heights)):
+        print(f"calculating nvps for height #{height_index+1}")
         # assuming mid track and mid-height for future calculations
+        # eye pos in front-left frame, using scan-frame axes
         eye_x_m = scan.D_m
-        eye_y_m = scan.A_m - ((scan.B_m - scan.A_m) / 2)
-        eye_z_m = scan.F_m + ((scan.E_m - scan.F_m) / 2) + driver_height
+        eye_y_m = driver_seat_heights[height_index] + \
+            driver_sitting_heights[height_index]
+        eye_z_m = driver_seat_positions[height_index]
+        driver_eye_heights.append(eye_y_m)
         eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
-        # eye_pos = np.array([scan.eye_x_m, scan.eye_y_m, scan.eye_z_m])
-        nvp_xs, nvp_ys = find_nvps(mesh, eye_pos, scan.driver_side_start)
-        print(f"Found NVPs for height #{height_index}")
+        scan_eye_pos = get_eye_in_mesh_frame(
+            mesh, eye_pos, scan.driver_side_start)
+        nvp_xs, nvp_ys = find_nvps(mesh, scan_eye_pos, scan.driver_side_start)
+        print(f"Found NVPs for height #{height_index+1}")
         list_of_nvps.append(nvp_xs)
         list_of_nvps.append(nvp_ys)
         coordinates = np.stack([nvp_xs, nvp_ys]).T
         coordinates = np.concatenate([np.zeros((1, 2)), coordinates])
         list_of_coordinates.append(coordinates)
-        height_index += 1
 
     completed_scan = CompletedScan(
         raw_scan=scan,
+        driver_eye_heights=list(driver_eye_heights),
+        driver_seat_heights=list(driver_seat_heights),
+        driver_seat_distances=list(driver_seat_positions),
         nvp_5th_female_xs=list_of_nvps[0],
         nvp_5th_female_ys=list_of_nvps[1],
         nvp_50th_male_xs=list_of_nvps[2],
@@ -76,7 +90,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     :param eye_pos: a 3D numpy vector giving the coordinates of the eye position
     :param driver_side_start: a bool, True when the scan started on the driver
         side of the car, False when the scan started on the passenger side.
-    :return: a tuple of two numpy vectors of equivalent length, giving the
+    :return: a tuple of two int lists of equivalent length, giving the
         x-coordinates and y-coordinates of the NVPs, respectively
     """
     # The directions to cast rays
@@ -130,6 +144,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     if driver_side_start:
         nvp_rays *= -1
     print('Vectors calculated, NVPS found')
+
     return [-int(x) for x in nvp_rays[:, 0]], [int(y) for y in nvp_rays[:, 2]]
 
 
@@ -146,15 +161,36 @@ def calculate_area(coordinates):
     return area
 
 
-# def correct_mesh_frame(mesh):
-#     x_coordinates = mesh.vertices[:, 0]
-#     y_coordinates = mesh.vertices[:, 1]
-#     z_coordinates = mesh.vertices[:, 2]
+def get_eye_in_mesh_frame(mesh, eye_pos, driver_start):
+    if (driver_start):
+        min_height = np.min(mesh.vertices[:, 1])
+    vertices = mesh.vertices[mesh.vertices[:, 1] > min_height + 0.3, :]
 
-#     ground_z = np.min(z_coordinates)
-#     ground_range = 0.5  # m off the ground within which to remove points from mesh
-#     filt_ground = z_coordinates > (ground_z + ground_range)
+    z_front = np.min(vertices[:, 2])
+    min_pos = np.min(vertices, axis=0)
+    max_pos = np.max(vertices, axis=0)
 
-#     final_vertices = mesh.vertices[filt_ground]
+    min_idx = np.argmin(vertices, axis=0)
+    max_idx = np.argmax(vertices, axis=0)
+    z_of_min_x = vertices[min_idx[0], 2]
+    z_of_max_x = vertices[max_idx[0], 2]
 
-#     left_mirror
+    min_percent = (z_of_min_x - min_pos[2]) / (max_pos[2] - min_pos[2])
+    if min_percent < 0.7:
+        filtered_by_min = vertices[vertices[:, 2] > z_of_min_x + 0.25, :]
+    else:
+        filtered_by_min = vertices
+    min_pos[0] = np.min(filtered_by_min[:, 0])
+
+    max_percent = (z_of_max_x - min_pos[2]) / (max_pos[2] - min_pos[2])
+    if max_percent < 0.7:
+        filtered_by_max = vertices[vertices[:, 2] > z_of_max_x + 0.25, :]
+    else:
+        filtered_by_max = vertices
+    max_pos[0] = np.max(filtered_by_max[:, 0])
+
+    new_eye_pos = [eye_pos[0] + min_pos[0],
+                   eye_pos[1] + min_height, eye_pos[2] + z_front]
+    # print(f"new eye posiition: {new_eye_pos}")
+    # print(f"mesh vertice size after frame shift: {mesh.vertices.size}")
+    return new_eye_pos

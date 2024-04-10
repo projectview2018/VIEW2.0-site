@@ -82,6 +82,15 @@ class Scan(models.Model):
 class CompletedScan(models.Model):
     raw_scan = models.ForeignKey(Scan, on_delete=models.PROTECT)
     completed_scan_added = models.DateTimeField(auto_now_add=True)
+    # full driver eye heights (seat height + sitting height)
+    driver_eye_heights = models.CharField(
+        validators=[validate_comma_separated_integer_list], max_length=2160, default="[0.0, 0.0, 0.0]")
+    # 0 = lowest seat height, 1 = mid seat height, 2 = highest seat height
+    driver_seat_heights = models.CharField(
+        validators=[validate_comma_separated_integer_list], max_length=2160, default="[2, 1, 0]")
+    # 0 = back-most seat position, 1 = mid seat position, 2 = forward-most seat position
+    driver_seat_distances = models.CharField(
+        validators=[validate_comma_separated_integer_list], max_length=2160, default="[2, 1, 0]")
     nvp_5th_female_xs = models.CharField(
         validators=[validate_comma_separated_integer_list], max_length=2160, default="[185, 186, 186, 194, 195, 195, 195, 198, 197, 200, 200, 202, 202, 202, 202, 203, 203, 203, 203, \
         203, 204, 203, 203, 203, 203, 214, 214, 215, 216, 214, 211, 213, 210, 210, 210, 219, 220, 221, 219, 217, 216, 215, 224, 222, 221, 220, 215, 215, 225, 224, 221, 220, 216, 226, \

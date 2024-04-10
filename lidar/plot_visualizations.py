@@ -100,8 +100,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     '''idx = np.argsort(theta)  # find indices that would sort the array
     r_sorted = np.array(r)[idx]
     theta_sorted = np.array(theta)[idx]'''
-    r_sorted = np.append(r,0)
-    theta_sorted = np.append(theta,0)
+    r_sorted = np.append(r, 0)
+    theta_sorted = np.append(theta, 0)
     ''' -----------------------
   End initial data processing
   ------------------------'''
@@ -126,11 +126,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     # set plot color options based on number of VRUs so ligher color is always on top
     if len(vru_selected) == 2:
-      vru_plot_colors = ['#A34D9D', '#A6DDE7']
-      vru_fill_colors = ['#A34D9Da6', '#A6DDE7a6']
+        vru_plot_colors = ['#A34D9D', '#A6DDE7']
+        vru_fill_colors = ['#A34D9Da6', '#A6DDE7a6']
     else:
-      vru_plot_colors = ['#A6DDE7']
-      vru_fill_colors = ['#A6DDE7a6']
+        vru_plot_colors = ['#A6DDE7']
+        vru_fill_colors = ['#A6DDE7a6']
     graph_str = ['', '']
     vru_index = 0
     for vru in vru_selected:
@@ -189,30 +189,30 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     #     '''graph_str[vru_index] = ('The closest forward-visible ' +
     #                             vru_label[vru-1] + ' is ' +
     #                             str(round(front_vru_dist)) + 'ft in front of the vehicle.')'''
-    #     graph_str[vru_index]=[' ']
+        graph_str[vru_index] = " "
 
     #     ''' -------------------------------------------------------
     #   End note minimum distance from hood to VRU in front of driver
     #   ----------------------------------------------------------'''
     #     vru_index += 1
 
-    # # restrict angles of plot (switching min and max moves tick labels)
-    # ax.set_thetamin(plot_end)
-    # ax.set_thetamax(plot_start)
+    # restrict angles of plot (switching min and max moves tick labels)
+    ax.set_thetamin(plot_end)
+    ax.set_thetamax(plot_start)
 
-    # # make plot axes match background divisions
-    # # generate markers range(0,round(max(r)),round(max(r)/7))
-    # tick_list = np.arange(0, max_distance+1, max_distance/7)
-    # ax.set_ylim(0, max_distance)  # [0,round(max(r))]
-    # plt.yticks(tick_list)  # range(0,round(max(r)),round(max(r)/7))
+    # make plot axes match background divisions
+    # generate markers range(0,round(max(r)),round(max(r)/7))
+    tick_list = np.arange(0, max_distance+1, max_distance/7)
+    ax.set_ylim(0, max_distance)  # [0,round(max(r))]
+    plt.yticks(tick_list)  # range(0,round(max(r)),round(max(r)/7))
 
-    # # label the radial axis
-    # label_position = ax.get_rlabel_position()
-    # ax.text(np.radians(plot_end + 15), 5 + ax.get_rmax()/2., 'Distance from Vehicle [ft]',
-    #         rotation=-1 * label_position, horizontalalignment='right', ha='center', va='center')
+    # label the radial axis
+    label_position = ax.get_rlabel_position()
+    ax.text(np.radians(plot_end + 15), 5 + ax.get_rmax()/2., 'Distance from Vehicle [ft]',
+            rotation=-1 * label_position, horizontalalignment='right', ha='center', va='center')
 
-    # ax.grid(True, color='#fff')
-    # ax.spines['polar'].set_visible(False)
+    ax.grid(True, color='#fff')
+    ax.spines['polar'].set_visible(False)
 
     ''' ---------------------------
   Begin car image scaling/plotting
@@ -259,20 +259,20 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     # make plot fill entire figure
     pos = ax.get_position()
-    pos.x0=0 # units of percentage of fig
-    pos.x1=1 
-    pos.y0=0 
-    pos.y1=1 
+    pos.x0 = 0  # units of percentage of fig
+    pos.x1 = 1
+    pos.y0 = 0
+    pos.y1 = 1
     ax.set_position(pos)
 
     # dislaimer that vehicle pictured is not to scale
     # ax.text(0.75, 0, '*vehicle pictured is not to scale', transform=ax.transAxes,
-    ax.text(-0.15,0.02, '*vehicle not shown to scale', transform=ax.transAxes,
+    ax.text(-0.15, 0.02, '*vehicle not shown to scale', transform=ax.transAxes,
             fontsize=10, verticalalignment='center', bbox=dict(boxstyle='square',
                                                                facecolor='#fff', alpha=0))
 
     # legend in bottom left corner of FIGURE, not PLOT
-    #fig.legend(loc='lower right', fontsize="12", fancybox=False)
+    # fig.legend(loc='lower right', fontsize="12", fancybox=False)
 
     # title for the graph
     '''plt.title(

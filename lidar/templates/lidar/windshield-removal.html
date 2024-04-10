@@ -372,6 +372,33 @@
         margin-bottom: 0;
       }
     </style>
+
+    <style>
+      .demphasizedbutton-inline {
+        color: var(--dl-color-text-darktext);
+        width: auto;
+        padding: 5px 10px;
+        text-align: center;
+        font-family: Roboto;
+        font-weight: 400;
+        border-radius: 30px;
+        background-color: none;
+        transition-duration: 280ms;
+      }
+      .demphasizedbutton-inline:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .demphasizedbutton-inline:disabled {
+        color: #888888;
+      }
+      .demphasizedbutton-inline:active {
+        text-decoration: underline;
+      }
+      .demphasizedbutton-inline:focus {
+        text-decoration: underline;
+      }
+    </style>
     {% load static %}
     {{ get_url|json_script:"get_url" }}
     {{ put_url|json_script:"put_url" }}
@@ -543,15 +570,18 @@
                   Make sure you are not in Eraser Mode. Use two fingers to pinch the mousepad or move two fingers up and down the mousepad.
                 </span>
                 <div><br/></div>
-                <div style="display: flex; padding-top: 20px; width: 100%; justify-content: center;">
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="erase_button">Erase</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="undo_button">Undo</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="redo_button">Redo</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="reset_button">Reset</button>
-                  <input type="range" min="2" max="20" class="slider" id="dist_slider">
-                </div>
-                <div class="windshield-removal-container4 elevation01">
-                    <div id="canvas_viewer"></div>
+                <div class="windshield-removal-container4 elevation01" style="position: relative;">
+                  <div style="position: absolute; display: flex; width: 100%; justify-content: center; bottom: 0;">
+                    <div class='elevation03' style="display: flex; flex-wrap: wrap; position: relative; width: auto; max-width: calc(100%-(2*var(--dl-space-space-halfunit))); padding: var(--dl-space-space-halfunit); margin: var(--dl-space-space-halfunit); align-items: center; justify-content: center; background: #ffffffcc; border-radius: var(--dl-radius-radius-radius4);">
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-inline button" id="erase_button">Erase</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="undo_button">Undo</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="redo_button">Redo</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry demphasizedbutton-inline button" id="reset_button">Reset</button>
+                      <span class="Body" style="padding: 1px 4px;">Size:</span>
+                      <input type="range" min="2" max="20" class="slider" id="dist_slider">
+                    </div>
+                  </div>
+                  <div id="canvas_viewer"></div>
                 </div>
               </div>
               <div class="windshield-removal-container6">

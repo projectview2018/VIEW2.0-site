@@ -688,6 +688,9 @@
 #search_col_select, #search_bar, #clear_search_bar {
   margin: 4px;
 }
+#search_col_select {
+  background: #fff;
+}
 #entry_select_container, #sort_select_container {
   margin: 9px 4px 25px 4px;
 }
@@ -726,11 +729,12 @@
   grid-gap: var(--dl-space-space-unit);
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-td #scan_selector { /* select scan_selector element in table */
+td .scan_selector { /* select scan_selector element in table */
   padding: 4px;
   margin: 0 var(--dl-space-space-unit) 0 0;
   border-radius: var(--dl-radius-radius-radius4);
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) ;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  background: #fff;
 }
 @media(max-width: 1200px) {
   .vehicle-database-table-container1 {

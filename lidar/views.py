@@ -130,7 +130,6 @@ def visualization(request, scan_id):
                 if viz_form.is_valid():
                     print("viz_from was valid")
                     completed_scan = CompletedScan.objects.get(raw_scan=scan)
-
                     eye_pos = int(
                         viz_form.cleaned_data['eye_position_selected'])
                     vrus_selected = list(
@@ -148,8 +147,18 @@ def visualization(request, scan_id):
                     else:
                         nvp_xs = json.loads(completed_scan.nvp_95th_male_xs)
                         nvp_ys = json.loads(completed_scan.nvp_95th_male_ys)
+                    # height of driver's eye from ground
+                    driver_eye_heights = json.loads(
+                        completed_scan.driver_eye_heights)
+                    driver_seat_positions = json.loads(
+                        completed_scan.driver_seat_distances)
+
+                    eye_height_full = driver_eye_heights[eye_pos-1]
+                    # distance of driver's eye from hood
+                    eye_point_full = driver_seat_positions[eye_pos-1]
+
                     [graph, graph_str] = viz_overhead(
-                        nvp_xs, nvp_ys, (scan.F_m + ((scan.E_m - scan.F_m) / 2)), (((scan.B_m - scan.A_m) / 2) + scan.A_m), eye_pos, vrus_selected, vehicle_str)
+                        nvp_xs, nvp_ys, eye_height_full, eye_point_full, eye_pos, vrus_selected, vehicle_str)
                     return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': graph, 'graph_str1': graph_str[0], 'graph_str2': graph_str[1], 'vrus_selected': vrus_selected, "loading": False})
 
             return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': None, 'graph_str1': None, 'graph_str2': None, 'vrus_selected': None, "loading": False})

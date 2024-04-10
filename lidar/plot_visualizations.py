@@ -35,18 +35,16 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # eye_point_full = ((84-70)+20.5)*0.0254
     height_percentile = "Nth-Percentile Female"
     # vru_selected = [1, 3]
-
+    plt.plot(nvp_x_cartesian, nvp_y_cartesian)
+    plt.show()
     # SHOULD BE UNCOMMENTED WHEN TESTING IS DONE
     # set true eye height (height of chair PLUS height of sitting person to eye) according to eye position
     height_percentile = ""
     if (eye_pos == 1):
-        eye_height_full += (0.0254 * 60)  # [m]
         height_percentile = "5th-Percentile Female"
     elif (eye_pos == 2):
-        eye_height_full += (0.0254 * 69)  # [m]
         height_percentile = "50th-Percentile Male"
     else:
-        eye_height_full += (0.0254 * 74)  # [m]
         height_percentile = "95th-Percentile Male"
 
     '''VRU sizes (taken fron VIEW 1.0)

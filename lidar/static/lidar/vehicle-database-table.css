@@ -736,6 +736,10 @@ td .scan_selector { /* select scan_selector element in table */
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   background: #fff;
 }
+.current_page {
+  background-color: var(--dl-color-primaryblue-primaryblue);
+  color: var(--dl-color-text-whitetext);
+}
 @media(max-width: 1200px) {
   .vehicle-database-table-container1 {
     width: 100%;

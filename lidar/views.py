@@ -4,12 +4,15 @@ from django.core import serializers
 from .models import Vehicle, Scan, CompletedScan
 from .s3_utils import get_object, generate_presigned_url_get, generate_presigned_url_put
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest, HttpResponse, FileResponse
 from django.utils import timezone
 import threading
 from .forms import ScanForm, VehicleForm, VisualizationForm
 from .perform_scan import complete_scan
 from .plot_visualizations import viz_overhead
+from django.views.decorators.cache import cache_control
+from django.views.decorators.http import require_GET
+from django.conf import settings
 
 
 def index(request):
@@ -183,3 +186,14 @@ def windshield_removal(request, scan_id):
     # print(f'{put_url = }')
     return render(request, 'lidar/windshield-removal.html',
                   {'scan_id': scan_id, 'scan_path': scan_path, 'get_url': get_url, 'put_url': put_url})
+
+
+@require_GET
+@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day
+def favicon(request):
+    return HttpResponse(
+        (
+            '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74.73 51.32"><defs><style>.c{fill:#1a6ea7;}</style></defs><g id="a"/><g id="b"><path class="c" d="M19.2,0H0C11.24,10.82,19.53,26.42,23.05,44.47c3.56-11.92,7.75-21.66,12.65-29.29C31.19,8.55,25.77,3.19,19.2,0ZM10.25,2.29h2.63c1.68,1.02,3.26,2.19,4.75,3.5h-2.92c-1.4-1.29-2.88-2.47-4.47-3.5Zm5.72,4.71h2.99c1.84,1.77,3.53,3.78,5.11,5.97h-3.26c-1.47-2.15-3.07-4.17-4.84-5.97Zm11.08,17.93c-.98-2.45-2.06-4.84-3.28-7.11l-.92-1.65c-.3-.51-.62-1.01-.93-1.51h3.33c.33,.5,.68,.99,1,1.51,0,0,1,1.64,1.01,1.66l.02,.04s1.14,2.03,1.69,3.08c-.65,1.28-1.29,2.61-1.91,3.98Z"/><path class="c" d="M55.53,0c-16.61,8.07-25.88,29.93-31.54,51.32h26.59C53.16,30.39,62.08,12.17,74.73,0h-19.2Z"/></g></svg>'
+        ),
+        content_type="image/svg+xml",
+    )

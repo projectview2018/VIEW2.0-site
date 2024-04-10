@@ -170,48 +170,49 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         ''' ---------------------------------------------------------
       Begin note minimum distance from hood to VRU in front of driver
       ------------------------------------------------------------'''
-        # find nvp in front of driver (with tolerance)
-        # b/w 89 and 90deg (taking ind0 since returns array inside variable)
-        front_range_indices = np.where(np.logical_and(
-            theta_sorted >= (mth.pi/2)-mth.radians(1),
-            theta_sorted <= (mth.pi/2)+mth.radians(1)))[0]
-        # find index of minimum of selected entries
-        front_r_min_index = front_range_indices[np.argmin(
-            r_sorted[front_range_indices])]
-        # store r value that meets the conditions above (absolute location)
-        r_vru_fit = r_vru_nvp[front_r_min_index]
-        print(f"distance from eye to hood: {eye_point_full}")
-        print(f"distance from eye to {vru_label[vru-1]}: {r_vru_fit}")
-        # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
-        front_vru_dist = r_vru_fit-eye_point_full  # [ft]
-        # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
-        # store note (str) of distance to closest forward-visible VRU to pass to site
-        graph_str[vru_index] = ('The closest forward-visible ' +
-                                vru_label[vru-1] + ' is ' +
-                                str(round(front_vru_dist)) + 'ft in front of the vehicle.')
+    #     # find nvp in front of driver (with tolerance)
+    #     # b/w 89 and 90deg (taking ind0 since returns array inside variable)
+    #     front_range_indices = np.where(np.logical_and(
+    #         theta_sorted >= (mth.pi/2)-mth.radians(1),
+    #         theta_sorted <= (mth.pi/2)+mth.radians(1)))[0]
+    #     # find index of minimum of selected entries
+    #     front_r_min_index = front_range_indices[np.argmin(
+    #         r_sorted[front_range_indices])]
+    #     # store r value that meets the conditions above (absolute location)
+    #     r_vru_fit = r_vru_nvp[front_r_min_index]
+    #     print(f"distance from eye to hood: {eye_point_full}")
+    #     print(f"distance from eye to {vru_label[vru-1]}: {r_vru_fit}")
+    #     # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
+    #     front_vru_dist = r_vru_fit-eye_point_full  # [ft]
+    #     # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
+    #     # store note (str) of distance to closest forward-visible VRU to pass to site
+    #     '''graph_str[vru_index] = ('The closest forward-visible ' +
+    #                             vru_label[vru-1] + ' is ' +
+    #                             str(round(front_vru_dist)) + 'ft in front of the vehicle.')'''
+    #     graph_str[vru_index]=[' ']
 
-        ''' -------------------------------------------------------
-      End note minimum distance from hood to VRU in front of driver
-      ----------------------------------------------------------'''
-        vru_index += 1
+    #     ''' -------------------------------------------------------
+    #   End note minimum distance from hood to VRU in front of driver
+    #   ----------------------------------------------------------'''
+    #     vru_index += 1
 
-    # restrict angles of plot (switching min and max moves tick labels)
-    ax.set_thetamin(plot_end)
-    ax.set_thetamax(plot_start)
+    # # restrict angles of plot (switching min and max moves tick labels)
+    # ax.set_thetamin(plot_end)
+    # ax.set_thetamax(plot_start)
 
-    # make plot axes match background divisions
-    # generate markers range(0,round(max(r)),round(max(r)/7))
-    tick_list = np.arange(0, max_distance+1, max_distance/7)
-    ax.set_ylim(0, max_distance)  # [0,round(max(r))]
-    plt.yticks(tick_list)  # range(0,round(max(r)),round(max(r)/7))
+    # # make plot axes match background divisions
+    # # generate markers range(0,round(max(r)),round(max(r)/7))
+    # tick_list = np.arange(0, max_distance+1, max_distance/7)
+    # ax.set_ylim(0, max_distance)  # [0,round(max(r))]
+    # plt.yticks(tick_list)  # range(0,round(max(r)),round(max(r)/7))
 
-    # label the radial axis
-    label_position = ax.get_rlabel_position()
-    ax.text(np.radians(plot_end + 15), 5 + ax.get_rmax()/2., 'Distance from Vehicle [ft]',
-            rotation=-1 * label_position, horizontalalignment='right', ha='center', va='center')
+    # # label the radial axis
+    # label_position = ax.get_rlabel_position()
+    # ax.text(np.radians(plot_end + 15), 5 + ax.get_rmax()/2., 'Distance from Vehicle [ft]',
+    #         rotation=-1 * label_position, horizontalalignment='right', ha='center', va='center')
 
-    ax.grid(True, color='#fff')
-    ax.spines['polar'].set_visible(False)
+    # ax.grid(True, color='#fff')
+    # ax.spines['polar'].set_visible(False)
 
     ''' ---------------------------
   Begin car image scaling/plotting

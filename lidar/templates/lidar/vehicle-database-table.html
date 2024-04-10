@@ -390,12 +390,20 @@
         padding: 10px 20px;
         text-align: left;
       }
-      #vehicle_table tr {
-        /* border-radius: 4px; */
-        box-shadow: 0px 1px 4px black;
+      #vehicle_table td {
+        background-color: white;
       }
-      #header_row {
+      .left_cell {
+        border-radius: var(--dl-radius-radius-radius4) 0 0 var(--dl-radius-radius-radius4);
+      }
+      .right_cell {
+        border-radius: 0 var(--dl-radius-radius-radius4) var(--dl-radius-radius-radius4) 0;
+      }
+      #vehicle_table th {
         background-color: #dce5ec; 
+      }
+      #vehicle_table tr {
+        border-radius: var(--dl-radius-radius-radius4);
       }
       .view_button {
         cursor: pointer;
@@ -586,14 +594,14 @@
                 </div>
               </div>
               <table id="vehicle_table">
-                <tr id="header_row">
-                  <th>Updated</th>
+                <tr class="elevation02" id="header_row">
+                  <th class="left_cell">Updated</th>
                   <th>Make</th>
                   <th>Model</th>
                   <th>Year</th>
                   <th>Body Class</th>
                   <th>Weight Class</th>
-                  <th>Scan Details</th>
+                  <th class="right_cell">Scan Details</th>
                 </tr>
               </table>
               <div id="table_footer">

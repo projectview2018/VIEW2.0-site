@@ -229,7 +229,7 @@ class SearchController {
     this.seachColSelector = document.getElementById("search_col_select");
     this.searchBar = document.getElementById("search_bar");
     this.clearButton = document.getElementById("clear_search_bar");
-    this.seachColSelector.value = '2';
+    this.seachColSelector.value = "2";
     this.seachColSelector.addEventListener("change", () =>
       this.handleSeachFieldChange()
     );
@@ -325,6 +325,7 @@ class TableView {
     }
     for (let vehicle of this.model.getShownVehicles()) {
       let row = document.createElement("tr");
+      row.classList.add("elevation01");
       this.table.appendChild(row);
       for (let index in this.model.table_fields) {
         let col = document.createElement("td");

@@ -104,6 +104,7 @@ function createDropdown(vehicle_id) {
   select_items = select_items.sort(compareByField("date_added")).toReversed();
 
   let dropdown = document.createElement("select");
+  dropdown.classList.add("scan_selector");
   for (ind in select_items) {
     let choice = document.createElement("option");
     choice.value = select_items[ind]["fields"]["raw_scan"];
@@ -139,7 +140,7 @@ class Model {
       [...data].sort(compareByField("vehicle_model")),
       [...data].sort(compareByField("vehicle_year")),
     ];
-    this.current_list = this.vehicle_lists[0];
+    this.current_list = this.vehicle_lists[1];
 
     // search controller
     this.search_field_index = 0;
@@ -150,8 +151,8 @@ class Model {
     this.num_pages = Math.ceil(this.current_list.length / this.cars_per_page);
 
     // sort controller
-    this.vehicle_lists_index = 0;
-    this.reverse = false;
+    this.vehicle_lists_index = 1;
+    this.reverse = true;
 
     // page controller
     this.page = null;

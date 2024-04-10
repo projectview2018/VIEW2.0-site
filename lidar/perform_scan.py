@@ -94,7 +94,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
         x-coordinates and y-coordinates of the NVPs, respectively
     """
     # The directions to cast rays
-    yaws = np.deg2rad(np.arange(70, 200) +
+    yaws = np.deg2rad(np.arange(-20, 200) +
                       (0 if driver_side_start else 180))
     pitches = np.deg2rad(np.arange(-85, -1))
     print('Found desired pitches and yaws')
@@ -145,11 +145,11 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
         nvp_rays *= -1
     print('Vectors calculated, NVPS found')
 
-    all_eye_pos = np.tile(eye_pos, nvp_rays.shape[0]).reshape((-1, 3))
-    nvp_obj = trimesh.load_path(
-        np.stack([all_eye_pos, nvp_rays]).swapaxes(0, 1))
-    scene = trimesh.Scene(mesh)
-    scene.show()
+    # all_eye_pos = np.tile(eye_pos, nvp_rays.shape[0]).reshape((-1, 3))
+    # nvp_obj = trimesh.load_path(
+    #     np.stack([all_eye_pos, nvp_rays]).swapaxes(0, 1))
+    # scene = trimesh.Scene(mesh)
+    # scene.show()
 
     return [-int(x) for x in nvp_rays[:, 0]], [int(y) for y in nvp_rays[:, 2]]
 

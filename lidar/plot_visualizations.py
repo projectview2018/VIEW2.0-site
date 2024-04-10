@@ -16,7 +16,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     Takes inputs:
     vp_x_cartesian = np.array([nums]) [cm]
     nvp_y_cartesian = np.array([nums]) [cm]
-    eye_height_full = num # eye height calculated from interpolated seat-ground [m]
+    # eye height calculated from interpolated seat-ground [m]
+    eye_height_full = num
     eye_point_full = num # interpolated front-of-hood to eye distance
       interpolated [m]
     vru_selected = array # options: 1=toddler, 2=elementary, 3=elem_bike,
@@ -35,8 +36,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # eye_point_full = ((84-70)+20.5)*0.0254
     height_percentile = "Nth-Percentile Female"
     # vru_selected = [1, 3]
-    plt.plot(nvp_x_cartesian, nvp_y_cartesian)
-    plt.show()
+    # plt.plot(nvp_x_cartesian, nvp_y_cartesian)
+    # plt.show()
     # SHOULD BE UNCOMMENTED WHEN TESTING IS DONE
     # set true eye height (height of chair PLUS height of sitting person to eye) according to eye position
     height_percentile = ""
@@ -184,6 +185,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         ''' -------------------------------------------------------
       End note minimum distance from hood to VRU in front of driver
       ----------------------------------------------------------'''
+
+        # graph_str[vru_index] = "stuff"
         vru_index += 1
 
     # restrict angles of plot (switching min and max moves tick labels)

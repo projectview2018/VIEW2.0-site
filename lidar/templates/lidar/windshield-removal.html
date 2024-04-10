@@ -543,15 +543,17 @@
                   Turn Off Eraser Mode. Depending on computer, pinch with two fingers on mousepad, OR move two fingers up and down on mousepad.
                 </span>
                 <div><br/></div>
-                <div style="display: flex; padding-top: 20px; width: 100%; justify-content: center;">
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-inline button" id="erase_button">Turn On Eraser Mode</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="undo_button">Undo</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="redo_button">Redo</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="reset_button">Reset Vehicle</button>
-                  <input type="range" min="2" max="20" value="5" class="slider" id="dist_slider">
-                </div>
-                <div class="windshield-removal-container4 elevation01">
-                    <div id="canvas_viewer"></div>
+                <div class="windshield-removal-container4 elevation01" style="position: relative;">
+                  <div style="position: absolute; display: flex; width: 100%; justify-content: center; bottom: 0;">
+                    <div class='elevation03' style="display: flex; position: relative; width: auto; padding: var(--dl-space-space-halfunit); margin: var(--dl-space-space-halfunit); align-items: center; justify-content: center; background: #ffffffcc; border-radius: var(--dl-radius-radius-radius4);">
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-inline button" id="erase_button">Erase</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="undo_button">Undo</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="redo_button">Redo</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="reset_button">Reset</button>
+                      <input type="range" min="2" max="20" value="5" class="slider" id="dist_slider">
+                    </div>
+                  </div>
+                  <div id="canvas_viewer"></div>
                 </div>
               </div>
               <div class="windshield-removal-container6">

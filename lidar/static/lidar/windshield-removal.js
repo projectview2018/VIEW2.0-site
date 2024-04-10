@@ -42082,9 +42082,9 @@ class erasetoolController {
   }
   switchButtonText() {
     if (this.model.eraseMode) {
-      this.erase_button.innerText = "Turn Off Erase Mode";
+      this.erase_button.innerText = "Move";
     } else {
-      this.erase_button.innerText = "Turn On Erase Mode";
+      this.erase_button.innerText = "Erase";
     }
   }
 }

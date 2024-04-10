@@ -372,6 +372,33 @@
         margin-bottom: 0;
       }
     </style>
+
+    <style>
+      .demphasizedbutton-inline {
+        color: var(--dl-color-text-darktext);
+        width: auto;
+        padding: 5px 10px;
+        text-align: center;
+        font-family: Roboto;
+        font-weight: 400;
+        border-radius: 30px;
+        background-color: none;
+        transition-duration: 280ms;
+      }
+      .demphasizedbutton-inline:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .demphasizedbutton-inline:disabled {
+        color: #888888;
+      }
+      .demphasizedbutton-inline:active {
+        text-decoration: underline;
+      }
+      .demphasizedbutton-inline:focus {
+        text-decoration: underline;
+      }
+    </style>
     {% load static %}
     {{ get_url|json_script:"get_url" }}
     {{ put_url|json_script:"put_url" }}
@@ -512,46 +539,50 @@
             <!-- <form name="Vehicle Entry Form" class="windshield-removal-form"> -->
             <div class="windshield-removal-container3">
               <div class="windshield-removal-eraser">
-                <h3 class="windshield-removal-text1">Erase Windshield Instructions</h3>
-                <span class="windshield-removal-text2 Body">
+                <h3 class="windshield-removal-text1 HeadingH3">Erase Windshield Instructions</h3>
+                <p class="windshield-removal-text2 Body">
                   In the 3D file viewer below, use the eraser tool to remove
-                  the windshield from your vehicle scan.&nbsp;&nbsp;
-                </span>
+                  the windshield from your vehicle scan. The erase tool is only supported on desktop.
                 <div><br/></div>
-                <span class="windshield-removal-text2 Body">
-                  <b>How to Erase</b>
+                <h4 class="HeadingH4" style="font-size: 1.2rem;">
+                  Erase
+                </h4>
+                <span class="windshield-removal-text2 Body" style="margin-bottom: 0.75rem;">
+                  Toggle Eraser Mode on and off by clicking the Erase/Move button. When in Eraser Mode, click and drag cursor to erase.
                 </span>
-                <span class="windshield-removal-text2 Body">
-                  Turn On Eraser Mode by clicking the "Turn On/Off Eraser Mode" button. An indicator will appear at the top of the vehicle window. Then <b>left</b> mouse click and drag cursor to erase.
+                <h4 class="HeadingH4" style="font-size: 1.2rem;">
+                  Rotate Vehicle
+                </h4>
+                <span class="windshield-removal-text2 Body" style="margin-bottom: 0.75rem;">
+                  Make sure you are not in Eraser Mode. Click and drag cursor to rotate vehicle.
                 </span>
-                <span class="windshield-removal-text2 Body">
-                  <b>How to Rotate Vehicle</b>
+                <h4 class="HeadingH4" style="font-size: 1.2rem;">
+                  Move/Translate Vehicle
+                </h4>
+                <span class="windshield-removal-text2 Body" style="margin-bottom: 0.75rem;">
+                  Make sure you are not in Eraser Mode. Hold down the CTRL key while clicking your mouse and drag your cursor to move the vehicle (left, right, up, diagonal, etc.).
                 </span>
-                <span class="windshield-removal-text2 Body">
-                  Turn Off Eraser Mode. Then <b>left</b> mouse click and drag cursor to rotate vehicle.
-                </span>
-                <span class="windshield-removal-text2 Body">
-                  <b>How to Move/Translate Vehicle</b>
-                </span>
-                <span class="windshield-removal-text2 Body">
-                  Turn Off Eraser Mode. Then <b>right</b> mouse click and drag cursor to move vehicle (left, right, up, down, diagonal, etc.).
-                </span>
-                <span class="windshield-removal-text2 Body">
-                  <b>How to Zoom In/Out</b>
-                </span>
+                <h4 class="HeadingH4" style="font-size: 1.2rem;">
+                  Zoom In/Out
+                </h4>
                 <span class="windshield-removal-text2 Body"> 
-                  Turn Off Eraser Mode. Depending on computer, pinch with two fingers on mousepad, OR move two fingers up and down on mousepad.
+                  Make sure you are not in Eraser Mode. Use two fingers to pinch the mousepad or move two fingers up and down the mousepad.
                 </span>
                 <div><br/></div>
-                <div style="display: flex; padding-top: 20px;">
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="erase_button">Turn On Eraser Mode</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="undo_button">Undo</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="redo_button">Redo</button>
-                  <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-2-6-12-secondaryblue button" id="reset_button">Reset Vehicle</button>
-                  <input type="range" min="2" max="20" value="5" class="slider" id="dist_slider">
-                </div>
-                <div class="windshield-removal-container4 elevation01">
-                    <div id="canvas_viewer"></div>
+                <div class="windshield-removal-container4 elevation01" style="position: relative;">
+                  <div style="position: absolute; display: flex; width: 100%; justify-content: center; bottom: 0;">
+                    <div class='elevation03' style="display: flex; flex-wrap: wrap; position: relative; width: auto; max-width: calc(100%-(2*var(--dl-space-space-halfunit))); 
+                          padding: var(--dl-space-space-halfunit); margin: var(--dl-space-space-halfunit); align-items: center; justify-content: center; 
+                          background: #ffffffe6; border-radius: var(--dl-radius-radius-radius4);">
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry containedbutton-inline button" id="erase_button">Erase</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="undo_button">Undo</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry outlinedbutton-inline button" id="redo_button">Redo</button>
+                      <button style= "margin-right: 20px;" class="windshield-removal-submit-entry demphasizedbutton-inline button" id="reset_button">Reset</button>
+                      <span class="Body" style="padding: 1px 4px;">Size:</span>
+                      <input type="range" min="2" max="20" class="slider" id="dist_slider">
+                    </div>
+                  </div>
+                  <div id="canvas_viewer"></div>
                 </div>
               </div>
               <div class="windshield-removal-container6">

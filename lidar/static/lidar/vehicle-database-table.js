@@ -104,6 +104,7 @@ function createDropdown(vehicle_id) {
   select_items = select_items.sort(compareByField("date_added")).toReversed();
 
   let dropdown = document.createElement("select");
+  dropdown.classList.add("scan_selector");
   for (ind in select_items) {
     let choice = document.createElement("option");
     choice.value = select_items[ind]["fields"]["raw_scan"];

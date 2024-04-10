@@ -159,34 +159,34 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
       End calculate NVPs for seeing vru_selected
       ---------------------------------------'''
 
-        ''' ---------------------------------------------------------
-      Begin note minimum distance from hood to VRU in front of driver
-      ------------------------------------------------------------'''
-        # find nvp in front of driver (with tolerance)
-        # b/w 89 and 90deg (taking ind0 since returns array inside variable)
-        front_range_indices = np.where(np.logical_and(
-            theta_sorted >= (mth.pi/2)-mth.radians(1),
-            theta_sorted <= (mth.pi/2)+mth.radians(1)))[0]
-        # find index of minimum of selected entries
-        front_r_min_index = front_range_indices[np.argmin(
-            r_sorted[front_range_indices])]
-        # store r value that meets the conditions above (absolute location)
-        r_vru_fit = r_vru_nvp[front_r_min_index]
-        # print(f"distance from eye to hood: {eye_point_full}")
-        # print(f"distance from eye to {vru_label[vru-1]}: {r_vru_fit}")
-        # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
-        front_vru_dist = r_vru_fit-eye_point_full  # [ft]
-        # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
-        # store note (str) of distance to closest forward-visible VRU to pass to site
-        graph_str[vru_index] = ('The closest forward-visible ' +
-                                vru_label[vru-1] + ' is ' +
-                                str(round(front_vru_dist)) + 'ft in front of the vehicle.')
+      #   ''' ---------------------------------------------------------
+      # Begin note minimum distance from hood to VRU in front of driver
+      # ------------------------------------------------------------'''
+      #   # find nvp in front of driver (with tolerance)
+      #   # b/w 89 and 90deg (taking ind0 since returns array inside variable)
+      #   front_range_indices = np.where(np.logical_and(
+      #       theta_sorted >= (mth.pi/2)-mth.radians(1),
+      #       theta_sorted <= (mth.pi/2)+mth.radians(1)))[0]
+      #   # find index of minimum of selected entries
+      #   front_r_min_index = front_range_indices[np.argmin(
+      #       r_sorted[front_range_indices])]
+      #   # store r value that meets the conditions above (absolute location)
+      #   r_vru_fit = r_vru_nvp[front_r_min_index]
+      #   # print(f"distance from eye to hood: {eye_point_full}")
+      #   # print(f"distance from eye to {vru_label[vru-1]}: {r_vru_fit}")
+      #   # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
+      #   front_vru_dist = r_vru_fit-eye_point_full  # [ft]
+      #   # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
+      #   # store note (str) of distance to closest forward-visible VRU to pass to site
+      #   graph_str[vru_index] = ('The closest forward-visible ' +
+      #                           vru_label[vru-1] + ' is ' +
+      #                           str(round(front_vru_dist)) + 'ft in front of the vehicle.')
 
-        ''' -------------------------------------------------------
-      End note minimum distance from hood to VRU in front of driver
-      ----------------------------------------------------------'''
+      #   ''' -------------------------------------------------------
+      # End note minimum distance from hood to VRU in front of driver
+      # ----------------------------------------------------------'''
 
-        # graph_str[vru_index] = "stuff"
+        graph_str[vru_index] = " "
         vru_index += 1
 
     # restrict angles of plot (switching min and max moves tick labels)

@@ -390,12 +390,20 @@
         padding: 10px 20px;
         text-align: left;
       }
-      #vehicle_table tr {
-        /* border-radius: 4px; */
-        box-shadow: 0px 1px 4px black;
+      #vehicle_table td {
+        background-color: white;
       }
-      #header_row {
+      .left_cell {
+        border-radius: var(--dl-radius-radius-radius4) 0 0 var(--dl-radius-radius-radius4);
+      }
+      .right_cell {
+        border-radius: 0 var(--dl-radius-radius-radius4) var(--dl-radius-radius-radius4) 0;
+      }
+      #vehicle_table th {
         background-color: #dce5ec; 
+      }
+      #vehicle_table tr {
+        border-radius: var(--dl-radius-radius-radius4);
       }
       .view_button {
         cursor: pointer;
@@ -415,9 +423,6 @@
       }
       .unclickable_page {
         color: graytext;
-      }
-      .current_page {
-         background-color: #248ee0;
       }
     </style>
     {% load static %}
@@ -554,12 +559,12 @@
               <div id="table_header">
                 <div id="search_bar_container", class="elevation03">
                   <select name="search_col_select" id="search_col_select">
-                    <option value="0">Last Updated</option>
+                    <option value="0">Updated</option>
                     <option value="1">Make</option>
                     <option value="2">Model</option>
                     <option value="3">Year</option>
                   </select>
-                  <input type="text" id="search_bar" name="search_bar" placeholder="Search for Last Updated">
+                  <input type="text" id="search_bar" name="search_bar" placeholder="Search for Model">
                   <button id="clear_search_bar" type="button", class="outlinedbutton-inline">Clear</button>
                 </div>
                 <div id="entry_select_container">
@@ -574,26 +579,26 @@
                 <div id="sort_select_container">
                   <label for="sort_selct">Sort By:</label>
                   <select name="sort_select" id="sort_select" class="elevation03">
-                    <option value="1">Last Updated (Old-New)</option>
-                    <option value="2">Last Updated (New-Old)</option>
-                    <option value="3">Make (Alphabetical)</option>
-                    <option value="4">Make (Reverse Alphabetical)</option>
-                    <option value="5">Model (Alphabetical)</option>
-                    <option value="6">Model (Reverse Alphabetical)</option>
+                    <option value="1">Updated (Old-New)</option>
+                    <option value="2">Updated (New-Old)</option>
+                    <option value="3">Make (A-Z)</option>
+                    <option value="4">Make (Z-A)</option>
+                    <option value="5">Model (A-Z)</option>
+                    <option value="6">Model (Z-A)</option>
                     <option value="7">Year (Old-New)</option>
                     <option value="8">Year (New-Old)</option>
                   </select>
                 </div>
               </div>
               <table id="vehicle_table">
-                <tr id="header_row">
-                  <th>Last Updated</th>
+                <tr class="elevation02" id="header_row">
+                  <th class="left_cell">Updated</th>
                   <th>Make</th>
                   <th>Model</th>
                   <th>Year</th>
                   <th>Body Class</th>
                   <th>Weight Class</th>
-                  <th>Scan Details</th>
+                  <th class="right_cell">Scan Details</th>
                 </tr>
               </table>
               <div id="table_footer">

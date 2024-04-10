@@ -100,8 +100,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     '''idx = np.argsort(theta)  # find indices that would sort the array
     r_sorted = np.array(r)[idx]
     theta_sorted = np.array(theta)[idx]'''
-    r_sorted = np.append(r, 0)
-    theta_sorted = np.append(theta, 0)
+    r_sorted = r
+    theta_sorted = theta
     ''' -----------------------
   End initial data processing
   ------------------------'''

@@ -221,7 +221,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # Choose whether to show a car or truck-sized vehicle on the plot.
     # Numbers taken from VIEW 1.0: eye_height_full < 70 [in] = car, eye_height_full >= 70 [in] = truck
 
-    image_file = "Vehicle-Overhead-09.png"  # import car image
+    image_file = "Vehicle-Overhead-Eyepoint.png"  # import car image
     # create s3 client to  access digital ocean space bucket for image
     s3_client = create_s3_client()
 
@@ -236,15 +236,15 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # NEED TO FIGURE OUT HOW TO SHIFT IMAGE DOWN AND HAVE IT SHOW UP
     if eye_height_full*12 >= 70:
         # change image zoom to fit truck-sized vehicle
-        imagebox = OffsetImage(img, zoom=0.07)
+        imagebox = OffsetImage(img, zoom=0.45) # previously 0.07
         # position to likely eye position for truck
-        ab = AnnotationBbox(imagebox, (0, 1.5), frameon=False)
+        ab = AnnotationBbox(imagebox, (0, 0), frameon=False) # previously (0,1.5)
         # currently not shifted down but needs to be
     else:  # assumes all other cases are cars
         # change image zoom to fit car-sized vehicle
-        imagebox = OffsetImage(img, zoom=0.045)
+        imagebox = OffsetImage(img, zoom=0.3) # previously 0.045
         # position to likely eye position for car
-        ab = AnnotationBbox(imagebox, (0, 0.9), frameon=False)
+        ab = AnnotationBbox(imagebox, (0, 0), frameon=False) # previously (0,0.9)
 
     ax.add_artist(ab)
     ax.patch.set_alpha(0)

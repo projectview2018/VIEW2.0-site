@@ -100,8 +100,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     '''idx = np.argsort(theta)  # find indices that would sort the array
     r_sorted = np.array(r)[idx]
     theta_sorted = np.array(theta)[idx]'''
-    r_sorted = np.append(r,0)
-    theta_sorted = np.append(theta,0)
+    r_sorted = np.append(r, 0)
+    theta_sorted = np.append(theta, 0)
     ''' -----------------------
   End initial data processing
   ------------------------'''
@@ -126,11 +126,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     # set plot color options based on number of VRUs so ligher color is always on top
     if len(vru_selected) == 2:
-      vru_plot_colors = ['#A34D9D', '#A6DDE7']
-      vru_fill_colors = ['#A34D9Da6', '#A6DDE7a6']
+        vru_plot_colors = ['#A34D9D', '#A6DDE7']
+        vru_fill_colors = ['#A34D9Da6', '#A6DDE7a6']
     else:
-      vru_plot_colors = ['#A6DDE7']
-      vru_fill_colors = ['#A6DDE7a6']
+        vru_plot_colors = ['#A6DDE7']
+        vru_fill_colors = ['#A6DDE7a6']
     graph_str = ['', '']
     vru_index = 0
     for vru in vru_selected:
@@ -260,20 +260,20 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     # make plot fill entire figure
     pos = ax.get_position()
-    pos.x0=0 # units of percentage of fig
-    pos.x1=1 
-    pos.y0=0 
-    pos.y1=1 
+    pos.x0 = 0  # units of percentage of fig
+    pos.x1 = 1
+    pos.y0 = 0
+    pos.y1 = 1
     ax.set_position(pos)
 
     # dislaimer that vehicle pictured is not to scale
     # ax.text(0.75, 0, '*vehicle pictured is not to scale', transform=ax.transAxes,
-    ax.text(-0.15,0.02, '*vehicle not shown to scale', transform=ax.transAxes,
+    ax.text(-0.15, 0.02, '*vehicle not shown to scale', transform=ax.transAxes,
             fontsize=10, verticalalignment='center', bbox=dict(boxstyle='square',
                                                                facecolor='#fff', alpha=0))
 
     # legend in bottom left corner of FIGURE, not PLOT
-    #fig.legend(loc='lower right', fontsize="12", fancybox=False)
+    # fig.legend(loc='lower right', fontsize="12", fancybox=False)
 
     # title for the graph
     '''plt.title(

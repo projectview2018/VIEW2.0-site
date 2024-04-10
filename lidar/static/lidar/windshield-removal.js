@@ -41901,6 +41901,7 @@ class Model {
     while (this.undoStack.length > 0) {
       this.undo();
     }
+    this.redoStack = [];
   }
   loadMeshobj(gltf) {
     this.meshObj = gltf.scene.children[0];
@@ -41974,6 +41975,7 @@ class Model {
           if (normalDot > 0) {
             this.currentErase[faceIdx] = this.getFace(faceIdx);
             this.removeFace(faceIdx);
+            this.redoStack = [];
           }
         }
       }

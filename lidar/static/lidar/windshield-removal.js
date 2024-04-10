@@ -8676,44 +8676,44 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
       vertexShader:
         /* glsl */
         `
-  
-                  varying vec3 vWorldDirection;
-  
-                  vec3 transformDirection( in vec3 dir, in mat4 matrix ) {
-  
-                      return normalize( ( matrix * vec4( dir, 0.0 ) ).xyz );
-  
-                  }
-  
-                  void main() {
-  
-                      vWorldDirection = transformDirection( position, modelMatrix );
-  
-                      #include <begin_vertex>
-                      #include <project_vertex>
-  
-                  }
-              `,
+
+				varying vec3 vWorldDirection;
+
+				vec3 transformDirection( in vec3 dir, in mat4 matrix ) {
+
+					return normalize( ( matrix * vec4( dir, 0.0 ) ).xyz );
+
+				}
+
+				void main() {
+
+					vWorldDirection = transformDirection( position, modelMatrix );
+
+					#include <begin_vertex>
+					#include <project_vertex>
+
+				}
+			`,
       fragmentShader:
         /* glsl */
         `
-  
-                  uniform sampler2D tEquirect;
-  
-                  varying vec3 vWorldDirection;
-  
-                  #include <common>
-  
-                  void main() {
-  
-                      vec3 direction = normalize( vWorldDirection );
-  
-                      vec2 sampleUV = equirectUv( direction );
-  
-                      gl_FragColor = texture2D( tEquirect, sampleUV );
-  
-                  }
-              `,
+
+				uniform sampler2D tEquirect;
+
+				varying vec3 vWorldDirection;
+
+				#include <common>
+
+				void main() {
+
+					vec3 direction = normalize( vWorldDirection );
+
+					vec2 sampleUV = equirectUv( direction );
+
+					gl_FragColor = texture2D( tEquirect, sampleUV );
+
+				}
+			`,
     };
     const geometry = new BoxGeometry(5, 5, 5);
     const material = new ShaderMaterial({
@@ -11605,66 +11605,66 @@ function _getBlurShader(lodMax, width, height) {
     fragmentShader:
       /* glsl */
       `
-  
-              precision mediump float;
-              precision mediump int;
-  
-              varying vec3 vOutputDirection;
-  
-              uniform sampler2D envMap;
-              uniform int samples;
-              uniform float weights[ n ];
-              uniform bool latitudinal;
-              uniform float dTheta;
-              uniform float mipInt;
-              uniform vec3 poleAxis;
-  
-              #define ENVMAP_TYPE_CUBE_UV
-              #include <cube_uv_reflection_fragment>
-  
-              vec3 getSample( float theta, vec3 axis ) {
-  
-                  float cosTheta = cos( theta );
-                  // Rodrigues' axis-angle rotation
-                  vec3 sampleDirection = vOutputDirection * cosTheta
-                      + cross( axis, vOutputDirection ) * sin( theta )
-                      + axis * dot( axis, vOutputDirection ) * ( 1.0 - cosTheta );
-  
-                  return bilinearCubeUV( envMap, sampleDirection, mipInt );
-  
-              }
-  
-              void main() {
-  
-                  vec3 axis = latitudinal ? poleAxis : cross( poleAxis, vOutputDirection );
-  
-                  if ( all( equal( axis, vec3( 0.0 ) ) ) ) {
-  
-                      axis = vec3( vOutputDirection.z, 0.0, - vOutputDirection.x );
-  
-                  }
-  
-                  axis = normalize( axis );
-  
-                  gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
-                  gl_FragColor.rgb += weights[ 0 ] * getSample( 0.0, axis );
-  
-                  for ( int i = 1; i < n; i++ ) {
-  
-                      if ( i >= samples ) {
-  
-                          break;
-  
-                      }
-  
-                      float theta = dTheta * float( i );
-                      gl_FragColor.rgb += weights[ i ] * getSample( -1.0 * theta, axis );
-                      gl_FragColor.rgb += weights[ i ] * getSample( theta, axis );
-  
-                  }
-  
-              }
-          `,
+
+			precision mediump float;
+			precision mediump int;
+
+			varying vec3 vOutputDirection;
+
+			uniform sampler2D envMap;
+			uniform int samples;
+			uniform float weights[ n ];
+			uniform bool latitudinal;
+			uniform float dTheta;
+			uniform float mipInt;
+			uniform vec3 poleAxis;
+
+			#define ENVMAP_TYPE_CUBE_UV
+			#include <cube_uv_reflection_fragment>
+
+			vec3 getSample( float theta, vec3 axis ) {
+
+				float cosTheta = cos( theta );
+				// Rodrigues' axis-angle rotation
+				vec3 sampleDirection = vOutputDirection * cosTheta
+					+ cross( axis, vOutputDirection ) * sin( theta )
+					+ axis * dot( axis, vOutputDirection ) * ( 1.0 - cosTheta );
+
+				return bilinearCubeUV( envMap, sampleDirection, mipInt );
+
+			}
+
+			void main() {
+
+				vec3 axis = latitudinal ? poleAxis : cross( poleAxis, vOutputDirection );
+
+				if ( all( equal( axis, vec3( 0.0 ) ) ) ) {
+
+					axis = vec3( vOutputDirection.z, 0.0, - vOutputDirection.x );
+
+				}
+
+				axis = normalize( axis );
+
+				gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
+				gl_FragColor.rgb += weights[ 0 ] * getSample( 0.0, axis );
+
+				for ( int i = 1; i < n; i++ ) {
+
+					if ( i >= samples ) {
+
+						break;
+
+					}
+
+					float theta = dTheta * float( i );
+					gl_FragColor.rgb += weights[ i ] * getSample( -1.0 * theta, axis );
+					gl_FragColor.rgb += weights[ i ] * getSample( theta, axis );
+
+				}
+
+			}
+		`,
     blending: NoBlending,
     depthTest: false,
     depthWrite: false,
@@ -11681,25 +11681,25 @@ function _getEquirectMaterial() {
     fragmentShader:
       /* glsl */
       `
-  
-              precision mediump float;
-              precision mediump int;
-  
-              varying vec3 vOutputDirection;
-  
-              uniform sampler2D envMap;
-  
-              #include <common>
-  
-              void main() {
-  
-                  vec3 outputDirection = normalize( vOutputDirection );
-                  vec2 uv = equirectUv( outputDirection );
-  
-                  gl_FragColor = vec4( texture2D ( envMap, uv ).rgb, 1.0 );
-  
-              }
-          `,
+
+			precision mediump float;
+			precision mediump int;
+
+			varying vec3 vOutputDirection;
+
+			uniform sampler2D envMap;
+
+			#include <common>
+
+			void main() {
+
+				vec3 outputDirection = normalize( vOutputDirection );
+				vec2 uv = equirectUv( outputDirection );
+
+				gl_FragColor = vec4( texture2D ( envMap, uv ).rgb, 1.0 );
+
+			}
+		`,
     blending: NoBlending,
     depthTest: false,
     depthWrite: false,
@@ -11716,22 +11716,22 @@ function _getCubemapMaterial() {
     fragmentShader:
       /* glsl */
       `
-  
-              precision mediump float;
-              precision mediump int;
-  
-              uniform float flipEnvMap;
-  
-              varying vec3 vOutputDirection;
-  
-              uniform samplerCube envMap;
-  
-              void main() {
-  
-                  gl_FragColor = textureCube( envMap, vec3( flipEnvMap * vOutputDirection.x, vOutputDirection.yz ) );
-  
-              }
-          `,
+
+			precision mediump float;
+			precision mediump int;
+
+			uniform float flipEnvMap;
+
+			varying vec3 vOutputDirection;
+
+			uniform samplerCube envMap;
+
+			void main() {
+
+				gl_FragColor = textureCube( envMap, vec3( flipEnvMap * vOutputDirection.x, vOutputDirection.yz ) );
+
+			}
+		`,
     blending: NoBlending,
     depthTest: false,
     depthWrite: false,
@@ -11741,61 +11741,61 @@ function _getCommonVertexShader() {
   return (
     /* glsl */
     `
-  
-          precision mediump float;
-          precision mediump int;
-  
-          attribute float faceIndex;
-  
-          varying vec3 vOutputDirection;
-  
-          // RH coordinate system; PMREM face-indexing convention
-          vec3 getDirection( vec2 uv, float face ) {
-  
-              uv = 2.0 * uv - 1.0;
-  
-              vec3 direction = vec3( uv, 1.0 );
-  
-              if ( face == 0.0 ) {
-  
-                  direction = direction.zyx; // ( 1, v, u ) pos x
-  
-              } else if ( face == 1.0 ) {
-  
-                  direction = direction.xzy;
-                  direction.xz *= -1.0; // ( -u, 1, -v ) pos y
-  
-              } else if ( face == 2.0 ) {
-  
-                  direction.x *= -1.0; // ( -u, v, 1 ) pos z
-  
-              } else if ( face == 3.0 ) {
-  
-                  direction = direction.zyx;
-                  direction.xz *= -1.0; // ( -1, v, -u ) neg x
-  
-              } else if ( face == 4.0 ) {
-  
-                  direction = direction.xzy;
-                  direction.xy *= -1.0; // ( -u, -1, v ) neg y
-  
-              } else if ( face == 5.0 ) {
-  
-                  direction.z *= -1.0; // ( u, v, -1 ) neg z
-  
-              }
-  
-              return direction;
-  
-          }
-  
-          void main() {
-  
-              vOutputDirection = getDirection( uv, faceIndex );
-              gl_Position = vec4( position, 1.0 );
-  
-          }
-      `
+
+		precision mediump float;
+		precision mediump int;
+
+		attribute float faceIndex;
+
+		varying vec3 vOutputDirection;
+
+		// RH coordinate system; PMREM face-indexing convention
+		vec3 getDirection( vec2 uv, float face ) {
+
+			uv = 2.0 * uv - 1.0;
+
+			vec3 direction = vec3( uv, 1.0 );
+
+			if ( face == 0.0 ) {
+
+				direction = direction.zyx; // ( 1, v, u ) pos x
+
+			} else if ( face == 1.0 ) {
+
+				direction = direction.xzy;
+				direction.xz *= -1.0; // ( -u, 1, -v ) pos y
+
+			} else if ( face == 2.0 ) {
+
+				direction.x *= -1.0; // ( -u, v, 1 ) pos z
+
+			} else if ( face == 3.0 ) {
+
+				direction = direction.zyx;
+				direction.xz *= -1.0; // ( -1, v, -u ) neg x
+
+			} else if ( face == 4.0 ) {
+
+				direction = direction.xzy;
+				direction.xy *= -1.0; // ( -u, -1, v ) neg y
+
+			} else if ( face == 5.0 ) {
+
+				direction.z *= -1.0; // ( u, v, -1 ) neg z
+
+			}
+
+			return direction;
+
+		}
+
+		void main() {
+
+			vOutputDirection = getDirection( uv, faceIndex );
+			gl_Position = vec4( position, 1.0 );
+
+		}
+	`
   );
 }
 function WebGLCubeUVMaps(renderer) {
@@ -13354,25 +13354,25 @@ function loopReplacer(match, start, end, snippet) {
 }
 function generatePrecision(parameters) {
   let precisionstring = `precision ${parameters.precision} float;
-      precision ${parameters.precision} int;
-      precision ${parameters.precision} sampler2D;
-      precision ${parameters.precision} samplerCube;
-      `;
+	precision ${parameters.precision} int;
+	precision ${parameters.precision} sampler2D;
+	precision ${parameters.precision} samplerCube;
+	`;
   if (parameters.isWebGL2) {
     precisionstring += `precision ${parameters.precision} sampler3D;
-          precision ${parameters.precision} sampler2DArray;
-          precision ${parameters.precision} sampler2DShadow;
-          precision ${parameters.precision} samplerCubeShadow;
-          precision ${parameters.precision} sampler2DArrayShadow;
-          precision ${parameters.precision} isampler2D;
-          precision ${parameters.precision} isampler3D;
-          precision ${parameters.precision} isamplerCube;
-          precision ${parameters.precision} isampler2DArray;
-          precision ${parameters.precision} usampler2D;
-          precision ${parameters.precision} usampler3D;
-          precision ${parameters.precision} usamplerCube;
-          precision ${parameters.precision} usampler2DArray;
-          `;
+		precision ${parameters.precision} sampler2DArray;
+		precision ${parameters.precision} sampler2DShadow;
+		precision ${parameters.precision} samplerCubeShadow;
+		precision ${parameters.precision} sampler2DArrayShadow;
+		precision ${parameters.precision} isampler2D;
+		precision ${parameters.precision} isampler3D;
+		precision ${parameters.precision} isamplerCube;
+		precision ${parameters.precision} isampler2DArray;
+		precision ${parameters.precision} usampler2D;
+		precision ${parameters.precision} usampler3D;
+		precision ${parameters.precision} usamplerCube;
+		precision ${parameters.precision} usampler2DArray;
+		`;
   }
   if (parameters.precision === "highp") {
     precisionstring += "\n#define HIGH_PRECISION";
@@ -19173,31 +19173,31 @@ class WebXRController {
   }
 }
 const _occlusion_vertex = `
-  void main() {
-  
-      gl_Position = vec4( position, 1.0 );
-  
-  }`;
+void main() {
+
+	gl_Position = vec4( position, 1.0 );
+
+}`;
 const _occlusion_fragment = `
-  uniform sampler2DArray depthColor;
-  uniform float depthWidth;
-  uniform float depthHeight;
-  
-  void main() {
-  
-      vec2 coord = vec2( gl_FragCoord.x / depthWidth, gl_FragCoord.y / depthHeight );
-  
-      if ( coord.x >= 1.0 ) {
-  
-          gl_FragDepthEXT = texture( depthColor, vec3( coord.x - 1.0, coord.y, 1 ) ).r;
-  
-      } else {
-  
-          gl_FragDepthEXT = texture( depthColor, vec3( coord.x, coord.y, 0 ) ).r;
-  
-      }
-  
-  }`;
+uniform sampler2DArray depthColor;
+uniform float depthWidth;
+uniform float depthHeight;
+
+void main() {
+
+	vec2 coord = vec2( gl_FragCoord.x / depthWidth, gl_FragCoord.y / depthHeight );
+
+	if ( coord.x >= 1.0 ) {
+
+		gl_FragDepthEXT = texture( depthColor, vec3( coord.x - 1.0, coord.y, 1 ) ).r;
+
+	} else {
+
+		gl_FragDepthEXT = texture( depthColor, vec3( coord.x, coord.y, 0 ) ).r;
+
+	}
+
+}`;
 class WebXRDepthSensing {
   constructor() {
     this.texture = null;
@@ -30074,24 +30074,24 @@ function decompress(texture, maxTextureSize = Infinity, renderer = null) {
     fullscreenQuadMaterial = new ShaderMaterial({
       uniforms: { blitTexture: new Uniform(texture) },
       vertexShader: `
-              varying vec2 vUv;
-              void main(){
-                  vUv = uv;
-                  gl_Position = vec4(position.xy * 1.0,0.,.999999);
-              }`,
+			varying vec2 vUv;
+			void main(){
+				vUv = uv;
+				gl_Position = vec4(position.xy * 1.0,0.,.999999);
+			}`,
       fragmentShader: `
-              uniform sampler2D blitTexture; 
-              varying vec2 vUv;
-  
-              void main(){ 
-                  gl_FragColor = vec4(vUv.xy, 0, 1);
-                  
-                  #ifdef IS_SRGB
-                  gl_FragColor = LinearTosRGB( texture2D( blitTexture, vUv) );
-                  #else
-                  gl_FragColor = texture2D( blitTexture, vUv);
-                  #endif
-              }`,
+			uniform sampler2D blitTexture; 
+			varying vec2 vUv;
+
+			void main(){ 
+				gl_FragColor = vec4(vUv.xy, 0, 1);
+				
+				#ifdef IS_SRGB
+				gl_FragColor = LinearTosRGB( texture2D( blitTexture, vUv) );
+				#else
+				gl_FragColor = texture2D( blitTexture, vUv);
+				#endif
+			}`,
     });
   fullscreenQuadMaterial.uniforms.blitTexture.value = texture;
   fullscreenQuadMaterial.defines.IS_SRGB = texture.colorSpace == SRGBColorSpace;
@@ -41731,7 +41731,6 @@ function breakPutUrl(url2) {
 window.onload = () => {
   const model = new Model();
   new canvasController(model);
-  new erasetoolViewer(model);
   new erasetoolController(model);
   new filesaveController(model);
 };
@@ -41754,6 +41753,7 @@ class Model {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.update();
     this.undoStack = [];
+    this.redoStack = [];
     this.currentErase = {};
     this.loader = new GLTFLoader();
     this.get_url = JSON.parse(document.getElementById("get_url").textContent);
@@ -41788,6 +41788,7 @@ class Model {
     this.submitUrl =
       this.baseURI.slice(0, this.baseURI.indexOf(this.windshieldRemovalExt)) +
       this.visualizationExt;
+    this.eraseDistance = 0.05;
     this.erasemodeSubscribers = [];
     this.animate();
   }
@@ -41826,6 +41827,18 @@ class Model {
       }
     }
     this.meshObj.geometry.index.needsUpdate = true;
+    this.redoStack.push(toUndo);
+  }
+  redo() {
+    if (this.redoStack.length === 0) {
+      return;
+    }
+    const toRedo = this.redoStack.pop();
+    for (const faceIdx in toRedo) {
+      this.removeFace(faceIdx);
+    }
+    this.meshObj.geometry.index.needsUpdate = true;
+    this.undoStack.push(toRedo);
   }
   resetMesh() {
     while (this.undoStack.length > 0) {
@@ -41836,28 +41849,54 @@ class Model {
     this.meshObj = gltf.scene.children[0];
     this.scene.add(this.meshObj);
   }
+  getFace(faceIdx) {
+    return [
+      this.meshObj.geometry.index.array[faceIdx * 3],
+      this.meshObj.geometry.index.array[faceIdx * 3 + 1],
+      this.meshObj.geometry.index.array[faceIdx * 3 + 2],
+    ];
+  }
+  removeFace(faceIdx) {
+    for (let component = 0; component < 3; component++) {
+      this.meshObj.geometry.index.array[faceIdx * 3 + component] = 0;
+    }
+  }
+  getVertexComponent(vertexIdx, component) {
+    return this.meshObj.geometry.attributes.position.array[
+      vertexIdx * 3 + component
+    ];
+  }
+  getFaceCenter(faceIdx) {
+    let center = [0, 0, 0];
+    let face = this.getFace(faceIdx);
+    for (let component = 0; component < 3; component++) {
+      center[component] =
+        (this.getVertexComponent(face[0], component) +
+          this.getVertexComponent(face[1], component) +
+          this.getVertexComponent(face[2], component)) /
+        3;
+    }
+    return center;
+  }
   render() {
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const intersects = this.raycaster.intersectObjects(this.scene.children);
     for (let i = 0; i < intersects.length; i++) {
-      let vertices = [
-        intersects[i].face.a,
-        intersects[i].face.b,
-        intersects[i].face.c,
+      let intersectCenter = [
+        intersects[i].point.x,
+        intersects[i].point.y,
+        intersects[i].point.z,
       ];
       for (let faceIdx = 0; faceIdx < this.numFaces(); faceIdx++) {
-        let faceVertex1 = this.meshObj.geometry.index.array[faceIdx * 3];
-        let faceVertex2 = this.meshObj.geometry.index.array[faceIdx * 3 + 1];
-        let faceVertex3 = this.meshObj.geometry.index.array[faceIdx * 3 + 2];
-        if (
-          vertices.includes(faceVertex1) ||
-          vertices.includes(faceVertex2) ||
-          vertices.includes(faceVertex3)
-        ) {
-          this.currentErase[faceIdx] = [faceVertex1, faceVertex2, faceVertex3];
-          for (let component = 0; component < 3; component++) {
-            this.meshObj.geometry.index.array[faceIdx * 3 + component] = 0;
-          }
+        let faceCenter = this.getFaceCenter(faceIdx);
+        let distance = 0;
+        for (let component = 0; component < 3; component++) {
+          distance += (intersectCenter[component] - faceCenter[component]) ** 2;
+        }
+        distance = Math.sqrt(distance);
+        if (distance <= this.eraseDistance) {
+          this.currentErase[faceIdx] = this.getFace(faceIdx);
+          this.removeFace(faceIdx);
         }
       }
     }
@@ -41922,20 +41961,6 @@ class canvasController {
     }
   }
 }
-class erasetoolViewer {
-  constructor(m) {
-    this.model = m;
-    this.eraseMessage = document.getElementById("erase_mode");
-    this.model.subEraseMode(() => this.toggleEraseMessage());
-  }
-  toggleEraseMessage() {
-    if (this.eraseMessage.style.display == "none") {
-      this.eraseMessage.style.display = "block";
-    } else {
-      this.eraseMessage.style.display = "none";
-    }
-  }
-}
 class erasetoolController {
   constructor(m) {
     this.model = m;
@@ -41949,6 +41974,13 @@ class erasetoolController {
     this.reset_button.addEventListener("click", () => this.model.resetMesh());
     this.undo_button = document.getElementById("undo_button");
     this.undo_button.addEventListener("click", () => this.model.undo());
+    this.redo_button = document.getElementById("redo_button");
+    this.redo_button.addEventListener("click", () => this.model.redo());
+    this.slider = document.getElementById("dist_slider");
+    this.slider.oninput = function () {
+      m.eraseDistance = this.value / 100;
+    };
+    this.model.subEraseMode(() => this.switchButtonText());
   }
   documentKeyDown(e) {
     if (e.key === "e" || e.key === "E") {
@@ -41957,6 +41989,9 @@ class erasetoolController {
     if ((e.key === "z" || e.key === "Z") && e.ctrlKey) {
       this.model.undo();
     }
+    if ((e.key === "y" || e.key === "Y") && e.ctrlKey) {
+      this.model.redo();
+    }
   }
   onPointerMove(e) {
     let rect = e.target.getBoundingClientRect();
@@ -41964,6 +41999,13 @@ class erasetoolController {
       ((e.clientX - rect.left) / (rect.right - rect.left)) * 2 - 1;
     this.model.pointer.y =
       -((e.clientY - rect.top) / (rect.bottom - rect.top)) * 2 + 1;
+  }
+  switchButtonText() {
+    if (this.model.eraseMode) {
+      this.erase_button.innerText = "Turn Off Erase Mode";
+    } else {
+      this.erase_button.innerText = "Turn On Erase Mode";
+    }
   }
 }
 class filesaveController {

@@ -209,7 +209,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     # label the radial axis
     label_position = ax.get_rlabel_position()
-    ax.text(np.radians(plot_end + 15), 5 + ax.get_rmax()/2., 'Distance from Vehicle [ft]',
+    ax.text(np.radians(plot_end + 12), 5 + ax.get_rmax()/2., 'Distance from Vehicle [ft]',
             rotation=-1 * label_position, horizontalalignment='right', ha='center', va='center')
 
     ax.grid(True, color='#fff')

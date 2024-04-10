@@ -454,8 +454,6 @@
     </style>
     {% load static %}
     {{ loading|json_script:"loading" }}
-    {{ graph_str1|json_script:"graph_str1" }}
-    {{ graph_str2|json_script:"graph_str2" }}
     {{ vrus_selected|json_script:"vrus_selected" }}
     <script src="{% static 'lidar/visualization.js' %}" defer></script>
     <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
@@ -792,19 +790,19 @@
                 <div id="graph_legend">
                   <div class="legend_entry" id="ground_entry">
                     <div class="legend_entry_color">
-                      <div id="ground_entry_color" style="background-color: #5c5c5ca6; width: 16px; height: 100%;"></div>
+                      <div id="ground_entry_color" style="background-color: #404040; width: 40px; height: 100%;"></div>
                     </div>
                     <div class="legend_entry_text" id="ground_entry_text">ground blindzone</div>
                   </div>
                   <div class="legend_entry" id="vru1_entry">
                     <div class="legend_entry_color">
-                      <div id="vru1_entry_color" style="background-color: #2bb0e5; width: 16px; height: 100%;"></div>
+                      <div id="vru1_entry_color" style="width: 40px; height: 100%;"></div>
                     </div>
                     <div class="legend_entry_text" id="vru1_entry_text"></div>
                   </div>
                   <div class="legend_entry" id="vru2_entry" style="display: none;">
                     <div class="legend_entry_color">
-                      <div id="vru2_entry_color" style="background-color: #800080; width: 16px; height: 100%;"></div>
+                      <div id="vru2_entry_color" style="width: 40px; height: 100%;"></div>
                     </div>
                     <div class="legend_entry_text" id="vru2_entry_text"></div>
                   </div>

@@ -1002,6 +1002,10 @@
 }
 .visualization-text20 {
   width: auto;
+  margin-bottom: var(--dl-space-space-halfunit);
+}
+.visualization-text-vru-dist {
+  margin-bottom: var(--dl-space-space-halfunit);
 }
 /* select svg (plot) in overhead view container */
 .visualization-overhead-view > svg {

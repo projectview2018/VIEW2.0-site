@@ -423,6 +423,12 @@
   flex-direction: column;
   padding-bottom: var(--dl-space-space-unit);
 }
+@media(max-width: 479px) {
+  .upload-process-masthead-container1 {
+    padding-left: var(--dl-space-space-unit);
+    padding-right: var(--dl-space-space-unit);
+  }
+}
 .upload-process-masthead-heading {
   color: var(--dl-color-text-darktext);
 }
@@ -581,12 +587,12 @@
 }
 @media(max-width: 479px) {
   .footer-container1 {
-    padding-left: var(--dl-space-space-twounits);
-    padding-right: var(--dl-space-space-twounits);
+    padding-left: var(--dl-space-space-unit);
+    padding-right: var(--dl-space-space-unit);
   }
   .footer-text2 {
-    padding-left: var(--dl-space-space-twounits);
-    padding-right: var(--dl-space-space-twounits);
+    padding-left: var(--dl-space-space-unit);
+    padding-right: var(--dl-space-space-unit);
   }
 }
 
@@ -618,6 +624,12 @@
   padding-right: var(--dl-space-space-threeunits);
   flex-direction: column;
   padding-bottom: var(--dl-space-space-twounits);
+}
+@media(max-width: 479px) {
+  .windshield-removal-container2 {
+    padding-left: var(--dl-space-space-unit);
+    padding-right: var(--dl-space-space-unit);
+  }
 }
 .windshield-removal-text {
   color: var(--dl-color-primaryblue-primaryblue);

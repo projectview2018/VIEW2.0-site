@@ -427,6 +427,12 @@
   flex-direction: column;
   padding-bottom: var(--dl-space-space-unit);
 }
+@media(max-width: 479px) {
+  .instructions-masthead-container1 {
+    padding-left: var(--dl-space-space-unit);
+    padding-right: var(--dl-space-space-unit);
+  }
+}
 .instructions-masthead-container2 {
   flex: 0 0 auto;
   width: auto;
@@ -674,12 +680,12 @@
 }
 @media(max-width: 479px) {
   .footer-container1 {
-    padding-left: var(--dl-space-space-twounits);
-    padding-right: var(--dl-space-space-twounits);
+    padding-left: var(--dl-space-space-unit);
+    padding-right: var(--dl-space-space-unit);
   }
   .footer-text2 {
-    padding-left: var(--dl-space-space-twounits);
-    padding-right: var(--dl-space-space-twounits);
+    padding-left: var(--dl-space-space-unit);
+    padding-right: var(--dl-space-space-unit);
   }
 }
 
@@ -1344,8 +1350,8 @@
 }
 @media(max-width: 479px) {
   .instructions-container02 {
-    padding-left: var(--dl-space-space-twounits);
-    padding-left: var(--dl-space-space-twounits);
+    padding-left: var(--dl-space-space-unit);
+    padding-left: var(--dl-space-space-unit);
   }
   .instructions-front-front-and-front-back {
     flex-direction: column;

@@ -45,14 +45,16 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         height_percentile = "5th-Percentile Female"
     elif (eye_pos == 2):
         height_percentile = "50th-Percentile Male"
-    else:
+    elif (eye_pos == 3):
         height_percentile = "95th-Percentile Male"
+    else:
+        height_percentile = "50th-Percentile Male"
 
     '''VRU sizes (taken fron VIEW 1.0)
       'pre-school', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
       shoulder height, width, person height (all in [in])
       DOESN'T CONTAIN DEPTH, BUT ASSUMES THAT BICYCLES ARE 4X DEPTH OF PEOPLE AND IGNORES WHEELCHAIRS?'''
-    vru_label = ['pre-school child', 'elementary school child', 'elementary schooler on bike',
+    vru_label = ['pre-school child', 'elementary schooler on bike', 'elementary school child',
                  'wheelchair user', 'adult on bike', 'adult']
     vru_sizes = np.array([[28, 9, 34], [35, 12, 45], [37, 12, 45], [
                          39, 26, 49], [47, 16, 58], [49, 16, 60]])
@@ -83,7 +85,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     theta = np.arctan2(nvp_y_cartesian_ft, nvp_x_cartesian_ft)
 
     # remove erroneous data (pillars)
-    to_keep = r <= 800
+    to_keep = r <= max_distance
     r = r[to_keep]
     theta = theta[to_keep]
 
@@ -96,9 +98,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     r = r[to_keep]'''
 
     # sort data from smallest to largest theta value ('untwist') (WIP)
-    idx = np.argsort(theta)  # find indices that would sort the array
+    '''idx = np.argsort(theta)  # find indices that would sort the array
     r_sorted = np.array(r)[idx]
-    theta_sorted = np.array(theta)[idx]
+    theta_sorted = np.array(theta)[idx]'''
+    r_sorted = r
+    theta_sorted = theta
     ''' -----------------------
   End initial data processing
   ------------------------'''
@@ -115,14 +119,19 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
                color=colorBG, edgecolor=colorBG, label='_Visible Zone')  # 294 previously max(r)
 
     # plot NVPs
-    ax.plot(theta_sorted, r_sorted, '#000',
+    ax.plot(theta_sorted, r_sorted, '#404040',
             linewidth=0)
-    ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
-    # 65% opacity (a6) 404040bf is darker
-    ax.fill(theta_sorted, r_sorted, '#5c5c5ca6', label="ground blindzone")
+    ax.set_rlabel_position(-20)  # Move radial labels away from plotted line
+    # 65% opacity (a6) 5c5c5ca6 is lighter bf
+    ax.fill(theta_sorted, r_sorted, '#404040', label="ground blindzone")
 
-    vru_plot_colors = ['#2bb0e5', '#800080']
-    vru_fill_colors = ['#2bb0e5a6', '#800080']
+    # set plot color options based on number of VRUs so ligher color is always on top
+    if len(vru_selected) == 2:
+        vru_plot_colors = ['#A34D9D', '#A6DDE7']
+        vru_fill_colors = ['#A34D9Da6', '#A6DDE7a6']
+    else:
+        vru_plot_colors = ['#A6DDE7']
+        vru_fill_colors = ['#A6DDE7a6']
     graph_str = ['', '']
     vru_index = 0
     for vru in vru_selected:
@@ -158,29 +167,30 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         ''' ------------------------------------
       End calculate NVPs for seeing vru_selected
       ---------------------------------------'''
-
-      #   ''' ---------------------------------------------------------
-      # Begin note minimum distance from hood to VRU in front of driver
-      # ------------------------------------------------------------'''
-      #   # find nvp in front of driver (with tolerance)
-      #   # b/w 89 and 90deg (taking ind0 since returns array inside variable)
-      #   front_range_indices = np.where(np.logical_and(
-      #       theta_sorted >= (mth.pi/2)-mth.radians(1),
-      #       theta_sorted <= (mth.pi/2)+mth.radians(1)))[0]
-      #   # find index of minimum of selected entries
-      #   front_r_min_index = front_range_indices[np.argmin(
-      #       r_sorted[front_range_indices])]
-      #   # store r value that meets the conditions above (absolute location)
-      #   r_vru_fit = r_vru_nvp[front_r_min_index]
-      #   # print(f"distance from eye to hood: {eye_point_full}")
-      #   # print(f"distance from eye to {vru_label[vru-1]}: {r_vru_fit}")
-      #   # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
-      #   front_vru_dist = r_vru_fit-eye_point_full  # [ft]
-      #   # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
-      #   # store note (str) of distance to closest forward-visible VRU to pass to site
-      #   graph_str[vru_index] = ('The closest forward-visible ' +
-      #                           vru_label[vru-1] + ' is ' +
-      #                           str(round(front_vru_dist)) + 'ft in front of the vehicle.')
+        ''' ---------------------------------------------------------
+      Begin note minimum distance from hood to VRU in front of driver
+      ------------------------------------------------------------'''
+        # find nvp in front of driver (with tolerance)
+        # b/w 88 and 92deg (taking ind0 since returns array inside variable)
+        front_range_indices = np.where(np.logical_and(
+            theta_sorted >= (mth.pi/2)-mth.radians(2),
+            theta_sorted <= (mth.pi/2)+mth.radians(2)))[0]
+        # find index of minimum of selected entries
+        front_r_min_index = front_range_indices[np.argmin(
+            r_sorted[front_range_indices])]
+        # store r value that meets the conditions above (absolute location)
+        r_vru_fit = r_vru_nvp[front_r_min_index]
+        print(f"distance from eye to hood: {eye_point_full}")
+        print(f"distance from eye to {vru_label[vru-1]}: {r_vru_fit}")
+        # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
+        front_vru_dist = r_vru_fit-eye_point_full  # [ft]
+        if front_vru_dist < 0: # prevent negativ results
+            front_vru_dist = 0
+        # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
+        # store note (str) of distance to closest forward-visible VRU to pass to site
+        graph_str[vru_index] = ('The closest forward-visible ' +
+                                vru_label[vru-1] + ' is ' +
+                                str(round(front_vru_dist)) + 'ft in front of the vehicle.')
 
       #   ''' -------------------------------------------------------
       # End note minimum distance from hood to VRU in front of driver
@@ -201,7 +211,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     # label the radial axis
     label_position = ax.get_rlabel_position()
-    ax.text(np.radians(plot_end + 20), 5 + ax.get_rmax()/2., 'Radial Distance from Vehicle\n[ft]',
+    ax.text(np.radians(plot_end + 12), 5 + ax.get_rmax()/2., 'Distance from Driver Eye [ft]',
             rotation=-1 * label_position, horizontalalignment='right', ha='center', va='center')
 
     ax.grid(True, color='#fff')
@@ -213,7 +223,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # Choose whether to show a car or truck-sized vehicle on the plot.
     # Numbers taken from VIEW 1.0: eye_height_full < 70 [in] = car, eye_height_full >= 70 [in] = truck
 
-    image_file = "Vehicle-Overhead-09.png"  # import car image
+    image_file = "Vehicle-Overhead-Eyepoint.png"  # import car image
     # create s3 client to  access digital ocean space bucket for image
     s3_client = create_s3_client()
 
@@ -228,15 +238,15 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # NEED TO FIGURE OUT HOW TO SHIFT IMAGE DOWN AND HAVE IT SHOW UP
     if eye_height_full*12 >= 70:
         # change image zoom to fit truck-sized vehicle
-        imagebox = OffsetImage(img, zoom=0.07)
+        imagebox = OffsetImage(img, zoom=0.45) # previously 0.07
         # position to likely eye position for truck
-        ab = AnnotationBbox(imagebox, (0, 1.5), frameon=False)
+        ab = AnnotationBbox(imagebox, (0, 0), frameon=False) # previously (0,1.5)
         # currently not shifted down but needs to be
     else:  # assumes all other cases are cars
         # change image zoom to fit car-sized vehicle
-        imagebox = OffsetImage(img, zoom=0.045)
+        imagebox = OffsetImage(img, zoom=0.3) # previously 0.045
         # position to likely eye position for car
-        ab = AnnotationBbox(imagebox, (0, 0.9), frameon=False)
+        ab = AnnotationBbox(imagebox, (0, 0), frameon=False) # previously (0,0.9)
 
     ax.add_artist(ab)
     ax.patch.set_alpha(0)
@@ -246,22 +256,30 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     # shift plot over to the right by editing its bbox
     '''pos = ax.get_position()
-    pos.x0 += .11  # increase value by 11% of figure sizw
+    pos.x0 += .11  # increase value by 11% of figure size
     pos.x1 += .11  # must mach value for x0 for shift, otherwise it narrows the box
     ax.set_position(pos)'''
 
+    # make plot fill entire figure
+    pos = ax.get_position()
+    pos.x0 = 0  # units of percentage of fig
+    pos.x1 = 1
+    pos.y0 = 0
+    pos.y1 = 1
+    ax.set_position(pos)
+
     # dislaimer that vehicle pictured is not to scale
     # ax.text(0.75, 0, '*vehicle pictured is not to scale', transform=ax.transAxes,
-    ax.text(-0.37, -0.12, '*vehicle pictured is not to scale', transform=ax.transAxes,
+    ax.text(-0.15, 0.02, '*vehicle not shown to scale', transform=ax.transAxes,
             fontsize=10, verticalalignment='center', bbox=dict(boxstyle='square',
                                                                facecolor='#fff', alpha=0))
 
     # legend in bottom left corner of FIGURE, not PLOT
-    fig.legend(loc='lower right', fontsize="12", fancybox=False)
+    # fig.legend(loc='lower right', fontsize="12", fancybox=False)
 
     # title for the graph
-    plt.title(
-        f"Blindzones for {height_percentile} Driver in {vehicle}", fontsize=15)
+    '''plt.title(
+        f"Blindzones for {height_percentile} Driver in {vehicle}", fontsize=15)'''
 
     imgdata = StringIO()
     # save file as SVG

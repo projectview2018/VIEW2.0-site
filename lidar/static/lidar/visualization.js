@@ -1,4 +1,4 @@
-const vru_labels = [
+const vruLabels = [
   "pre-school child",
   "elementary school child on bike",
   "elementary school child",
@@ -6,12 +6,12 @@ const vru_labels = [
   "adult on bike",
   "adult",
 ];
+const colors = ["#A6DDE7a6", "#A34D9Da6"];
+const borders = ["1px solid #A6DDE7", "1px solid #A34D9D"];
 
 const loadingStatus = JSON.parse(
   document.getElementById("loading").textContent
 );
-const graphStr1 = JSON.parse(document.getElementById("graph_str1").textContent);
-const graphStr2 = JSON.parse(document.getElementById("graph_str2").textContent);
 const vrusSelected = JSON.parse(
   document.getElementById("vrus_selected").textContent
 );
@@ -40,26 +40,35 @@ if (loadingStatus === true) {
       return false;
     }
   }
-  if (graphStr1) {
+  if (vrusSelected) {
     let graphContainer = document.getElementById("graph_container");
     graphContainer.style.display = "flex";
 
     let graphContainerHeading = document.getElementById("vissVRUshown");
     graphContainerHeading.innerText =
       vrusSelected.length > 1
-        ? `${vru_labels[vrusSelected[0] - 1]} and ${
-            vru_labels[vrusSelected[1] - 1]
+        ? `${vruLabels[vrusSelected[0] - 1]} and ${
+            vruLabels[vrusSelected[1] - 1]
           }`
-        : `${vru_labels[vrusSelected[0] - 1]}`;
+        : `${vruLabels[vrusSelected[0] - 1]}`;
 
     let vru1Text = document.getElementById("vru1_entry_text");
-    vru1Text.innerText = `${vru_labels[vrusSelected[0] - 1]} blindzone`;
+    vru1Text.innerText = `${vruLabels[vrusSelected[0] - 1]} blindzone`;
 
-    if (graphStr2) {
+    let vru1Color = document.getElementById("vru1_entry_color");
+    vru1Color.style.backgroundColor = colors[0];
+    vru1Color.style.border = borders[0];
+
+    if (vrusSelected.length > 1) {
       let vru2 = document.getElementById("vru2_entry");
       vru2.style.display = "flex";
       let vru2Text = document.getElementById("vru2_entry_text");
-      vru2Text.innerText = `${vru_labels[vrusSelected[1] - 1]} blindzone`;
+      vru2Text.innerText = `${vruLabels[vrusSelected[1] - 1]} blindzone`;
+      let vru2Color = document.getElementById("vru2_entry_color");
+      vru2Color.style.backgroundColor = colors[0];
+      vru2Color.style.border = borders[0];
+      vru1Color.style.backgroundColor = colors[1];
+      vru1Color.style.border = borders[1];
     }
   }
 }

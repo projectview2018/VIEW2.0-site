@@ -41731,6 +41731,7 @@ function breakPutUrl(url2) {
 window.onload = () => {
   const model = new Model();
   new canvasController(model);
+  new erasetoolViewer(model);
   new erasetoolController(model);
   new filesaveController(model);
 };
@@ -41793,10 +41794,11 @@ function cross(v1, v2) {
 }
 class Model {
   constructor() {
+    this.container = document.getElementById("erase_tool_container");
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(
       75,
-      window.innerWidth / window.innerHeight,
+      this.container.offsetWidth / this.container.offsetHeight,
       0.1,
       1e3
     );
@@ -41804,9 +41806,11 @@ class Model {
     this.light = new AmbientLight(16777215);
     this.scene.add(this.light);
     this.renderer = new WebGLRenderer();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.domElement.style.width = "100%";
-    this.renderer.domElement.style.height = "500px";
+    this.renderer.setSize(
+      this.container.offsetWidth,
+      this.container.offsetHeight
+    );
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.update();
     this.undoStack = [];
@@ -41848,6 +41852,15 @@ class Model {
     this.eraseDistance = 0.05;
     this.erasemodeSubscribers = [];
     this.animate();
+    addEventListener("resize", () => {
+      this.camera.aspect =
+        this.container.offsetWidth / this.container.offsetHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(
+        this.container.offsetWidth,
+        this.container.offsetHeight
+      );
+    });
   }
   numFaces() {
     return this.meshObj.geometry.index.array.length / 3;
@@ -42041,6 +42054,20 @@ class canvasController {
     }
   }
 }
+class erasetoolViewer {
+  constructor(m) {
+    this.model = m;
+    this.eraseMessage = document.getElementById("erase_mode");
+    this.model.subEraseMode(() => this.toggleEraseMessage());
+  }
+  toggleEraseMessage() {
+    if (this.eraseMessage.style.display == "none") {
+      this.eraseMessage.style.display = "block";
+    } else {
+      this.eraseMessage.style.display = "none";
+    }
+  }
+}
 class erasetoolController {
   constructor(m) {
     this.model = m;
@@ -42057,6 +42084,7 @@ class erasetoolController {
     this.redo_button = document.getElementById("redo_button");
     this.redo_button.addEventListener("click", () => this.model.redo());
     this.slider = document.getElementById("dist_slider");
+    this.slider.value = String(this.model.eraseDistance * 100);
     this.slider.oninput = function () {
       m.eraseDistance = this.value / 100;
     };
@@ -42082,9 +42110,9 @@ class erasetoolController {
   }
   switchButtonText() {
     if (this.model.eraseMode) {
-      this.erase_button.innerText = "Turn Off Erase Mode";
+      this.erase_button.innerText = "Move";
     } else {
-      this.erase_button.innerText = "Turn On Erase Mode";
+      this.erase_button.innerText = "Erase";
     }
   }
 }

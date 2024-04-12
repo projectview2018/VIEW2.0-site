@@ -103,6 +103,10 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     eye_pos_repeated = np.tile(eye_pos, pitches.shape[0]).reshape((-1, 3))
     print('Created eye pos matrix')
 
+    # The height of the ground (the lowest point in the entire mesh)
+    floor_y_val = np.min(mesh.vertices[:, 1])
+    print('Found height of the floor')
+
     nvp_rays = np.zeros((yaws.shape[0], 3))
     for idx, yaw in enumerate(yaws):
         # An (n x 3) matrix of unit vectors in each direction (given yaw and pitch)
@@ -119,36 +123,31 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
         face_idx_vals = intersections[intersections >= 0]
 
         if face_idx_vals.size > 0:
-            face_idx = face_idx_vals[-1]
-            face = mesh.faces[face_idx, :]
-            face_vertices = mesh.vertices[face, :]
-            highest_vertex_idx = np.argmax(face_vertices[:, 1])
-            highest_vertex = mesh.vertices[face[highest_vertex_idx]]
-            nvp_rays[idx, :] = (highest_vertex - eye_pos)
+            faces = mesh.faces[face_idx_vals, :]
+            face_vertices = mesh.vertices[faces, :]
+            highest_face_vertices = face_vertices[np.arange(faces.shape[0]), np.argmax(face_vertices[:, :, 1], axis=1), :]
+            initial_rays = highest_face_vertices - eye_pos
+            rays_to_floor = initial_rays * (floor_y_val - eye_pos[1]) / initial_rays[:, 1].reshape((-1, 1))
+            nvp_rays[idx, :] = rays_to_floor[np.argmax(np.linalg.norm(rays_to_floor[:, (0, 2)], axis=1)), :]
         else:
             nvp_rays[idx, :] = np.nan
 
     nvp_rays = nvp_rays[~np.isnan(nvp_rays)].reshape((-1, 3))
 
-    # The height of the ground (the lowest point in the entire mesh)
-    floor_y_val = np.min(mesh.vertices[:, 1])
-    print('Found height of the floor')
-
     # Calculate the vector which points from eye position to NVP
-    hypot = np.sqrt(np.sum(nvp_rays * nvp_rays, axis=0))
-    nvp_rays /= hypot  # Normalize
-    nvp_rays *= -(eye_pos[1] - floor_y_val) / \
-        np.stack([nvp_rays[:, 1]] * 3).T  # scale until ground hit
+    # Scale until ground hit
+    nvp_rays *= (floor_y_val - eye_pos[1]) / nvp_rays[:, 1].reshape((-1, 1))
+    orig_rays = nvp_rays.copy()
     nvp_rays *= 100
     nvp_rays = np.floor(nvp_rays)
     if driver_side_start:
         nvp_rays *= -1
     print('Vectors calculated, NVPS found')
 
-    # all_eye_pos = np.tile(eye_pos, nvp_rays.shape[0]).reshape((-1, 3))
+    # all_eye_pos = np.tile(eye_pos, orig_rays.shape[0]).reshape((-1, 3))
     # nvp_obj = trimesh.load_path(
-    #     np.stack([all_eye_pos, nvp_rays]).swapaxes(0, 1))
-    # scene = trimesh.Scene(mesh)
+    #     np.stack([all_eye_pos, orig_rays]).swapaxes(0, 1))
+    # scene = trimesh.Scene([mesh, nvp_obj])
     # scene.show()
 
     return [-int(x) for x in nvp_rays[:, 0]], [int(y) for y in nvp_rays[:, 2]]

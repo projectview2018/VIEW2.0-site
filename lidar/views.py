@@ -151,11 +151,12 @@ def visualization(request, scan_id):
                         nvp_xs = json.loads(completed_scan.nvp_95th_male_xs)
                         nvp_ys = json.loads(completed_scan.nvp_95th_male_ys)
                     # height of driver's eye from ground
+                    # plt.plot(nvp_xs, nvp_ys)
+                    # plt.show()
                     driver_eye_heights = json.loads(
                         completed_scan.driver_eye_heights)
                     driver_seat_positions = json.loads(
                         completed_scan.driver_seat_distances)
-
                     eye_height_full = driver_eye_heights[eye_pos-1]
                     # distance of driver's eye from hood
                     eye_point_full = driver_seat_positions[eye_pos-1]

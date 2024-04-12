@@ -94,14 +94,18 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
         x-coordinates and y-coordinates of the NVPs, respectively
     """
     # The directions to cast rays
-    yaws = np.deg2rad(np.arange(70, 200) +
+    yaws = np.deg2rad(np.arange(70, 290, 2) +
                       (0 if driver_side_start else 180))
-    pitches = np.deg2rad(np.arange(-85, -1))
+    pitches = np.deg2rad(np.arange(-85, -1, 2))
     print('Found desired pitches and yaws')
 
     # An (p x 3) matrix where each row is equal to eye_pos
     eye_pos_repeated = np.tile(eye_pos, pitches.shape[0]).reshape((-1, 3))
     print('Created eye pos matrix')
+
+    # The height of the ground (the lowest point in the entire mesh)
+    floor_y_val = np.min(mesh.vertices[:, 1])
+    print('Found height of the floor')
 
     nvp_rays = np.zeros((yaws.shape[0], 3))
     for idx, yaw in enumerate(yaws):
@@ -111,34 +115,29 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
             np.sin(pitches),
             np.cos(yaw) * np.cos(pitches),
         ]).T
-        print('Put rays in an array')
 
         # Perform raycasts
         intersections = mesh.ray.intersects_first(eye_pos_repeated, rays)
-        print(f'Raycasts performed for yaw: {yaw}')
         face_idx_vals = intersections[intersections >= 0]
 
         if face_idx_vals.size > 0:
-            face_idx = face_idx_vals[-1]
-            face = mesh.faces[face_idx, :]
-            face_vertices = mesh.vertices[face, :]
-            highest_vertex_idx = np.argmax(face_vertices[:, 1])
-            highest_vertex = mesh.vertices[face[highest_vertex_idx]]
-            nvp_rays[idx, :] = (highest_vertex - eye_pos)
+            faces = mesh.faces[face_idx_vals, :]
+            face_vertices = mesh.vertices[faces, :]
+            highest_face_vertices = face_vertices[np.arange(faces.shape[0]), np.argmax(face_vertices[:, :, 1], axis=1), :]
+            initial_rays = highest_face_vertices - eye_pos
+            rays_to_floor = initial_rays * (floor_y_val - eye_pos[1]) / initial_rays[:, 1].reshape((-1, 1))
+            nvp_rays[idx, :] = rays_to_floor[np.argmax(np.linalg.norm(rays_to_floor[:, (0, 2)], axis=1)), :]
+            print(f'Found NVP for yaw: {yaw:.3f}')
         else:
             nvp_rays[idx, :] = np.nan
+            print(f'No NVP found for yaw: {yaw:.3f}')
 
     nvp_rays = nvp_rays[~np.isnan(nvp_rays)].reshape((-1, 3))
 
-    # The height of the ground (the lowest point in the entire mesh)
-    floor_y_val = np.min(mesh.vertices[:, 1])
-    print('Found height of the floor')
-
     # Calculate the vector which points from eye position to NVP
-    hypot = np.sqrt(np.sum(nvp_rays * nvp_rays, axis=0))
-    nvp_rays /= hypot  # Normalize
-    nvp_rays *= -(eye_pos[1] - floor_y_val) / \
-        np.stack([nvp_rays[:, 1]] * 3).T  # scale until ground hit
+    # Scale until ground hit
+    nvp_rays *= (floor_y_val - eye_pos[1]) / nvp_rays[:, 1].reshape((-1, 1))
+    orig_rays = nvp_rays.copy()
     nvp_rays *= 100
     nvp_rays = np.floor(nvp_rays)
     if driver_side_start:

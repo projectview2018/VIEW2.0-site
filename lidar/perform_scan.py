@@ -94,9 +94,9 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
         x-coordinates and y-coordinates of the NVPs, respectively
     """
     # The directions to cast rays
-    yaws = np.deg2rad(np.arange(-20, 200) +
+    yaws = np.deg2rad(np.arange(70, 290, 2) +
                       (0 if driver_side_start else 180))
-    pitches = np.deg2rad(np.arange(-85, -1))
+    pitches = np.deg2rad(np.arange(-85, -1, 2))
     print('Found desired pitches and yaws')
 
     # An (p x 3) matrix where each row is equal to eye_pos
@@ -115,11 +115,9 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
             np.sin(pitches),
             np.cos(yaw) * np.cos(pitches),
         ]).T
-        print('Put rays in an array')
 
         # Perform raycasts
         intersections = mesh.ray.intersects_first(eye_pos_repeated, rays)
-        print(f'Raycasts performed for yaw: {yaw}')
         face_idx_vals = intersections[intersections >= 0]
 
         if face_idx_vals.size > 0:
@@ -129,8 +127,10 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
             initial_rays = highest_face_vertices - eye_pos
             rays_to_floor = initial_rays * (floor_y_val - eye_pos[1]) / initial_rays[:, 1].reshape((-1, 1))
             nvp_rays[idx, :] = rays_to_floor[np.argmax(np.linalg.norm(rays_to_floor[:, (0, 2)], axis=1)), :]
+            print(f'Found NVP for yaw: {yaw:.3f}')
         else:
             nvp_rays[idx, :] = np.nan
+            print(f'No NVP found for yaw: {yaw:.3f}')
 
     nvp_rays = nvp_rays[~np.isnan(nvp_rays)].reshape((-1, 3))
 
@@ -143,12 +143,6 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
     if driver_side_start:
         nvp_rays *= -1
     print('Vectors calculated, NVPS found')
-
-    # all_eye_pos = np.tile(eye_pos, orig_rays.shape[0]).reshape((-1, 3))
-    # nvp_obj = trimesh.load_path(
-    #     np.stack([all_eye_pos, orig_rays]).swapaxes(0, 1))
-    # scene = trimesh.Scene([mesh, nvp_obj])
-    # scene.show()
 
     return [-int(x) for x in nvp_rays[:, 0]], [int(y) for y in nvp_rays[:, 2]]
 

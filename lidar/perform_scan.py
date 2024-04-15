@@ -43,7 +43,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         eye_z_m = driver_seat_positions[height_index]
         driver_eye_heights.append(eye_y_m)
         eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
-        scan_eye_pos, vehicle_width = get_eye_in_mesh_frame(
+        scan_eye_pos = get_eye_in_mesh_frame(
             mesh, eye_pos, scan.driver_side_start)
         vehicle_front_left, vehicle_back_right = get_vehicle_bounding_box(
             mesh, scan.driver_side_start)
@@ -85,8 +85,6 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     print('Vehicle\'s time stamp saved')
     scan.scan_status = "processed"
     scan.save()
-
-    return vehicle_width
 
 
 def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,

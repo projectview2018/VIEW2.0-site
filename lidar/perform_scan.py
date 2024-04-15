@@ -132,6 +132,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
             highest_face_vertices = face_vertices[np.arange(
                 faces.shape[0]), np.argmax(face_vertices[:, :, 1], axis=1), :]
             initial_rays = highest_face_vertices - eye_pos
+            initial_rays = initial_rays[initial_rays[:, 1] < 0, :]
             rays_to_floor = initial_rays * \
                 (floor_y_val - eye_pos[1]) / \
                 initial_rays[:, 1].reshape((-1, 1))

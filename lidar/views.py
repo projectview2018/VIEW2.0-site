@@ -161,8 +161,13 @@ def visualization(request, scan_id):
                     # distance of driver's eye from hood
                     eye_point_full = driver_seat_positions[eye_pos-1]
 
+                    # vehicle width in [ft]
+                    vehicle_width = abs(
+                        completed_scan.vehicle_left - completed_scan.vehicle_right) * 3.28084
+                    vehicle_D = scan.D_ft + (scan.D_in / 12)
+
                     [graph, graph_str] = viz_overhead(
-                        nvp_xs, nvp_ys, eye_height_full, eye_point_full, eye_pos, vrus_selected, vehicle_str)
+                        nvp_xs, nvp_ys, eye_height_full, eye_point_full, eye_pos, vrus_selected, vehicle_width, vehicle_D)
                     return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': graph, 'graph_str1': graph_str[0], 'graph_str2': graph_str[1], 'vrus_selected': vrus_selected, "loading": False})
 
             return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': None, 'graph_str1': None, 'graph_str2': None, 'vrus_selected': None, "loading": False})

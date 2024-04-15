@@ -43,8 +43,10 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         eye_z_m = driver_seat_positions[height_index]
         driver_eye_heights.append(eye_y_m)
         eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
-        scan_eye_pos = get_eye_in_mesh_frame(
+        scan_eye_pos, vehicle_width = get_eye_in_mesh_frame(
             mesh, eye_pos, scan.driver_side_start)
+        vehicle_front_left, vehicle_back_right = get_vehicle_bounding_box(
+            mesh, scan.driver_side_start)
         nvp_xs, nvp_ys = find_nvps(mesh, scan_eye_pos, scan.driver_side_start)
         print(f"Found NVPs for height #{height_index+1}")
         list_of_nvps.append(nvp_xs)
@@ -67,6 +69,10 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         female_5th_area=calculate_area(list_of_coordinates[0]),
         male_50th_area=calculate_area(list_of_coordinates[1]),
         male_95th_area=calculate_area(list_of_coordinates[2]),
+        vehicle_left=vehicle_front_left[0],
+        vehicle_front=vehicle_front_left[2],
+        vehicle_right=vehicle_back_right[0],
+        vehicle_back=vehicle_back_right[2],
     )
     # print('Saving original scan')
     # scan.save()
@@ -79,6 +85,8 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     print('Vehicle\'s time stamp saved')
     scan.scan_status = "processed"
     scan.save()
+
+    return vehicle_width
 
 
 def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
@@ -123,10 +131,14 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
         if face_idx_vals.size > 0:
             faces = mesh.faces[face_idx_vals, :]
             face_vertices = mesh.vertices[faces, :]
-            highest_face_vertices = face_vertices[np.arange(faces.shape[0]), np.argmax(face_vertices[:, :, 1], axis=1), :]
+            highest_face_vertices = face_vertices[np.arange(
+                faces.shape[0]), np.argmax(face_vertices[:, :, 1], axis=1), :]
             initial_rays = highest_face_vertices - eye_pos
-            rays_to_floor = initial_rays * (floor_y_val - eye_pos[1]) / initial_rays[:, 1].reshape((-1, 1))
-            nvp_rays[idx, :] = rays_to_floor[np.argmax(np.linalg.norm(rays_to_floor[:, (0, 2)], axis=1)), :]
+            rays_to_floor = initial_rays * \
+                (floor_y_val - eye_pos[1]) / \
+                initial_rays[:, 1].reshape((-1, 1))
+            nvp_rays[idx, :] = rays_to_floor[np.argmax(
+                np.linalg.norm(rays_to_floor[:, (0, 2)], axis=1)), :]
             print(f'Found NVP for yaw: {yaw:.3f}')
         else:
             nvp_rays[idx, :] = np.nan
@@ -160,12 +172,17 @@ def calculate_area(coordinates):
     return area
 
 
-def get_eye_in_mesh_frame(mesh, eye_pos, driver_start):
-    if (driver_start):
-        min_height = np.min(mesh.vertices[:, 1])
+def get_vehicle_bounding_box(mesh, driver_start):
+    min_height = np.min(mesh.vertices[:, 1])
     vertices = mesh.vertices[mesh.vertices[:, 1] > min_height + 0.3, :]
+    passenger_side_adj = np.array([-1, 1, -1])
+    if not driver_start:
+        vertices *= passenger_side_adj
 
-    z_front = np.min(vertices[:, 2])
+    min_pos = np.min(vertices, axis=0)
+    min_pos[1] = min_height
+    max_pos = np.max(vertices, axis=0)
+
     min_pos = np.min(vertices, axis=0)
     max_pos = np.max(vertices, axis=0)
 
@@ -188,8 +205,18 @@ def get_eye_in_mesh_frame(mesh, eye_pos, driver_start):
         filtered_by_max = vertices
     max_pos[0] = np.max(filtered_by_max[:, 0])
 
-    new_eye_pos = [eye_pos[0] + min_pos[0],
-                   eye_pos[1] + min_height, eye_pos[2] + z_front]
+    if not driver_start:
+        min_pos *= passenger_side_adj
+        max_pos *= passenger_side_adj
+    return min_pos, max_pos
+
+
+def get_eye_in_mesh_frame(mesh, eye_pos, driver_start):
+    min_pos, max_pos = get_vehicle_bounding_box(mesh, driver_start)
+    z_front = (min_pos if driver_start else max_pos)[2]
+    x_left = (min_pos if driver_start else max_pos)[0]
+    new_eye_pos = [eye_pos[0] + x_left,
+                   eye_pos[1] + min_pos[1], eye_pos[2] + z_front]
     # print(f"new eye posiition: {new_eye_pos}")
     # print(f"mesh vertice size after frame shift: {mesh.vertices.size}")
     return new_eye_pos

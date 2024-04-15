@@ -7,7 +7,7 @@ from .s3_utils import create_s3_client
 import math as mth
 
 
-def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_full, eye_pos, vru_selected, vehicle):
+def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_full, eye_pos, vru_selected, vehicle_width, vehicle_D):
     '''
     Takes NVPs, vehicle measurements, and VRU. Plots overhead view of blind zone
       with nearest forward-visible VRU. Saves the figure as an SVG and returns fig
@@ -107,6 +107,26 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
   End initial data processing
   ------------------------'''
 
+    """
+    ------------------------------------
+    Begin Calculate Area Taken Up By Car
+    ------------------------------------
+    """
+    # calculate vehicle area in [ft^2]
+    vehicle_area = (vehicle_width * eye_point_full) + (vehicle_D**2 * mth.tan(mth.radians(20)
+                                                                              ) / 2) + ((vehicle_width - vehicle_D)**2 * mth.tan(mth.radians(20)) / 2)
+
+    # initialize array to hold areas bounded by nvps and each vru in [ft^2]
+    vru_areas = []
+
+    # use nvps for first area
+
+    """
+    ----------------------------------
+    End Calculate Area Taken Up By Car
+    ----------------------------------
+    """
+
     # set figure size (check as regular script since notebooks don't work the same way)
     px = 1/plt.rcParams['figure.dpi']  # pixel in inches
     fig, ax = plt.subplots(
@@ -184,7 +204,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         print(f"distance from eye to {vru_label[vru-1]}: {r_vru_fit}")
         # minimum distance from HOOD to first visible VRU in front of driver (relative distance)
         front_vru_dist = r_vru_fit-eye_point_full  # [ft]
-        if front_vru_dist < 0: # prevent negativ results
+        if front_vru_dist < 0:  # prevent negativ results
             front_vru_dist = 0
         # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
         # store note (str) of distance to closest forward-visible VRU to pass to site
@@ -238,15 +258,17 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # NEED TO FIGURE OUT HOW TO SHIFT IMAGE DOWN AND HAVE IT SHOW UP
     if eye_height_full*12 >= 70:
         # change image zoom to fit truck-sized vehicle
-        imagebox = OffsetImage(img, zoom=0.45) # previously 0.07
+        imagebox = OffsetImage(img, zoom=0.45)  # previously 0.07
         # position to likely eye position for truck
-        ab = AnnotationBbox(imagebox, (0, 0), frameon=False) # previously (0,1.5)
+        # previously (0,1.5)
+        ab = AnnotationBbox(imagebox, (0, 0), frameon=False)
         # currently not shifted down but needs to be
     else:  # assumes all other cases are cars
         # change image zoom to fit car-sized vehicle
-        imagebox = OffsetImage(img, zoom=0.3) # previously 0.045
+        imagebox = OffsetImage(img, zoom=0.3)  # previously 0.045
         # position to likely eye position for car
-        ab = AnnotationBbox(imagebox, (0, 0), frameon=False) # previously (0,0.9)
+        # previously (0,0.9)
+        ab = AnnotationBbox(imagebox, (0, 0), frameon=False)
 
     ax.add_artist(ab)
     ax.patch.set_alpha(0)

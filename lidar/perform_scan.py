@@ -137,7 +137,7 @@ def find_nvps(mesh: trimesh.primitives.Trimesh, eye_pos: np.ndarray,
                 initial_rays[:, 1].reshape((-1, 1))
             nvp_rays[idx, :] = rays_to_floor[np.argmax(
                 np.linalg.norm(rays_to_floor[:, (0, 2)], axis=1)), :]
-            print(f'Found NVP for yaw: {yaw:.3f}')
+            print(f'Found NVP for yaw {yaw:.3f}: {nvp_rays[idx, :]}')
         else:
             nvp_rays[idx, :] = np.nan
             print(f'No NVP found for yaw: {yaw:.3f}')
@@ -203,15 +203,18 @@ def get_vehicle_bounding_box(mesh, driver_start):
     if not driver_start:
         min_pos *= passenger_side_adj
         max_pos *= passenger_side_adj
+        bounds = np.stack([min_pos, max_pos])
+        min_pos = np.min(bounds, axis=0)
+        max_pos = np.max(bounds, axis=0)
     return min_pos, max_pos
 
 
 def get_eye_in_mesh_frame(mesh, eye_pos, driver_start):
+    if not driver_start:
+        eye_pos *= np.array([-1, 1, -1])
     min_pos, max_pos = get_vehicle_bounding_box(mesh, driver_start)
     z_front = (min_pos if driver_start else max_pos)[2]
     x_left = (min_pos if driver_start else max_pos)[0]
     new_eye_pos = [eye_pos[0] + x_left,
                    eye_pos[1] + min_pos[1], eye_pos[2] + z_front]
-    # print(f"new eye posiition: {new_eye_pos}")
-    # print(f"mesh vertice size after frame shift: {mesh.vertices.size}")
     return new_eye_pos

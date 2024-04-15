@@ -183,9 +183,6 @@ def get_vehicle_bounding_box(mesh, driver_start):
     min_pos[1] = min_height
     max_pos = np.max(vertices, axis=0)
 
-    min_pos = np.min(vertices, axis=0)
-    max_pos = np.max(vertices, axis=0)
-
     min_idx = np.argmin(vertices, axis=0)
     max_idx = np.argmax(vertices, axis=0)
     z_of_min_x = vertices[min_idx[0], 2]

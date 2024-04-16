@@ -455,6 +455,8 @@
     {% load static %}
     {{ loading|json_script:"loading" }}
     {{ vrus_selected|json_script:"vrus_selected" }}
+    {{ closest_forward_nvps|json_script:"closest_forward_nvps" }}
+    {{ num_vrus_in_vru_nvp_area|json_script:"num_vrus_in_vru_nvp_area" }}
     <script src="{% static 'lidar/visualization.js' %}" defer></script>
     <link rel="stylesheet" href="{% static 'lidar/style.css' %}" />
     <link href="{% static 'lidar/visualization.css' %}" rel="stylesheet" />
@@ -781,11 +783,13 @@
                 <p class="visualization-text20 Body">
                   Birds-eye view of the vehicle and surrounding blind zones.
                 </p>
-                <p class="visualization-text-vru-dist Body">
-                  {{ graph_str1 }}
+                <p id="graph_str1" class="visualization-text-vru-dist Body">
+                  The closest forward-visible <b class="vru1_label"></b> is <b id="vru1_front_dist"></b> in front of the vehicle.
+                  The <b class="vru1_label"></b> blindzone can fit <b id="vru1_total_num"></b> <span id="vru1_label_plural"></span>.
                 </p>
-                <p class="visualization-text-vru-dist Body">
-                  {{ graph_str2 }}
+                <p id="graph_str2" class="visualization-text-vru-dist Body" style="display: none;">
+                  The closest forward-visible <b class="vru2_label"></b> is <b id="vru2_front_dist"></b> in front of the vehicle.
+                  The <b class="vru2_label"></b> blindzone can fit <b id="vru2_total_num"></b> <span id="vru2_label_plural"></span>.
                 </p>
                 <div id="graph_legend">
                   <div class="legend_entry" id="ground_entry">

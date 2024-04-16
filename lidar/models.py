@@ -127,3 +127,7 @@ class CompletedScan(models.Model):
     female_5th_area = models.FloatField(default=1000)
     male_50th_area = models.FloatField(default=1000)
     male_95th_area = models.FloatField(default=1000)
+    vehicle_left = models.FloatField(default=0)
+    vehicle_front = models.FloatField(default=0)
+    vehicle_right = models.FloatField(default=0)
+    vehicle_back = models.FloatField(default=0)

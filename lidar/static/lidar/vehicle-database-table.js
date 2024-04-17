@@ -112,7 +112,7 @@ function createDropdown(vehicle_id) {
     dropdown.appendChild(choice);
   }
 
-  let submit_button = document.createElement("button");
+  let submit_button = document.createElement("a");
   submit_button.innerText = "View";
   submit_button.classList.add("containedbutton-inline");
 
@@ -357,19 +357,14 @@ class ViewButtonController {
     this.dropdown = d;
     this.button = b;
     this.scan_num = this.dropdown.value;
+    this.button.href = vis_page_url + "/" + this.scan_num;
 
     this.dropdown.addEventListener("change", () => this.handleChangedView());
-    this.button.addEventListener("click", () => this.handleViewButtonClick());
   }
 
   handleChangedView() {
     this.scan_num = this.dropdown.value;
-  }
-
-  handleViewButtonClick() {
-    let link = document.createElement("a");
-    link.href = vis_page_url + "/" + this.scan_num;
-    link.click();
+    this.button.href = vis_page_url + "/" + this.scan_num;
   }
 }
 

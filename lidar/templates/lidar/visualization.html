@@ -474,7 +474,7 @@
               <a href="{% url 'lidar:index' %}" class="header-v2-navlink">
                 <h1 class="header-v2-text">
                   <span class="header-v2-text1">
-                    VIEW Blind Zone Calculator
+                    VIEW Blindzone Calculator
                   </span>
                   <br />
                 </h1>
@@ -506,7 +506,7 @@
               <a href="{% url 'lidar:index' %}">
                 <h1 class="header-v2-text4">
                   <span class="header-v2-text5">
-                    VIEW Blind Zone Calculator
+                    VIEW Blindzone Calculator
                   </span>
                   <br />
                 </h1>
@@ -638,7 +638,7 @@
           <div class="visualization-container06">
             <div class="visualization-container07 elevation01">
               <h2 class="visualization-text HeadingH2">
-                Blind-Zone Visualizations
+                Blindzone Visualizations
               </h2>
               <form action="{% url 'lidar:visualization' scan_id %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -781,17 +781,17 @@
               <div class="visualization-container19">
                 <h3 class="visualization-text19 HeadingH3">Overhead View</h3>
                 <p class="visualization-text20 Body">
-                  Birds-eye view of the vehicle and surrounding blind zones.
+                  Birds-eye view of the vehicle and surrounding blindzones.
                 </p>
                 <p id="graph_str1" class="visualization-text-vru-dist Body">
                   The closest forward-visible <b class="vru1_label"></b> is <b id="vru1_front_dist"></b> in front of the vehicle.
                   <br>
-                  There are <b id="vru1_total_num"></b> <b id="vru1_label_plural"></b> hidden in the blind zone.
+                  There are <b id="vru1_total_num"></b> <b id="vru1_label_plural"></b> hidden in the blindzone.
                 </p>
                 <p id="graph_str2" class="visualization-text-vru-dist Body" style="display: none;">
                   The closest forward-visible <b class="vru2_label"></b> is <b id="vru2_front_dist"></b> in front of the vehicle.
                   <br>
-                  There are <b id="vru2_total_num"></b> <b id="vru2_label_plural"></b> hidden in the blind zone.
+                  There are <b id="vru2_total_num"></b> <b id="vru2_label_plural"></b> hidden in the blindzone.
                 </p>
                 <div id="graph_legend">
                   <div class="legend_entry" id="ground_entry">

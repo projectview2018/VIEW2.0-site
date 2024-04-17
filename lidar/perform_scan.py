@@ -19,6 +19,12 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     # print(f"scan before changing to binary: {response['Body'].read()}")
     mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
+
+    vehicle_front_left, vehicle_back_right = get_vehicle_bounding_box(
+        mesh, scan.driver_side_start)
+    if not scan.driver_side_start:
+        vehicle_front_left, vehicle_back_right = vehicle_back_right, vehicle_front_left
+
     # array of information for 5th female, 50th male, 95th male , respectively [m]
     driver_sitting_heights = np.array(
         [69.8, 80.4, 86]) * 0.01  # convert from cm to m
@@ -29,10 +35,10 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     driver_seat_positions = np.array(
         [scan.A_m, (scan.A_m + ((scan.B_m - scan.A_m) / 2)), scan.B_m]) + scan.C_m
     driver_eye_heights = []  # list to hold total eye heights for each driver height
+
     list_of_nvps = []  # list to hold all six sets of nvps for three driver heights
     # list to hold all three coordinates to calculate areas for three driver heights
     list_of_coordinates = []
-    # driver_height = 1.2
     for height_index in range(len(driver_sitting_heights)):
         print(f"calculating nvps for height #{height_index+1}")
         # assuming mid track and mid-height for future calculations
@@ -45,8 +51,6 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         eye_pos = np.array([eye_x_m, eye_y_m, eye_z_m])
         scan_eye_pos = get_eye_in_mesh_frame(
             mesh, eye_pos, scan.driver_side_start)
-        vehicle_front_left, vehicle_back_right = get_vehicle_bounding_box(
-            mesh, scan.driver_side_start)
         nvp_xs, nvp_ys = find_nvps(mesh, scan_eye_pos, scan.driver_side_start)
         print(f"Found NVPs for height #{height_index+1}")
         list_of_nvps.append(nvp_xs)

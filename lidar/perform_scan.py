@@ -19,6 +19,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     # print(f"scan before changing to binary: {response['Body'].read()}")
     mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
+    del response
 
     vehicle_front_left, vehicle_back_right = get_vehicle_bounding_box(
         mesh, scan.driver_side_start)
@@ -37,8 +38,8 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     driver_eye_heights = []  # list to hold total eye heights for each driver height
 
     list_of_nvps = []  # list to hold all six sets of nvps for three driver heights
-    # list to hold all three coordinates to calculate areas for three driver heights
-    list_of_coordinates = []
+    # list to hold all areas for three driver heights
+    list_of_areas = []
     for height_index in range(len(driver_sitting_heights)):
         print(f"calculating nvps for height #{height_index+1}")
         # assuming mid track and mid-height for future calculations
@@ -57,7 +58,8 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         list_of_nvps.append(nvp_ys)
         coordinates = np.stack([nvp_xs, nvp_ys]).T
         coordinates = np.concatenate([np.zeros((1, 2)), coordinates])
-        list_of_coordinates.append(coordinates)
+        list_of_areas.append(calculate_area(coordinates))
+    del mesh
 
     completed_scan = CompletedScan(
         raw_scan=scan,
@@ -70,9 +72,9 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         nvp_50th_male_ys=list_of_nvps[3],
         nvp_95th_male_xs=list_of_nvps[4],
         nvp_95th_male_ys=list_of_nvps[5],
-        female_5th_area=calculate_area(list_of_coordinates[0]),
-        male_50th_area=calculate_area(list_of_coordinates[1]),
-        male_95th_area=calculate_area(list_of_coordinates[2]),
+        female_5th_area=list_of_areas[0],
+        male_50th_area=list_of_areas[1],
+        male_95th_area=list_of_areas[2],
         vehicle_left=vehicle_front_left[0],
         vehicle_front=vehicle_front_left[2],
         vehicle_right=vehicle_back_right[0],

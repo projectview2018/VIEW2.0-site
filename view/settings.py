@@ -38,7 +38,7 @@ SECRET_KEY = 'django-insecure-kfb=+rej@*g)fb58b_&!o8vg4&!gn&6o6-(749bqdd@b+up9_0
 # # SECURITY WARNING: don't run with debug turned on in production!
 # if not IS_HEROKU_APP:
 #     DEBUG = True
-DEBUG = True
+DEBUG = False
 
 # # On Heroku, it's safe to use a wildcard for `ALLOWED_HOSTS``, since the Heroku router performs
 # # validation of the Host header in the incoming HTTP request. On other platforms you may need

@@ -272,6 +272,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         Bucket='vehicle-scans', Key=f'static/lidar/images/{image_file}')
 
     img = Image.open(response['Body'])
+    del response
 
     # Change scaling and position based on vehicle size (convert height to [in] for comparison)
     # image placement is in polar (theta, r) and will only plot angles included in the axes.

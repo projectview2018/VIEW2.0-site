@@ -19,6 +19,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
     # print(f"scan before changing to binary: {response['Body'].read()}")
     mesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
     print('Loading scan')
+    del response
 
     vehicle_front_left, vehicle_back_right = get_vehicle_bounding_box(
         mesh, scan.driver_side_start)
@@ -58,6 +59,7 @@ def complete_scan(scan: Scan, vehicle: Vehicle):
         coordinates = np.stack([nvp_xs, nvp_ys]).T
         coordinates = np.concatenate([np.zeros((1, 2)), coordinates])
         list_of_coordinates.append(coordinates)
+    del mesh
 
     completed_scan = CompletedScan(
         raw_scan=scan,

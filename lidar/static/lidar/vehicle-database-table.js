@@ -1,13 +1,23 @@
+// get the array of completed scan objects and parse into JSON format
 const completed_scan_list_raw = document.getElementById("completed_scan_list");
 const completed_scan_data = JSON.parse(completed_scan_list_raw.textContent);
 
+// get the array of vehicle objects and parse into JSON format
 const vehicle_list_raw = document.getElementById("vehicle_list");
 const data = JSON.parse(vehicle_list_raw.textContent);
 
-let vehicle_to_scan_dict = [];
+// initialize empty object for matching car ids to completed scans
+let vehicle_to_scan_dict = {};
+// each car id points to an array of objects representing completed scans,
+// initially empty
 for (let car of data) {
   vehicle_to_scan_dict[car["pk"]] = [];
 }
+// iterate through the completed scans
+// push an object holding the raw scan id and the date added to the array of
+// the correct vehicle id
+// the info is nested one level down under the `fields` key to make objects
+// compatible with sorting function below
 for (let scan of completed_scan_data) {
   vehicle_to_scan_dict[scan["vehicle"]].push({
     fields: {
@@ -17,16 +27,23 @@ for (let scan of completed_scan_data) {
   });
 }
 
+// get the base uri of the current page
 const table_base_uri = vehicle_list_raw.baseURI;
+// get the extension of the vis page - to be used for redirecting when the
+// `View` button is clicked
 const visual_page_extension = document.currentScript.dataset.visualUrl.slice(
   0,
   -2
 );
+// get the extension of the current page
 const table_page_extension = document.currentScript.dataset.currentUrl;
+// make the url of the vis page by removing the current extension from the base
+// uri and adding the extension of the vis page
 const vis_page_url =
   table_base_uri.slice(0, table_base_uri.indexOf(table_page_extension)) +
   visual_page_extension;
 
+// body classes - used for populating the table
 const body_class_list = [
   "N/A",
   "Passenger Cars",
@@ -42,10 +59,14 @@ const body_class_list = [
   "Six Axle, Multi-Trailer",
   "Seven or More Axle, Multi-Trailer",
 ];
+// make a dict mapping the integer representing the body class to its correct
+// string representation
 const body_class_dict = {};
 body_class_list.forEach((item, index) => {
   body_class_dict[index + 1] = item;
 });
+
+// weight classes - used for populating the table
 const weight_class_list = [
   "Class 1",
   "Class 2",
@@ -56,11 +77,26 @@ const weight_class_list = [
   "Class 7",
   "Class 8",
 ];
+// make a dict mapping the integer representing the weight class to its correct
+// string representation
 const weight_class_dict = {};
 weight_class_list.forEach((item, index) => {
   weight_class_dict[index + 1] = item;
 });
 
+/**
+ * Sort a dictionary of objects by a certain field
+ *
+ * The objects must have the following heirarchy:
+ * {
+ *  fields: {
+ *   field: ...
+ *  }
+ * }
+ *
+ * @param {string} field - the field to sort by
+ * @returns {function} A sorting function to be passed to Array.prototype.sort()
+ */
 function compareByField(field) {
   return function (a, b) {
     if (a.fields[field] < b.fields[field]) {
@@ -73,6 +109,15 @@ function compareByField(field) {
   };
 }
 
+/**
+ * Check if a is a subsequence of b
+ *
+ * Letters in a need not be consecutive in b, but must be in the correct order
+ *
+ * @param {string} a - the potential subsequence
+ * @param {string} b - the main string
+ * @returns {boolean} true if a is a subsequence of b, false otherwise
+ */
 function isSubsequence(a, b) {
   // convert to lowercase
   a = a.toLowerCase();
@@ -93,9 +138,21 @@ function isSubsequence(a, b) {
   return true;
 }
 
+/**
+ * Make dropdown of completed scans and view button for last column of each row
+ *
+ * If there are no completed scans for the vehicle id, return a div with text
+ * indicating that there are no associated scans.
+ *
+ * @param {string} vehicle_id - the number of the vehicle
+ * @returns {HTMLDivElement} The element to populate the `Scan Details` field of the table
+ */
 function createDropdown(vehicle_id) {
+  // the completed scans associated with the id
   let select_items = vehicle_to_scan_dict[vehicle_id];
+  // wrapper element for the dropdown and button
   let wrapper = document.createElement("div");
+  // if no completed scans, return div with text instead
   if (select_items.length === 0) {
     wrapper.innerText = "No Associated Scans";
     return wrapper;

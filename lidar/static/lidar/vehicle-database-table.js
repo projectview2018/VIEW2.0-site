@@ -229,9 +229,9 @@ class Model {
 
     // modified by page controller
     this.page = null; // current page
-    // index into current_list to begin populating the page from
+    // the start and end vehicle number currently displayed in the table
+    // to be shown in the table footer
     this.start_vehicle_num = null;
-    // index into current_list to stop populating the page at
     this.end_vehicle_num = null;
 
     // the current set of vehicles displayed in the table - vehicle objects

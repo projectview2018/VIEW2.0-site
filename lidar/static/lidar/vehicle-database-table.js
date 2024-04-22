@@ -157,9 +157,11 @@ function createDropdown(vehicle_id) {
     wrapper.innerText = "No Associated Scans";
     return wrapper;
   }
-
+  // sort completed scans by date added, newest to oldest
   select_items = select_items.sort(compareByField("date_added")).toReversed();
 
+  // create select element, add styling, append each completed scan as an
+  // option to the dropdown
   let dropdown = document.createElement("select");
   dropdown.classList.add("scan_selector");
   for (ind in select_items) {
@@ -169,19 +171,29 @@ function createDropdown(vehicle_id) {
     dropdown.appendChild(choice);
   }
 
+  // create a button that will link to the correct vis page for the date
+  // selected
   let submit_button = document.createElement("a");
   submit_button.innerText = "View";
   submit_button.classList.add("containedbutton-inline");
 
+  // instantiate controller for the dropdown and button
   new ViewButtonController(dropdown, submit_button);
 
+  // add dropdown and button to wrapper and return wrapper element
   wrapper.appendChild(dropdown);
   wrapper.appendChild(submit_button);
   return wrapper;
 }
 
 class Model {
+  /**
+   * Create a Model instance
+   *
+   * Responsible for holding the state of the database table
+   */
   constructor() {
+    // vehicle fields to be populated into the table
     this.table_fields = [
       "vehicle_updated",
       "vehicle_make",
@@ -190,6 +202,7 @@ class Model {
       "vehicle_body_class",
       "vehicle_weight_class",
     ];
+    // vehicle data sorted by each field
     this.vehicle_lists = [
       data,
       [...data].sort(compareByField("vehicle_updated")),
@@ -197,67 +210,111 @@ class Model {
       [...data].sort(compareByField("vehicle_model")),
       [...data].sort(compareByField("vehicle_year")),
     ];
+    // the current list from which to populate the table
     this.current_list = this.vehicle_lists[1];
 
-    // search controller
-    this.search_field_index = 2;
-    this.seach_value = "";
+    // modified by search controller
+    this.search_field_index = 2; // which field to search into
+    this.seach_value = ""; // holds the text entered into the search bar
 
-    // row controller
-    this.cars_per_page = 25;
+    // modified by row controller
+    this.cars_per_page = 25; // how many vehicle to display per page
+    // how many pages are needed to display all vehicles
     this.num_pages = Math.ceil(this.current_list.length / this.cars_per_page);
 
-    // sort controller
-    this.vehicle_lists_index = 1;
+    // modified by sort controller
+    this.vehicle_lists_index = 1; // which of the sorted lists to pull data from
+    // whether to reverse the sorted list for ascending vs. decending
     this.reverse = true;
 
-    // page controller
-    this.page = null;
+    // modified by page controller
+    this.page = null; // current page
+    // index into current_list to begin populating the page from
     this.start_vehicle_num = null;
+    // index into current_list to stop populating the page at
     this.end_vehicle_num = null;
 
+    // the current set of vehicles displayed in the table - vehicle objects
     this.shown_vehicles = [];
+    // a list of functions to call when the page changes
     this.changedPageSubscribers = [];
   }
 
+  /**
+   * Return the variable `shown_vehicles`
+   *
+   * @returns {object} The list of vehicle objects currently shown in the table
+   */
   getShownVehicles() {
     return this.shown_vehicles;
   }
 
+  /**
+   * Append callback function to the list of page change subscriber functions
+   *
+   * @param {function} f - callback function to call when page changes
+   */
   subChangedPage(f) {
     this.changedPageSubscribers.push(f);
   }
 
+  /**
+   * Update the number of pages and change to page 1
+   *
+   * This function is called when the dropdown selector for number of entries
+   * per page is changed.
+   */
   updateNumPages() {
     this.num_pages = Math.ceil(this.current_list.length / this.cars_per_page);
     this.changePage(1);
   }
 
+  /**
+   * Update the list of vehicles to pull from when populating the table
+   *
+   * This function is called when there is text entered into or deleted from
+   * the search bar. This update preserves the current sorting.
+   */
   updateCurrentList() {
-    let list = [];
+    let list = []; // new list to replace current list
+
+    // get the search field
     let search_field = this.table_fields[this.search_field_index];
+
+    // iterate through the vehicles
     for (let vehicle of this.vehicle_lists[this.vehicle_lists_index]) {
+      // if search value matches text in the vehicle's field to search from,
+      // push it to the list
       if (
         isSubsequence(this.seach_value, vehicle.fields[search_field].toString())
       ) {
         list.push(vehicle);
       }
     }
+    // update current list and update num pages needed
     this.current_list = list;
     this.updateNumPages();
   }
 
+  /**
+   * Update the list of vehicles shown in the table
+   *
+   * @param {number} p - the page number to change to
+   */
   changePage(p) {
     this.page = p;
 
     this.shown_vehicles = [];
 
+    // based on the page number choose the start and end index for indexing
+    //into current_list
     let start_index = this.cars_per_page * (p - 1);
     let end_index =
       this.current_list.length >= this.cars_per_page * p
         ? this.cars_per_page * p
         : this.current_list.length;
 
+    // populate shown_vehicles from current_list in the correct order
     if (!this.reverse) {
       for (let i = start_index; i < end_index; i++) {
         this.shown_vehicles.push(this.current_list[i]);
@@ -273,9 +330,13 @@ class Model {
       this.shown_vehicles.reverse();
     }
 
-    this.start_vehicle_num = start_index + 1;
+    // set the values to be displayed in the table footer
+    // i.e. `showing vehicle ___ to ___`
+    this.start_vehicle_num = end_index === 0 ? 0 : start_index + 1;
     this.end_vehicle_num = end_index;
 
+    // call all subscriber function that need to be notified when the page
+    // changes
     this.changedPageSubscribers.forEach((f) => f(p));
   }
 }
@@ -523,15 +584,19 @@ class PageSelectorViewController {
   }
 }
 
+// initialize model, controllers, and views
 function init() {
   const model = new Model();
-  const searchC = new SearchController(model);
-  const numRowC = new NumRowController(model);
-  const sortC = new SortController(model);
-  const tableV = new TableView(model);
-  const labelV = new LabelView(model);
-  const pageSelectorVC = new PageSelectorViewController(model);
+  new SearchController(model);
+  new NumRowController(model);
+  new SortController(model);
+  new TableView(model);
+  new LabelView(model);
+  new PageSelectorViewController(model);
+
+  // set initial state of the model
   model.changePage(1);
 }
 
+// on page load, run init function
 window.addEventListener("load", init);

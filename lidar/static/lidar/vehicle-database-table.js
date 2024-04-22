@@ -332,7 +332,7 @@ class Model {
 
     // set the values to be displayed in the table footer
     // i.e. `showing vehicle ___ to ___`
-    this.start_vehicle_num = start_index + 1;
+    this.start_vehicle_num = end_index === 0 ? 0 : start_index + 1;
     this.end_vehicle_num = end_index;
 
     // call all subscriber function that need to be notified when the page

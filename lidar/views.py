@@ -114,7 +114,7 @@ def visualization(request, scan_id):
     if scan.scan_status == "modified":
         print("Tried to load Visualization page. Scan about to be processed.")
         thread = threading.Thread(
-            target=complete_scan, args=(scan, vehicle))
+            target=complete_scan, args=(scan))
         thread.start()
         return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': None, 'vrus_selected': None, "closest_forward_nvps": None, "num_vrus_in_vru_nvp_area": None, "loading": True})
 

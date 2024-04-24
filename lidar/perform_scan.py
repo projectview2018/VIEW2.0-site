@@ -25,12 +25,12 @@ def complete_scan(scan: Scan):
     scan.save()
 
     # Get recently uploaded scan from the bucket
-    response = get_object(scan.lidar_scan.name)
+    response_body = get_object(scan.lidar_scan.name)
 
     print('Starting scan')
-    mesh: trimesh.Trimesh = trimesh.load(response['Body'], file_type='gltf', force='mesh')
+    mesh: trimesh.Trimesh = trimesh.load(response_body, file_type='gltf', force='mesh')
     print('Loading scan')
-    del response
+    del response_body
 
     vehicle_front_left, vehicle_back_right = get_vehicle_bounding_box(
         mesh, scan.driver_side_start)

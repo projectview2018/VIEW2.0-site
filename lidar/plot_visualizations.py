@@ -35,21 +35,9 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # eye_height_full = ((18.3-16.25)*0.0254)+1.2
     # interpolated front-of-hood to eye distance interpolated [m]
     # eye_point_full = ((84-70)+20.5)*0.0254
-    height_percentile = "Nth-Percentile Female"
     # vru_selected = [1, 3]
     # plt.plot(nvp_x_cartesian, nvp_y_cartesian)
     # plt.show()
-    # SHOULD BE UNCOMMENTED WHEN TESTING IS DONE
-    # set true eye height (height of chair PLUS height of sitting person to eye) according to eye position
-    height_percentile = ""
-    if (eye_pos == 1):
-        height_percentile = "5th-Percentile Female"
-    elif (eye_pos == 2):
-        height_percentile = "50th-Percentile Male"
-    elif (eye_pos == 3):
-        height_percentile = "95th-Percentile Male"
-    else:
-        height_percentile = "50th-Percentile Male"
 
     '''VRU sizes (taken fron VIEW 1.0)
       'pre-school', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
@@ -89,10 +77,10 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     r = np.sqrt(np.square(nvp_x_cartesian_ft) + np.square(nvp_y_cartesian_ft))
     theta = np.arctan2(nvp_y_cartesian_ft, nvp_x_cartesian_ft)
 
-    # remove erroneous data (pillars)
-    to_keep = r <= max_distance
-    r = r[to_keep]
-    theta = theta[to_keep]
+    # # remove erroneous data (pillars)
+    # to_keep = r <= max_distance
+    # r = r[to_keep]
+    # theta = theta[to_keep]
 
     '''# remove data outside of plotting angle boundaries
     to_keep = theta <= mth.radians(plot_end)
@@ -109,8 +97,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     r_sorted = r
     theta_sorted = theta
     ''' -----------------------
-  End initial data processing
-  ------------------------'''
+    End initial data processing
+    ------------------------'''
 
     """
     ------------------------------------
@@ -192,8 +180,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
             r_vru_nvp[i] = b_eye-b_vru  # find distance from eye to visible vru
 
         # add area of vru to area array
+        # replace all NVPs greater than max distance with the max distance
+        r_area_calc = np.copy(r_vru_nvp)
+        r_area_calc[r_area_calc > max_distance] = max_distance
         vru_points = np.stack(
-            (r_vru_nvp * np.cos(theta_sorted), r_vru_nvp * np.sin(theta_sorted)), axis=1)
+            (r_area_calc * np.cos(theta_sorted), r_area_calc * np.sin(theta_sorted)), axis=1)
         vru_area = calculate_area(np.append(vru_points, [[0, 0]], axis=0))
         vru_nvp_areas.append(max(0, vru_area - vehicle_area))
         num_vrus_in_vru_nvp_area.append(

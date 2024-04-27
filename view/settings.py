@@ -66,7 +66,9 @@ ROOT_URLCONF = 'view.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'lidar/templates/lidar'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

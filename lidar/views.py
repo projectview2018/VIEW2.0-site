@@ -1,10 +1,9 @@
-import os
 import json
 from django.core import serializers
 from .models import Vehicle, Scan, CompletedScan
-from .s3_utils import get_object, generate_presigned_url_get, generate_presigned_url_put
+from .s3_utils import generate_presigned_url_get, generate_presigned_url_put
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpRequest, HttpResponse, FileResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 import threading
 from .forms import ScanForm, VehicleForm, VisualizationForm
@@ -12,7 +11,6 @@ from .perform_scan import complete_scan
 from .plot_visualizations import viz_overhead
 from django.views.decorators.cache import cache_control
 from django.views.decorators.http import require_GET
-from django.conf import settings
 
 
 def index(request):
@@ -126,7 +124,8 @@ def visualization(request, scan_id):
                 performing_scan = True
                 break
         if not performing_scan:
-            print(f'Lost thread {thread_name} while calculating. Restarting...')
+            print(
+                f'Lost thread {thread_name} while calculating. Restarting...')
             thread = threading.Thread(
                 target=complete_scan, args=(scan, vehicle), name=thread_name)
             thread.start()

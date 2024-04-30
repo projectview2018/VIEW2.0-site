@@ -1,28 +1,15 @@
 from django import forms
-from .models import Scan, Vehicle
+from .models import Scan, Vehicle, BODY_CLASSES, WEIGHT_CLASSES
 
 
 class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
-        body_classes = ['N/A',
-                        'Passenger Cars',
-                        'Four Tire, Single Unit',
-                        'Buses',
-                        'Two Axle, Six Tire, Single Unit',
-                        'Three Axle, Single Unit',
-                        'Four or More Axle, Single Unit',
-                        'Four or Less Axle, Single Trailer',
-                        '5-Axle Tractor Semitrailer',
-                        'Six or More Axle, Single Trailer',
-                        'Five or Less Axle, Multi-Trailer',
-                        'Six Axle, Multi-Trailer',
-                        'Seven or More Axle, Multi-Trailer']
+        body_classes = BODY_CLASSES
         body_classes_dict = {i + 1: body_class for i,
                              body_class in enumerate(body_classes)}
 
-        weight_classes = ['Class 1', 'Class 2', 'Class 3',
-                          'Class 4', 'Class 5', 'Class 6', 'Class 7', 'Class 8']
+        weight_classes = WEIGHT_CLASSES
         weight_classes_dict = {i + 1: weight_class for i,
                                weight_class in enumerate(weight_classes)}
 

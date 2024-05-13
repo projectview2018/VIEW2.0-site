@@ -35,8 +35,8 @@ class Vehicle(models.Model):
         vehicle_year: an int, the year of the vehicle
         vehicle_body_class: an int between 1 and 13, the (1-indexed) index into
             BODY_CLASSES giving the body class for this vehicle
-        vehicle_weight_class: an int between 1 and 8, the (1-indexed) index into
-            WEIGHT_CLASSES giving the weight class for this vehicle
+        vehicle_weight_class: an int between 1 and 8, the (1-indexed) index
+            into WEIGHT_CLASSES giving the weight class for this vehicle
     """
     vehicle_added = models.DateTimeField(auto_now_add=True)
     vehicle_updated = models.DateTimeField(auto_now_add=True)
@@ -72,7 +72,7 @@ class Scan(models.Model):
     """
     The raw data associated with a single scan
 
-    Args:
+    Attributes:
         vehicle: the Vehicle associated with this scan
         scan_added: the DateTime giving the time when this scan was added
         driver_side_start: a bool, True if the scan started on the driver side
@@ -159,17 +159,70 @@ class Scan(models.Model):
 
 
 class CompletedScan(models.Model):
+    """
+    The NVP data associated with a single scan
+
+    Holds the calculated NVPs, data about the driver's eye position, and
+    blindzone area
+
+    Attributes:
+        raw_scan: the Scan that this CompletedScan completes
+        completed_scan_added: the DateTime that this was added to the database
+        driver_eye_heights: a list of ints, the height of the driver's eye off
+            the ground in cm
+        driver_seat_heights: a list of ints 0-2, the heights of the drivers
+            seats off the ground, where 0 represents the lowest, 1 the middle,
+            and 2 is the highest position
+        driver_seat_distances: a list of ints 0-2, the positions of the driver
+            seat's track, where 0 represents the backmost, 1 the middle, and 2
+            the frontmost position
+        nvp_5th_female_xs: a list of ints, the x positions of the NVPs for a
+            5th percentile female driver (where the seat position is defined by
+            the first elements in driver_seat_heights and
+            driver_seat_distances) in cm
+        nvp_5th_female_ys: a list of ints, the y positions of the NVPs for a
+            5th percentile female driver (where the seat position is defined by
+            the first elements in driver_seat_heights and
+            driver_seat_distances) in cm
+        nvp_50th_male_xs: a list of ints, the x positions of the NVPs for a
+            50th percentile male driver (where the seat position is defined by
+            the second elements in driver_seat_heights and
+            driver_seat_distances) in cm
+        nvp_50th_male_ys: a list of ints, the y positions of the NVPs for a
+            50th percentile male driver (where the seat position is defined by
+            the second elements in driver_seat_heights and
+            driver_seat_distances) in cm
+        nvp_95th_male_xs: a list of ints, the x positions of the NVPs for a
+            95th percentile male driver (where the seat position is defined by
+            the third elements in driver_seat_heights and
+            driver_seat_distances) in cm
+        nvp_95th_male_ys: a list of ints, the y positions of the NVPs for a
+            95th percentile male driver (where the seat position is defined by
+            the third elements in driver_seat_heights and
+            driver_seat_distances) in cm
+        female_5th_area: a float, the blindzone area for the 5th percentile
+            female driver, in cm^2
+        male_50th_area: a float, the blindzone area for the 50th percentile
+            male driver, in cm^2
+        male_95th_area: a float, the blindzone area for the 95th percentile
+            male driver, in cm^2
+        vehicle_front: a float, the Z position of the front of the vehicle in
+            the scan, in m
+        vehicle_left: a float, the X position of the left of the vehicle in the
+            scan, in m
+        vehicle_back: a float, the Z position of the back of the vehicle in the
+            scan, in m
+        vehicle_right: a float, the X position of the right of the vehicle in
+            the scan, in m
+    """
     raw_scan = models.ForeignKey(Scan, on_delete=models.PROTECT)
     completed_scan_added = models.DateTimeField(auto_now_add=True)
-    # full driver eye heights (seat height + sitting height)
     driver_eye_heights = models.CharField(
-        validators=[validate_comma_separated_integer_list], max_length=2160, default="[0, 0, 0]")
-    # 0 = lowest seat height, 1 = mid seat height, 2 = highest seat height
+        validators=[validate_comma_separated_integer_list], max_length=20, default="[0, 0, 0]")
     driver_seat_heights = models.CharField(
-        validators=[validate_comma_separated_integer_list], max_length=2160, default="[2, 1, 0]")
-    # 0 = back-most seat position, 1 = mid seat position, 2 = forward-most seat position
+        validators=[validate_comma_separated_integer_list], max_length=20, default="[2, 1, 0]")
     driver_seat_distances = models.CharField(
-        validators=[validate_comma_separated_integer_list], max_length=2160, default="[2, 1, 0]")
+        validators=[validate_comma_separated_integer_list], max_length=20, default="[2, 1, 0]")
     nvp_5th_female_xs = models.CharField(
         validators=[validate_comma_separated_integer_list], max_length=2160, default="[]")
     nvp_5th_female_ys = models.CharField(

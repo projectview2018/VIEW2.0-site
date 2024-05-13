@@ -3,7 +3,28 @@ from .models import Scan, Vehicle, BODY_CLASSES, WEIGHT_CLASSES
 
 
 class VehicleForm(forms.ModelForm):
+    """
+    Form for the user to input the type of vehicle they are uploading
+    """
     class Meta:
+        """
+        Metadata for the VehicleForm
+
+        Attributes:
+            model: a class, the output type of the form (a Vehicle)
+            body_classes: a list of strings, the options for the dropdown
+                determining the body class of the vehicle
+            body_classes_dict: a dict mapping ints to strings, the IDs for each
+                body class to the name of the body class
+            weight_classes: a list of strings, the options for the dropdown
+                determining the weight class of the vehicle
+            weight_classes_dict: a dict mapping ints to strings, the IDs for
+                each weight class to the name of the weight class
+            widgets: a dict mapping strings to form inputs, the name of the
+                Vehicle attribute to the form input for that attribute
+            fields: a list of strings, the names of the Vehicle attributes that
+                are set by this form (the keys in widgets)
+        """
         model = Vehicle
         body_classes = BODY_CLASSES
         body_classes_dict = {i + 1: body_class for i,
@@ -66,7 +87,23 @@ class VehicleForm(forms.ModelForm):
 
 
 class ScanForm(forms.ModelForm):
+    """
+    Form for the user to input the scan they are uploading
+    """
     class Meta:
+        """
+        Metadata for the ScanFrom
+
+        Attributes:
+            model: a class, the output type of the form (a Scan)
+            start_side_dict: a dict mapping bools to strings, where the keys
+                are the stored data and the values are the displayed names for
+                the driver_side_start attribute
+            widgets: a dict mapping strings to form inputs, the name of the
+                Scan attribute to the form input for that attribute
+            fields: a list of strings, the names of the Scan attributes that
+                are set by this form (the keys in widgets)
+        """
         model = Scan
 
         start_side_dict = {
@@ -199,6 +236,20 @@ class ScanForm(forms.ModelForm):
 
 
 class VisualizationForm(forms.Form):
+    """
+    Form for the user to select the type of plot they want to make
+
+    Attributes:
+        VRUS: a list of tuples, where each tuple gives 1) the ID of the VRU (a
+            numeric string) and 2) the displayed text for the VRU (a string)
+        eye_positions: a list of tuples, where each tuple gives 1) the ID of
+            the eye position (a numeric string) and 2) the displayed text for
+            the eye position (a string)
+        vru_selected: a MultipleChoiceField for the user to select the VRU(s)
+            to visualize
+        eye_position_selected: a MultipleChoiceField for the user to select the
+            eye position to visualize
+    """
     VRUS = [
         ("1", 'Preschool child (28 inches)'),
         ("2", 'Elementary school child on bicycle (35 inches)'),

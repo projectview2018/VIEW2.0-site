@@ -1,3 +1,4 @@
+// labels for vrus, in order of ascending height
 const vruLabels = [
   "pre-school child",
   "elementary school child on bike",
@@ -6,6 +7,7 @@ const vruLabels = [
   "adult on bike",
   "adult",
 ];
+// plural labels for vrus, in same order
 const vruLabelsPlural = [
   "pre-school children",
   "elementary school children on bikes",
@@ -14,7 +16,9 @@ const vruLabelsPlural = [
   "adults on bikes",
   "adults",
 ];
+// colors for legend
 const colors = ["#A6DDE7a6", "#A34D9Da6"];
+// border styles for legend
 const borders = ["1px solid #A6DDE7", "1px solid #A34D9D"];
 
 const loadingStatus = JSON.parse(
@@ -30,22 +34,35 @@ const closest_forward_nvps = JSON.parse(
   document.getElementById("closest_forward_nvps").textContent
 );
 
+// check if page should be loading
+// if so, show the loader and refresh the page every 30 seconds
+// if not, continue to display content
 if (loadingStatus === true) {
+  // show the div that contains the loader
   let loader = document.getElementById("load_wrapper");
   loader.style.display = "block";
 
+  // reload the window after 30sec
   window.setTimeout(function () {
     window.location.reload();
   }, 30000);
 } else {
+  // show the div that contains the content
   let content = document.getElementsByClassName("visualization-content")[0];
   content.style.display = "flex";
 
+  // get a list of the checked vrus and attach the following onclick function
+  // to them
   let checks = document.getElementsByName("vru_selected");
   const max = 2;
   for (let check of checks) {
     check.onclick = selectiveCheck;
   }
+  /**
+   * Onclick function for VRU checkboxes. Uncheck box if two already selected.
+   *
+   * @returns {boolean} false if number of checked boxes is greater than two
+   */
   function selectiveCheck() {
     let checkedChecks = document.querySelectorAll(
       "input[name='vru_selected']:checked"
@@ -55,6 +72,7 @@ if (loadingStatus === true) {
     }
   }
   if (vrusSelected) {
+    // show the graph container if there are VRUs selected
     let graphContainer = document.getElementById("graph_container");
     graphContainer.style.display = "flex";
 

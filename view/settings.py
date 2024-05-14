@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-# import django_on_heroku
 import os
 from pathlib import Path
 from boto3 import *
@@ -29,16 +28,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+# # The `DYNO` env var is set on Heroku CI, but it's not a real Heroku app, so we have to
+# # also explicitly exclude CI:
+# # https://devcenter.heroku.com/articles/heroku-ci#immutable-environment-variables
+# IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
 
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 
+# allowed host https, important to be able to load website
 ALLOWED_HOSTS = ['127.0.0.1', 'view2-vd8vm.ondigitalocean.app',
-                 'localhost', '127.0.0.1', '0.0.0.0', "view2.blindzonesafety.org", "blindzonesafety.org"]
+                 'localhost', '0.0.0.0', 'view2.blindzonesafety.org', 'blindzonesafety.org']
+
+# important for forms to work, allows POST information to be accepted at that url
 CSRF_TRUSTED_ORIGINS = [
     'https://view2-vd8vm.ondigitalocean.app', 'https://view2.blindzonesafety.org', 'https://blindzonesafety.org']
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -90,7 +96,6 @@ WSGI_APPLICATION = 'view.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'defaultdb',
         'USER': 'doadmin',
@@ -135,8 +140,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-# STATIC_URL = 'static/'
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -144,18 +147,10 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'lidar/static/')
-
-# print(f"Bucket type is {type(os.environ.get('AWS_STORAGE_BUCKET_NAME'))}")
+# Digital Ocean Spaces bucket parameters for accessing, getting, and inputting media files
+# Parameters must be stored in a .env file that is NEVER committed or pushed to GitHub
 AWS_S3_ACCESS_KEY_ID = os.environ.get('AWS_S3_ACCESS_KEY_ID')
 AWS_S3_SECRET_ACCESS_KEY = os.environ.get('AWS_S3_SECRET_ACCESS_KEY')
-
-# AWS_STORAGE_BUCKET_NAME = 'vehicle-scans'
-# AWS_S3_REGION_NAME = os.environ.get('AWS_REGION_NAME')
-# AWS_DEFAULT_ACL = os.environ.get('AWS_DEFAULT_ACL')
-# AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL')
-
 AWS_STORAGE_BUCKET_NAME = 'vehicle-scans'
 AWS_DEFAULT_ACL = None
 AWS_S3_REGION_NAME = 'us-east-2'
@@ -181,20 +176,10 @@ STORAGES = {
     },
 }
 
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'view.storage_backends.StaticStorage'
+# defines where in the DO Spaces Bucket static and media files should be uploaded
 AWS_STATIC_LOCATION = 'static'
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_STATIC_LOCATION)
-# STATIC_ROOT = 'static/'
 
-# MEDIA_FILE_STORAGE = 'view.storage_backends.MediaStorage'
+
 AWS_MEDIA_LOCATION = 'media/lidar/lidar_scans'
-PUBLIC_MEDIA_LOCATION = 'media/public'
 MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_MEDIA_LOCATION)
-# MEDIA_ROOT = 'lidar/media/lidar/lidar_scans/'
-
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-
-# OLD Procfile CONTENT
-# web: python3 manage.py runserver 0.0.0.0:"$PORT"

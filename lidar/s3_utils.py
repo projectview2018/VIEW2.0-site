@@ -3,6 +3,14 @@ import os
 
 
 def create_s3_client():
+    """
+    Create a client session with S3 to interact with S3 buckets like the DO Spaces bucket we use to store our files.
+
+    Args:
+        N/A
+    Returns:
+        boto3.session.Session.client: the low-level service client used to access the Spaces bucket.
+    """
     return boto3.client('s3', region_name='nyc3', endpoint_url=os.environ.get('AWS_S3_ENDPOINT_URL'), aws_access_key_id=os.environ.get(
         'AWS_S3_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'))
 

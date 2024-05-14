@@ -41728,6 +41728,8 @@ function breakPutUrl(url2) {
   const path = split_url[1];
   return [hostname, path];
 }
+
+// on window load, instantiate model, controllers, and views
 window.onload = () => {
   const model = new Model();
   new canvasController(model);
@@ -41735,6 +41737,16 @@ window.onload = () => {
   new erasetoolController(model);
   new filesaveController(model);
 };
+
+/**
+ * Add two lists together element-wise.
+ *
+ * Lists must be the same length.
+ *
+ * @param {object} v1 - an array
+ * @param {object} v2 - an array
+ * @returns an array that is the element-wise sum of v1 and v2
+ */
 function addVectors(v1, v2) {
   if (v1.length !== v2.length) {
     throw "Vector lengths do not match";
@@ -41745,6 +41757,16 @@ function addVectors(v1, v2) {
   }
   return ans;
 }
+
+/**
+ * Subtract two lists together element wise.
+ *
+ * Lists must be the same length.
+ *
+ * @param {object} v1 - an array
+ * @param {object} v2 - an array
+ * @returns an array that is the element-wise difference of v1 and v2
+ */
 function subtractVectors(v1, v2) {
   if (v1.length !== v2.length) {
     throw "Vector lengths do not match";
@@ -41755,6 +41777,14 @@ function subtractVectors(v1, v2) {
   }
   return ans;
 }
+
+/**
+ * Scale a list by a constant factor.
+ *
+ * @param {object} vec - an array
+ * @param {number} scale - a scale factor
+ * @returns the original list scaled element-wise by the scale factor
+ */
 function scaleVector(vec, scale) {
   let ans = [];
   for (let idx = 0; idx < vec.length; idx++) {
@@ -41762,6 +41792,13 @@ function scaleVector(vec, scale) {
   }
   return ans;
 }
+
+/**
+ * Get the length of a vector.
+ *
+ * @param {object} vec - an array representing a vector
+ * @returns the length of the vector
+ */
 function vectorLength(vec) {
   let ans = 0;
   for (let idx = 0; idx < vec.length; idx++) {
@@ -41769,9 +41806,26 @@ function vectorLength(vec) {
   }
   return Math.sqrt(ans);
 }
+
+/**
+ * Normalize a vector to be unit length.
+ *
+ * @param {object} vec - the vector to normalize
+ * @returns the unit vector of the vector passed in
+ */
 function normalize(vec) {
   return scaleVector(vec, 1 / vectorLength(vec));
 }
+
+/**
+ * Take the dot product of two vectors.
+ *
+ * Vectors must be the same length.
+ *
+ * @param {object} v1
+ * @param {object} v2
+ * @returns a number representing the dot product of v1 and v2
+ */
 function dot(v1, v2) {
   if (v1.length !== v2.length) {
     throw "Vector lengths do not match";
@@ -41782,6 +41836,14 @@ function dot(v1, v2) {
   }
   return ans;
 }
+
+/**
+ * Take the cross product of two 3-dimensional vectors
+ *
+ * @param {object} v1 - an array representing a vector
+ * @param {object} v2 - an array representing a vector
+ * @returns a 3D vector that is the cross product of v1 and v2
+ */
 function cross(v1, v2) {
   if (v1.length !== 3 || v2.length !== 3) {
     throw "Can only take cross product of two 3-element vectors";
@@ -41792,9 +41854,19 @@ function cross(v1, v2) {
     v1[0] * v2[1] - v1[1] * v2[0],
   ];
 }
+
 class Model {
+  /**
+   * Create a Model instance.
+   *
+   * Responsible for initializing trimesh scene and keeping track of erase
+   * properties such as erase distance and the undo/redo stack.
+   */
   constructor() {
+    // get container element from DOM
     this.container = document.getElementById("erase_tool_container");
+
+    // initialize trimesh scene, camera, lighting, renderer, and controls
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(
       75,
@@ -41813,9 +41885,16 @@ class Model {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.update();
+
+    // undo and redo stack
     this.undoStack = [];
     this.redoStack = [];
+
+    // the set of faces erased in the current mousedown
     this.currentErase = {};
+
+    // gltf loader
+    // get url of mesh object and lood into scene
     this.loader = new GLTFLoader();
     this.get_url = JSON.parse(document.getElementById("get_url").textContent);
     this.meshObj;
@@ -41827,13 +41906,23 @@ class Model {
         console.error(error);
       }
     );
+
+    // initialize raycaster, pointer, and exporter
     this.raycaster = new Raycaster();
     this.pointer = new Vector2();
     this.exporter = new GLTFExporter();
+
+    // url for uploading erased scan
     this.put_url = JSON.parse(document.getElementById("put_url").textContent);
     [this.hostname, this.path] = breakPutUrl(this.put_url);
+
+    // keep track of mouse input
     this.mouseDown = false;
+
+    // if erase mode is on
     this.eraseMode = false;
+
+    // determine the extension of the current page
     this.baseURI = document.getElementById("put_url").baseURI;
     this.windshield_removal_index = JSON.parse(
       document.getElementById("windshield_removal_ext").innerText
@@ -41842,16 +41931,27 @@ class Model {
       document.getElementById("windshield_removal_ext").innerText
     ).slice(0, this.windshield_removal_index);
 
+    // detemine the extension of the vis page
     this.visualizationExt = JSON.parse(
       document.getElementById("visualization_ext").innerText
     );
 
+    // make the submit url by removing the current extension and adding the vis
+    // extension
     this.submitUrl =
       this.baseURI.slice(0, this.baseURI.indexOf(this.windshieldRemovalExt)) +
       this.visualizationExt;
+
+    // set default erase raduis
     this.eraseDistance = 0.05;
+
+    // functions to call when erase mode toggles on
     this.erasemodeSubscribers = [];
+
+    // animate scene
     this.animate();
+
+    // resize event listener to maintain aspect ratio of three js window
     addEventListener("resize", () => {
       this.camera.aspect =
         this.container.offsetWidth / this.container.offsetHeight;
@@ -41862,15 +41962,35 @@ class Model {
       );
     });
   }
+
+  /**
+   * Get the number of faces in the mesh object.
+   *
+   * @returns the number of faces in the mesh
+   */
   numFaces() {
     return this.meshObj.geometry.index.array.length / 3;
   }
+
+  /**
+   * Add a callback to the list of functions to call when erase mode turns on
+   *
+   * @param {function} f - callback function
+   */
   subEraseMode(f) {
     this.erasemodeSubscribers.push(f);
   }
+
+  /**
+   * When erase button is clicked, call all subscriber functions
+   */
   eButtonClicked() {
     this.erasemodeSubscribers.forEach((f) => f());
   }
+
+  /**
+   * Toggle erase mode and adjust controls and undo stack
+   */
   toggleEraseMode() {
     this.eraseMode = !this.eraseMode;
     this.controls.enabled = !this.eraseMode;
@@ -41879,43 +41999,78 @@ class Model {
       this.pushToUndoStack();
     }
   }
+
+  /**
+   * Push set of currently erased faces to undo stack and reset currentErase
+   */
   pushToUndoStack() {
     if (Object.keys(this.currentErase).length > 0) {
       this.undoStack.push(this.currentErase);
       this.currentErase = {};
     }
   }
+
+  /**
+   * Revert the latest change in the undo stack and move it to redo stack
+   *
+   * @returns undefined
+   */
   undo() {
     if (this.undoStack.length === 0) {
       return;
     }
+    // take the latest change from undo stack
     const toUndo = this.undoStack.pop();
+
+    // add each component of each face index back into the meshobj geometry
     for (const faceIdx in toUndo) {
       for (let component = 0; component < 3; component++) {
         this.meshObj.geometry.index.array[faceIdx * 3 + component] =
           toUndo[faceIdx][component];
       }
     }
+    // flag that geometry needs update
     this.meshObj.geometry.index.needsUpdate = true;
+    // push to redo stack
     this.redoStack.push(toUndo);
   }
+
+  /**
+   * Redo the latest change on the redo stack and move it to undo stack
+   *
+   * @returns undefined
+   */
   redo() {
     if (this.redoStack.length === 0) {
       return;
     }
+    // get the latest redo
     const toRedo = this.redoStack.pop();
+    // remove each face
     for (const faceIdx in toRedo) {
       this.removeFace(faceIdx);
     }
+    // flag that geometry needs update
     this.meshObj.geometry.index.needsUpdate = true;
+    // push to undo stack
     this.undoStack.push(toRedo);
   }
+
+  /**
+   * Undo all changes in the undo stack and reset redo stack.
+   */
   resetMesh() {
     while (this.undoStack.length > 0) {
       this.undo();
     }
     this.redoStack = [];
   }
+
+  /**
+   * Add the vehicle meshobject to the three js scene
+   *
+   * @param {object} gltf - gltf object
+   */
   loadMeshobj(gltf) {
     this.meshObj = gltf.scene.children[0];
     this.scene.add(this.meshObj);
@@ -41963,6 +42118,10 @@ class Model {
     let edge2 = subtractVectors(vertex3, vertex1);
     return normalize(cross(edge1, edge2));
   }
+
+  /**
+   * Render loop function
+   */
   render() {
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const intersects = this.raycaster.intersectObjects(this.scene.children);
@@ -41996,10 +42155,20 @@ class Model {
     this.meshObj.geometry.index.needsUpdate = true;
     this.renderer.render(this.scene, this.camera);
   }
+
+  /**
+   * Animate function that renders scene with specific camera viewpoint
+   */
   animate() {
     requestAnimationFrame(this.animate.bind(this));
     this.renderer.render(this.scene, this.camera);
   }
+
+  /**
+   * Save erased meshobject to save url
+   *
+   * @param {object} data - the meshobject to save
+   */
   saveFile(data) {
     return new Promise((resolve, reject) => {
       const req = https.request(
@@ -42030,23 +42199,50 @@ class Model {
     });
   }
 }
+
 class canvasController {
+  /**
+   * Create a cnavasController instance
+   *
+   * Responsible for updating model parameters when the mouse moves on the
+   * canvas
+   *
+   * @param {object} m - and instance of the Model class
+   */
   constructor(m) {
+    // associated model
     this.model = m;
+    // canvas viewer element from DOM
     this.viewer = document.getElementById("canvas_viewer");
+    // add renderer domelement to viewer as a child to get it to display
     this.viewer.appendChild(this.model.renderer.domElement);
+    // add event listeners for mouse down, mouse move, mouse up
     this.viewer.addEventListener("mousedown", () => this.documentMouseDown());
     this.viewer.addEventListener("mousemove", (e) => this.documentMouseMove(e));
     this.viewer.addEventListener("mouseup", () => this.documentMouseUp());
   }
+
+  /**
+   * On mouse down, set mouse down flag to true
+   */
   documentMouseDown() {
     this.model.mouseDown = true;
   }
+
+  /**
+   * On mouse move, if mousedown and erasing, request a new animation frame
+   *
+   * @param {object} e - mousemove event
+   */
   documentMouseMove(e) {
     if (this.model.mouseDown && this.model.eraseMode) {
       window.requestAnimationFrame(this.model.render.bind(this.model));
     }
   }
+
+  /**
+   * On mouse up, set mouse down to false and push any changes to undo stack
+   */
   documentMouseUp() {
     this.model.mouseDown = false;
     if (this.model.eraseMode) {
@@ -42054,12 +42250,27 @@ class canvasController {
     }
   }
 }
+
 class erasetoolViewer {
+  /**
+   * Create an erasetoolViewer instance
+   *
+   * Responsible for showing the erase message
+   *
+   * @param {object} m - an instance of the Model class
+   */
   constructor(m) {
+    // associated model
     this.model = m;
+    // erase message element from DOM
     this.eraseMessage = document.getElementById("erase_mode");
+    // sub function to erase mode toggle
     this.model.subEraseMode(() => this.toggleEraseMessage());
   }
+
+  /**
+   * When erase mode is toggled, update the visibility of the erase message
+   */
   toggleEraseMessage() {
     if (this.eraseMessage.style.display == "none") {
       this.eraseMessage.style.display = "block";
@@ -42068,28 +42279,61 @@ class erasetoolViewer {
     }
   }
 }
+
 class erasetoolController {
+  /**
+   * Create an erasetoolController instance
+   *
+   * Responsible for setting erase tool parameters when erase button is
+   * clicked, or when undo/redo is clicked, or when slider is adjusted
+   *
+   * @param {object} m - an instance of the Model class
+   */
   constructor(m) {
+    // associated model
     this.model = m;
+
+    // add event listener for pointer move to window
     window.addEventListener("pointermove", (e) => this.onPointerMove(e));
+
+    // add key down listener to document
     document.body.addEventListener("keydown", (e) => this.documentKeyDown(e));
+
+    // get erase button from DOM and add click event listener
     this.erase_button = document.getElementById("erase_button");
     this.erase_button.addEventListener("click", () =>
       this.model.toggleEraseMode()
     );
+
+    // get reset button from DOM and add click event listener
     this.reset_button = document.getElementById("reset_button");
     this.reset_button.addEventListener("click", () => this.model.resetMesh());
+
+    // get undo button from DOM and add click event listener
     this.undo_button = document.getElementById("undo_button");
     this.undo_button.addEventListener("click", () => this.model.undo());
+
+    // get redo button from DOM and add click event listener
     this.redo_button = document.getElementById("redo_button");
     this.redo_button.addEventListener("click", () => this.model.redo());
+
+    // get slider from DOM
     this.slider = document.getElementById("dist_slider");
+    // set initial slider value
     this.slider.value = String(this.model.eraseDistance * 100);
+    // function to adjust erase dist on slider input
     this.slider.oninput = function () {
       m.eraseDistance = this.value / 100;
     };
+    // sub function to erasemode
     this.model.subEraseMode(() => this.switchButtonText());
   }
+
+  /**
+   * On keydown, call the correct function depending on set of keys pressed
+   *
+   * @param {object} e - keydown event
+   */
   documentKeyDown(e) {
     if (e.key === "e" || e.key === "E") {
       this.model.toggleEraseMode();
@@ -42101,6 +42345,12 @@ class erasetoolController {
       this.model.redo();
     }
   }
+
+  /**
+   * On pointer move, update the model's pointer values
+   *
+   * @param {object} e - pointermove event
+   */
   onPointerMove(e) {
     let rect = e.target.getBoundingClientRect();
     this.model.pointer.x =
@@ -42108,6 +42358,10 @@ class erasetoolController {
     this.model.pointer.y =
       -((e.clientY - rect.top) / (rect.bottom - rect.top)) * 2 + 1;
   }
+
+  /**
+   * When erase mode is toggled, switch the text that is shown in the button.
+   */
   switchButtonText() {
     if (this.model.eraseMode) {
       this.erase_button.innerText = "Move";
@@ -42116,14 +42370,29 @@ class erasetoolController {
     }
   }
 }
+
 class filesaveController {
+  /**
+   * Create a filesaveController instance
+   *
+   * Responsible for saving the meshobj to AWS S3 when submit button is clicked
+   *
+   * @param {object} m - an instance of the Model class
+   */
   constructor(m) {
+    // associated model
     this.model = m;
+    // submit button from DOM
     this.submit_button = document.getElementById("submit_button");
+    // add event listener for click on button
     this.submit_button.addEventListener("click", () =>
       this.handleSubmitClick()
     );
   }
+
+  /**
+   * On submit button click, save the meshobj and redirect to the next page
+   */
   handleSubmitClick() {
     this.model.exporter.parse(
       this.model.meshObj,

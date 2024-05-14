@@ -27,23 +27,8 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         num_vrus_in_vru_nvp_area (list of ints): list containing the number of VRUs that are hidden in the blindzone of the driver, within 49 ft, restricted to the driver's front 220 degrees, for each VRU
 
     '''
-    #  FOR TESTING, creates a dummy plot
-    # nvp_x_cartesian = np.array([185, 186, 186, 194, 195, 195, 195, 198, 197, 200, 200, 202, 202, 202, 202, 203, 203, 203, 203, 203, 204, 203, 203, 203, 203, 214, 214, 215, 216, 214, 211, 213, 210, 210, 210, 219, 220, 221, 219, 217, 216, 215, 224, 222, 221, 220, 215, 215, 225, 224, 221, 220, 216, 226, 222, 221, 218, 214, 222, 219, 217, 213, 220, 217,
-    #                            212, 220, 216, 221, 216, 223, 232, 234, 234, 232, 232, 228, 235, 236, 228, 235, 228, 227, 225, 228, 229, 228, 225, 223, 225, 231, 228, 233, 237, 241, 247, 238, 239, 280, 272, 245, 236, 222, 203, 187, 170, 149, 116, 79, 57, 15, 1, -34, -61, -98, -124, -167, -190, -227, -263, -289, -313, -347, -382, -382, -430, -452, -483, -508, -536, -539])
-    # nvp_y_cartesian = np.array([-22, -15, -15, -18, -14, -14, -14, -12, -10, -9, -9, -7, -7, -7, -7, -4, -4, -4, -3, -3, 0, 2, 2, 2, 5, 7, 7, 9, 10, 11, 8, 13, 8, 14, 15, 16, 18, 21, 20, 23, 23, 23, 25, 27, 28, 28, 31, 31, 33, 37, 36, 37, 38, 41, 42, 46, 44, 46, 48, 50, 52, 51, 52, 55, 59, 61, 61, 69,
-    #                            67, 72, 77, 81, 81, 84, 90, 92, 94, 98, 104, 103, 107, 113, 120, 121, 132, 136, 141, 150, 153, 166, 172, 186, 202, 216, 235, 243, 265, 334, 351, 355, 356, 391, 411, 425, 450, 450, 474, 476, 474, 476, 474, 475, 474, 501, 500, 500, 498, 497, 494, 495, 494, 492, 491, 464, 460, 458, 456, 453, 453, 428])
-    # eye height calculated from interpolated seat-ground + human eye point on seat [m]
-    # eye_height_full = ((18.3-16.25)*0.0254)+1.2
-    # interpolated front-of-hood to eye distance interpolated [m]
-    # eye_point_full = ((84-70)+20.5)*0.0254
-    # vru_selected = [1, 3]
-    # plt.plot(nvp_x_cartesian, nvp_y_cartesian)
-    # plt.show()
 
-    '''VRU sizes (taken fron VIEW 1.0)
-      'pre-school', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
-      shoulder height, width, person height (all in [in])
-      DOESN'T CONTAIN DEPTH, BUT ASSUMES THAT BICYCLES ARE 4X DEPTH OF PEOPLE AND IGNORES WHEELCHAIRS?'''
+    # VRU information, sizes in [in] (taken fron VIEW 1.0)
     vru_label = ['pre-school child', 'elementary schooler on bike', 'elementary school child',
                  'wheelchair user', 'adult on bike', 'adult']
     vru_sizes = np.array([[28, 9, 34], [35, 12, 45], [37, 12, 45], [

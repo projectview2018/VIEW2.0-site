@@ -8,41 +8,27 @@ import math as mth
 from .perform_scan import calculate_area
 
 
-def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_full, eye_pos, vru_selected, vehicle_width, vehicle_D):
+def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_full, vru_selected, vehicle_width, vehicle_D):
     '''
-    Takes NVPs, vehicle measurements, and VRU. Plots overhead view of blind zone
-      with nearest forward-visible VRU. Saves the figure as an SVG and returns fig
-       for viewing, if desired.
+    Takes NVPs, vehicle measurements, and VRU. Plots overhead view of blind zone with nearest forward-visible VRU. Saves the figure as an SVG and returns fig for viewing, if desired.
 
-    Takes inputs:
-    vp_x_cartesian = np.array([nums]) [cm]
-    nvp_y_cartesian = np.array([nums]) [cm]
-    # eye height calculated from interpolated seat-ground [m]
-    eye_height_full = num
-    eye_point_full = num # interpolated front-of-hood to eye distance
-      interpolated [m]
-    vru_selected = array # options: 1=toddler, 2=elementary, 3=elem_bike,
-      4=wheelchair, 5=adult_bike, 6=adult
+    Args:
+        nvp_x_cartesian (np.array): numpy array of x-coordinates of NVPs on the Cartesian plane, in [cm]
+        nvp_y_cartesian (np.array): numpy array of y-coordinates of NVPs on the Cartesian plane, in [cm]
+        eye_height_full (float): height of the driver's eye calculated from seat height from ground + driver sitting height, in [m]
+        eye_point_full (float): longitudinal (along side fo a vehicle) distance from the front-most point on a vehicle to the driver's eye, in [m]
+        vru_selected (list of ints): VRU options (1=toddler, 2=elementary, 3=elem_bike,
+          4=wheelchair, 5=adult_bike, 6=adult)
+        vehicle_width: latitudinal width of the vehicle (side mirror to side mirror), in [ft]
+        vehicle_D: latitudinal distance from driver's eye to outside of the vehicle on driver's side in [ft]
+    Returns:
+        data (str): image data for the generated graph as a string    
+        closest_forward_vrus (list of ints): list containing the longitudinal distance of the closest visible VRU directly in front of the driver for each VRU, in ft
+        num_vrus_in_vru_nvp_area (list of ints): list containing the number of VRUs that are hidden in the blindzone of the driver, within 49 ft, restricted to the driver's front 220 degrees, for each VRU
 
-    *np.array requires importing the numpy library (import numpy as np)
     '''
-    #  FOR TESTING
-    # nvp_x_cartesian = np.array([185, 186, 186, 194, 195, 195, 195, 198, 197, 200, 200, 202, 202, 202, 202, 203, 203, 203, 203, 203, 204, 203, 203, 203, 203, 214, 214, 215, 216, 214, 211, 213, 210, 210, 210, 219, 220, 221, 219, 217, 216, 215, 224, 222, 221, 220, 215, 215, 225, 224, 221, 220, 216, 226, 222, 221, 218, 214, 222, 219, 217, 213, 220, 217,
-    #                            212, 220, 216, 221, 216, 223, 232, 234, 234, 232, 232, 228, 235, 236, 228, 235, 228, 227, 225, 228, 229, 228, 225, 223, 225, 231, 228, 233, 237, 241, 247, 238, 239, 280, 272, 245, 236, 222, 203, 187, 170, 149, 116, 79, 57, 15, 1, -34, -61, -98, -124, -167, -190, -227, -263, -289, -313, -347, -382, -382, -430, -452, -483, -508, -536, -539])
-    # nvp_y_cartesian = np.array([-22, -15, -15, -18, -14, -14, -14, -12, -10, -9, -9, -7, -7, -7, -7, -4, -4, -4, -3, -3, 0, 2, 2, 2, 5, 7, 7, 9, 10, 11, 8, 13, 8, 14, 15, 16, 18, 21, 20, 23, 23, 23, 25, 27, 28, 28, 31, 31, 33, 37, 36, 37, 38, 41, 42, 46, 44, 46, 48, 50, 52, 51, 52, 55, 59, 61, 61, 69,
-    #                            67, 72, 77, 81, 81, 84, 90, 92, 94, 98, 104, 103, 107, 113, 120, 121, 132, 136, 141, 150, 153, 166, 172, 186, 202, 216, 235, 243, 265, 334, 351, 355, 356, 391, 411, 425, 450, 450, 474, 476, 474, 476, 474, 475, 474, 501, 500, 500, 498, 497, 494, 495, 494, 492, 491, 464, 460, 458, 456, 453, 453, 428])
-    # eye height calculated from interpolated seat-ground + human eye point on seat [m]
-    # eye_height_full = ((18.3-16.25)*0.0254)+1.2
-    # interpolated front-of-hood to eye distance interpolated [m]
-    # eye_point_full = ((84-70)+20.5)*0.0254
-    # vru_selected = [1, 3]
-    # plt.plot(nvp_x_cartesian, nvp_y_cartesian)
-    # plt.show()
 
-    '''VRU sizes (taken fron VIEW 1.0)
-      'pre-school', 'elem_bike', 'elementary', 'wheelchair', 'adult_bike', 'adult'
-      shoulder height, width, person height (all in [in])
-      DOESN'T CONTAIN DEPTH, BUT ASSUMES THAT BICYCLES ARE 4X DEPTH OF PEOPLE AND IGNORES WHEELCHAIRS?'''
+    # VRU information, sizes in [in] (taken fron VIEW 1.0)
     vru_label = ['pre-school child', 'elementary schooler on bike', 'elementary school child',
                  'wheelchair user', 'adult on bike', 'adult']
     vru_sizes = np.array([[28, 9, 34], [35, 12, 45], [37, 12, 45], [
@@ -152,7 +138,6 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     else:
         vru_plot_colors = ['#A6DDE7']
         vru_fill_colors = ['#A6DDE7a6']
-    graph_str = ['', '']
     vru_index = 0
     for vru in vru_selected:
         ''' --------------------------------------
@@ -218,16 +203,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
         if front_vru_dist < 0:  # prevent negativ results
             front_vru_dist = 0
         # print(f"distance from hood to {vru_label[vru-1]}: {front_vru_dist}")
-        # store note (str) of distance to closest forward-visible VRU to pass to site
-        graph_str[vru_index] = ('The closest forward-visible ' +
-                                vru_label[vru-1] + ' is ' +
-                                str(round(front_vru_dist)) + 'ft in front of the vehicle.')
         closest_forward_vrus.append(int(front_vru_dist))
       #   ''' -------------------------------------------------------
       # End note minimum distance from hood to VRU in front of driver
       # ----------------------------------------------------------'''
 
-        graph_str[vru_index] = " "
         vru_index += 1
 
     # restrict angles of plot (switching min and max moves tick labels)
@@ -291,7 +271,7 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     # shift plot over to the right by editing its bbox
     '''pos = ax.get_position()
     pos.x0 += .11  # increase value by 11% of figure size
-    pos.x1 += .11  # must mach value for x0 for shift, otherwise it narrows the box
+    pos.x1 += .11  # must match value for x0 for shift, otherwise it narrows the box
     ax.set_position(pos)'''
 
     # make plot fill entire figure
@@ -302,14 +282,11 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
     pos.y1 = 1
     ax.set_position(pos)
 
-    # dislaimer that vehicle pictured is not to scale
+    # disclaimer that vehicle pictured is not to scale
     # ax.text(0.75, 0, '*vehicle pictured is not to scale', transform=ax.transAxes,
     ax.text(-0.15, 0.02, '*vehicle not shown to scale', transform=ax.transAxes,
             fontsize=10, verticalalignment='center', bbox=dict(boxstyle='square',
                                                                facecolor='#fff', alpha=0))
-
-    # legend in bottom left corner of FIGURE, not PLOT
-    # fig.legend(loc='lower right', fontsize="12", fancybox=False)
 
     # title for the graph
     '''plt.title(
@@ -317,8 +294,6 @@ def viz_overhead(nvp_x_cartesian, nvp_y_cartesian, eye_height_full, eye_point_fu
 
     imgdata = StringIO()
     # save file as SVG
-    # plt.savefig('/content/viz_overhead.svg', transparent=False, dpi='figure',
-    #             pad_inches=0, facecolor='#fff', edgecolor='#5c5c5c')
     fig.savefig(imgdata, format='svg', transparent=False, dpi='figure',
                 pad_inches=0, facecolor='#fff', edgecolor='#5c5c5c')
 

@@ -42022,7 +42022,7 @@ class Model {
     // take the latest change from undo stack
     const toUndo = this.undoStack.pop();
 
-    // add each component of each face index back into the meshobj geometry
+    // add each vertex of each face index back into the meshobj geometry
     for (const faceIdx in toUndo) {
       for (let component = 0; component < 3; component++) {
         this.meshObj.geometry.index.array[faceIdx * 3 + component] =
@@ -42075,6 +42075,13 @@ class Model {
     this.meshObj = gltf.scene.children[0];
     this.scene.add(this.meshObj);
   }
+
+  /**
+   * Get the vertex indeces of the bounding vertices of the face.
+   *
+   * @param {number} faceIdx - the index of the face
+   * @returns a list of 3 vertex indeces that bound the face
+   */
   getFace(faceIdx) {
     return [
       this.meshObj.geometry.index.array[faceIdx * 3],
@@ -42082,11 +42089,24 @@ class Model {
       this.meshObj.geometry.index.array[faceIdx * 3 + 2],
     ];
   }
+
+  /**
+   * Set the vertex indeces of a face to 0 to remove it from mesh
+   *
+   * @param {number} faceIdx - the index of the face
+   */
   removeFace(faceIdx) {
     for (let component = 0; component < 3; component++) {
       this.meshObj.geometry.index.array[faceIdx * 3 + component] = 0;
     }
   }
+
+  /**
+   * Given a vertex index, find the x, y, z coordinates of the vertex in space
+   *
+   * @param {number} vertexIdx - the index of the vertex
+   * @returns a list of the [x, y, z] coordinates of the vertex
+   */
   getVertex(vertexIdx) {
     return [
       this.getVertexComponent(vertexIdx, 0),
@@ -42094,11 +42114,26 @@ class Model {
       this.getVertexComponent(vertexIdx, 2),
     ];
   }
+
+  /**
+   * Get the x, y, or z component of a vertex given its index
+   *
+   * @param {number} vertexIdx - the index of the vertex
+   * @param {number} component - the component number
+   * @returns the x, y, or z component of a vertex
+   */
   getVertexComponent(vertexIdx, component) {
     return this.meshObj.geometry.attributes.position.array[
       vertexIdx * 3 + component
     ];
   }
+
+  /**
+   * Get the coordinates of the center of a face
+   *
+   * @param {number} faceIdx - the index of the face
+   * @returns a list of the [x, y, z] coordinates of the face center
+   */
   getFaceCenter(faceIdx) {
     let face = this.getFace(faceIdx);
     return scaleVector(
@@ -42109,13 +42144,28 @@ class Model {
       1 / 3
     );
   }
+
+  /**
+   * Get the vector normal to a given face
+   *
+   * @param {number} faceIdx - the index of the face
+   * @returns the unit vector normal to the face
+   */
   getFaceNormal(faceIdx) {
+    // the face
     let face = this.getFace(faceIdx);
+
+    // the coordinates for each vertex of the face
     let vertex1 = this.getVertex(face[0]);
     let vertex2 = this.getVertex(face[1]);
     let vertex3 = this.getVertex(face[2]);
+
+    // define vectors in the directions of two edges of the face
     let edge1 = subtractVectors(vertex2, vertex1);
     let edge2 = subtractVectors(vertex3, vertex1);
+
+    // the cross product of two vectors is normal to the plane defined by the
+    // two vectors, and therefore normal to the face
     return normalize(cross(edge1, edge2));
   }
 
@@ -42123,36 +42173,57 @@ class Model {
    * Render loop function
    */
   render() {
+    // set raycaster based on the pointer direction and the camera viewpoint
     this.raycaster.setFromCamera(this.pointer, this.camera);
+    // the list of intersections with the raycaster
     const intersects = this.raycaster.intersectObjects(this.scene.children);
+    // loop through each of the intersections
     for (let i = 0; i < intersects.length; i++) {
+      // the center of the intersection
       let intersectCenter = [
         intersects[i].point.x,
         intersects[i].point.y,
         intersects[i].point.z,
       ];
+      // the normal vector to the intersection
       let intersectNormal = [
         intersects[i].face.normal.x,
         intersects[i].face.normal.y,
         intersects[i].face.normal.z,
       ];
+
+      // loop through each of the faces in the mesh
       for (let faceIdx = 0; faceIdx < this.numFaces(); faceIdx++) {
+        // get the location of the face center
         let faceCenter = this.getFaceCenter(faceIdx);
+        // get the dist between the face center and the intersection point
         let distance = vectorLength(
           subtractVectors(faceCenter, intersectCenter)
         );
+        // if the face center is in the erase dist radius, do the following
         if (distance <= this.eraseDistance) {
+          // get the vector normal to the face to determine which direction it
+          // is pointing in
           let faceNormal = this.getFaceNormal(faceIdx);
+          // the dot product tells how aligned the face is with the raycaster
           let normalDot = dot(intersectNormal, faceNormal);
+          // if they are pointing in the same orientation (positive dot)
+          // do the following
           if (normalDot > 0) {
+            // add the list of face vertices to the current erase dict with
+            // the face index as the key
             this.currentErase[faceIdx] = this.getFace(faceIdx);
+            // remove the face
             this.removeFace(faceIdx);
+            // clear the redo stack
             this.redoStack = [];
           }
         }
       }
     }
+    // flag that geometry needs an update
     this.meshObj.geometry.index.needsUpdate = true;
+    // render scene with camera
     this.renderer.render(this.scene, this.camera);
   }
 

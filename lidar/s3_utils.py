@@ -57,17 +57,12 @@ def get_object(filepath: str):
         binary str: the binary string representing the media object located at the filepath
     """
     client = create_s3_client()
-    print('Got client')
     bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-    print(f'{bucket = }')
-    print(os.environ.get('AWS_S3_ACCESS_KEY_ID'))
     try:
         response = client.get_object(
             Bucket=bucket, Key=f'media/lidar/lidar_scans/{filepath}')
     except Exception as e:
         print(e)
         raise e
-    print('Got response')
     obj = response['Body']
-    print('Got body')
     return obj

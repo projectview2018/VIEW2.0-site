@@ -27,32 +27,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('SECRET_KEY')
-SECRET_KEY = 'django-insecure-kfb=+rej@*g)fb58b_&!o8vg4&!gn&6o6-(749bqdd@b+up9_0'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# # The `DYNO` env var is set on Heroku CI, but it's not a real Heroku app, so we have to
-# # also explicitly exclude CI:
-# # https://devcenter.heroku.com/articles/heroku-ci#immutable-environment-variables
-# IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
 
-# # SECURITY WARNING: don't run with debug turned on in production!
-# if not IS_HEROKU_APP:
-#     DEBUG = True
 DEBUG = False
 
-# # On Heroku, it's safe to use a wildcard for `ALLOWED_HOSTS``, since the Heroku router performs
-# # validation of the Host header in the incoming HTTP request. On other platforms you may need
-# # to list the expected hostnames explicitly to prevent HTTP Host header attacks. See:
-# # https://docs.djangoproject.com/en/5.0/ref/settings/#std-setting-ALLOWED_HOSTS
-# if IS_HEROKU_APP:
-#     ALLOWED_HOSTS = ["*"]
-# else:
-#     ALLOWED_HOSTS = []
 
 ALLOWED_HOSTS = ['127.0.0.1', 'view2-vd8vm.ondigitalocean.app',
-                 'localhost', '127.0.0.1', '0.0.0.0', "view2.blindzonesafety.org"]
+                 'localhost', '127.0.0.1', '0.0.0.0', "view2.blindzonesafety.org", "blindzonesafety.org"]
 CSRF_TRUSTED_ORIGINS = [
-    'https://view2-vd8vm.ondigitalocean.app', 'https://view2.blindzonesafety.org']
+    'https://view2-vd8vm.ondigitalocean.app', 'https://view2.blindzonesafety.org', 'https://blindzonesafety.org']
 
 # Application definition
 
@@ -82,7 +66,9 @@ ROOT_URLCONF = 'view.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'lidar/templates/lidar'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

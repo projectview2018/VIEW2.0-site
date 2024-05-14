@@ -569,6 +569,9 @@
           <p id="load_text" class="Body">
             This can take up to five minutes, and the page may reload several times.
           </p>
+          <p id="crash_warining" class="Body">
+            If you get a 500 - Internal Server Error, please refresh the page to resume processing your scan.
+          </p>
         </div>
         <div style="display: none;" class="visualization-content">
           <section
@@ -608,7 +611,7 @@
               </h1>
             </div>
           </section>
-          <div class="visualization-container01">
+          <div class="visualization-container01" style="display: none;">
             <img
               alt="image"
               src="https://play.teleporthq.io/static/svg/default-img.svg"
@@ -635,7 +638,7 @@
               </div>
             </div>
           </div>
-          <div class="visualization-container06">
+          <div class="visualization-container06" style = "margin-top: var(--dl-space-space-twounits);">
             <div class="visualization-container07 elevation01">
               <h2 class="visualization-text HeadingH2">
                 Blindzone Visualizations
@@ -665,7 +668,7 @@
                     <div class="visualization-container10">
                       <disclosure-inline data-popup="">
                         <h3 class="visualization-text HeadingH3" style="margin-top: var(--dl-space-space-unit);">
-                          Choose a Vulnerable Road User (VRU)
+                          Choose 1-2 Vulnerable Road Users (VRUs)
                           <span data-insert-trigger="inline"></span>
                         </h3>
                         <disclosure-content role="note">
@@ -691,7 +694,7 @@
                   <div class="visualization-vru-graphic" style="margin-top: 24px;">
                     <img
                       alt="image"
-                      src="{% static 'lidar/images/VRU Icons/viz01scale.svg' %}"
+                      src="{% static 'lidar/images/VRU Icons/Viz01ScaleShort.svg' %}"
                       class="visualization-image01"
                     />
                     <div class="visualization-container11">

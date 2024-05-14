@@ -1,10 +1,9 @@
-import os
 import json
 from django.core import serializers
 from .models import Vehicle, Scan, CompletedScan
-from .s3_utils import get_object, generate_presigned_url_get, generate_presigned_url_put
+from .s3_utils import generate_presigned_url_get, generate_presigned_url_put
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpRequest, HttpResponse, FileResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 import threading
 from .forms import ScanForm, VehicleForm, VisualizationForm
@@ -12,7 +11,6 @@ from .perform_scan import complete_scan
 from .plot_visualizations import viz_overhead
 from django.views.decorators.cache import cache_control
 from django.views.decorators.http import require_GET
-from django.conf import settings
 
 
 def index(request):
@@ -106,6 +104,7 @@ def visualization(request, scan_id):
     model = vehicle.vehicle_model
     year = vehicle.vehicle_year
     viz_form = VisualizationForm()
+    thread_name = f'process-scan-{scan_id}'
     print(f"Scan status on load: {scan.scan_status}")
     if scan.scan_status == "modifying":
         scan.scan_status = "modified"
@@ -114,11 +113,23 @@ def visualization(request, scan_id):
     if scan.scan_status == "modified":
         print("Tried to load Visualization page. Scan about to be processed.")
         thread = threading.Thread(
-            target=complete_scan, args=(scan))
+            target=complete_scan, args=(scan, vehicle), name=thread_name)
         thread.start()
         return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': None, 'vrus_selected': None, "closest_forward_nvps": None, "num_vrus_in_vru_nvp_area": None, "loading": True})
 
     if scan.scan_status == "calculating":
+        performing_scan = False
+        for thread in threading.enumerate():
+            if thread.name == thread_name:
+                performing_scan = True
+                break
+        if not performing_scan:
+            print(
+                f'Lost thread {thread_name} while calculating. Restarting...')
+            thread = threading.Thread(
+                target=complete_scan, args=(scan, vehicle), name=thread_name)
+            thread.start()
+
         print("Tried to load Visualization page. Scan is still being processed.")
         return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': None, 'vrus_selected': None, "closest_forward_nvps": None, "num_vrus_in_vru_nvp_area": None, "loading": True})
 

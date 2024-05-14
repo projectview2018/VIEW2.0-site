@@ -10,6 +10,13 @@ def create_s3_client():
 def generate_presigned_url_get(filepath):
     """
     Generate a presigned Amazon S3 URL that can be used to retrieve an object.
+
+    Args:
+        filepath (str): location of the object inside the folder 'media/lidar/lidar_scans' which is
+        located in the Digital Ocean Spaces S3 bucket. In practice, this should be the name of the object
+        i.e. 'kia_seltos_2022.glb'
+    Returns:
+        str: the url that is the location of the object inside the Digital Ocean Spaces S3 bucket
     """
     client = create_s3_client()
     bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
@@ -22,6 +29,13 @@ def generate_presigned_url_get(filepath):
 def generate_presigned_url_put(filepath):
     """
     Generate a presigned Amazon S3 URL that can be used to upload an object.
+
+    Args:
+        filepath (str): intended location of the object inside the folder 'media/lidar/lidar_scans' which is
+        located in the Digital Ocean Spaces S3 bucket. In practice, this should be the name of the object
+        i.e. 'kia_seltos_2022.glb'
+    Returns:
+        str: the url that can be used to upload an object to the Digital Ocean Spaces S3 bucket
     """
     client = create_s3_client()
     bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
@@ -32,6 +46,16 @@ def generate_presigned_url_put(filepath):
 
 
 def get_object(filepath: str):
+    """
+    Grab the binary data of a media file in the Digital Ocean Spaces S3 bucket
+
+    Args:
+        filepath (str): location of the media object inside the folder 'media/lidar/lidar_scans' which is
+        located in the Digital Ocean Spaces S3 bucket. In practice, this should be the name of the object
+        i.e. 'kia_seltos_2022.glb'
+    Returns:
+        binary str: the binary string representing the media object located at the filepath
+    """
     client = create_s3_client()
     bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
     try:

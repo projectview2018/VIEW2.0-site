@@ -241,7 +241,7 @@ def visualization(request, scan_id):
         print("Tried to load Visualization page. Scan about to be processed.")
         # start thread in which NVP calculation for the selected scan is done
         thread = threading.Thread(
-            target=complete_scan, args=(scan, vehicle), name=thread_name)
+            target=complete_scan, args=(scan,), name=thread_name)
         thread.start()
         return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': None, 'vrus_selected': None, "closest_forward_nvps": None, "num_vrus_in_vru_nvp_area": None, "loading": True})
     # onces calculation has begun inside thread, in which the scan's status is updated to "calculating", check on calculation process
@@ -261,7 +261,7 @@ def visualization(request, scan_id):
             print(
                 f'Lost thread {thread_name} while calculating. Restarting...')
             thread = threading.Thread(
-                target=complete_scan, args=(scan, vehicle), name=thread_name)
+                target=complete_scan, args=(scan,), name=thread_name)
             thread.start()
 
         print("Tried to load Visualization page. Scan is still being processed.")
@@ -318,7 +318,8 @@ def visualization(request, scan_id):
 
                     # call the function to generate the plot image, and relevant statistics for each user-selected VRU
                     graph, closest_forward_nvps, num_vrus_in_vru_nvp_area = viz_overhead(
-                        nvp_xs, nvp_ys, eye_height_full, eye_point_full, eye_pos, vrus_selected, vehicle_width, vehicle_D)
+                        nvp_xs, nvp_ys, eye_height_full, eye_point_full, vrus_selected, vehicle_width, vehicle_D)
+                    print('Got viz')
                     return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': graph, 'vrus_selected': vrus_selected, "closest_forward_nvps": closest_forward_nvps, "num_vrus_in_vru_nvp_area": num_vrus_in_vru_nvp_area, "loading": False})
 
             return render(request, 'lidar/visualization.html', {'VisualizationForm': viz_form, 'scan_id': scan_id, 'make': make, 'model': model, 'year': year, 'date': scan.scan_added, 'graph': None, 'vrus_selected': None, "closest_forward_nvps": None, "num_vrus_in_vru_nvp_area": None, "loading": False})
